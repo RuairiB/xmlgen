@@ -1,0 +1,182 @@
+<SigMonD>
+  <Initialize>
+    <ProjectName>IsodoubletStrangeT1u</ProjectName>
+    <LogFile>log_T1u.xml</LogFile>
+    <EchoXML/>
+    <MCObservables>
+      <MCEnsembleInfo>clover_s32_t256_ud860_s743</MCEnsembleInfo> 
+      <CorrelatorData>
+	<FileListInfo>
+          <FileNameStub>/latticeQCD/raid8/laph/clover_s32_t256_ud860_s743/bosonic_correlators/isodoublet_strange/mom_0_0_0/T1u_1/corr_32_860_B_2I1_S1_P0_T1u</FileNameStub>
+          <MinFileNumber>0</MinFileNumber>
+          <MaxFileNumber>5655</MaxFileNumber>
+	</FileListInfo>
+      </CorrelatorData>
+      <Specifications>
+	<!--  <AllHermitian/> -->
+	<HermitianCorrelationMatrix>
+	  <AssignName>IsodoubletStrangeT1u</AssignName>
+
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_1</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 SS_0</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 SS_1</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_5</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_13</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_42</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 SD_3</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_2</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_6</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_18</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_20</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_27</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDU_2</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_300</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 DDL_301</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_300</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_301</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_302</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_303</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_304</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_305</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_306</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_307</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_400</OperatorString>
+	  <OperatorString>kaon P=(0,0,0) T1u_1 TDO_401</OperatorString>
+
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,0) A1u SS_0] [P=(0,0,0) T1gm SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,0) A1u SS_0] [P=(0,0,0) T1gp SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,0) T1g DDL_6] [P=(0,0,0) A1um SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,0) T1g SS_0] [P=(0,0,0) A1um SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,0) T1u SS_1] [P=(0,0,0) A1gm SS_0]</OperatorString>    
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) A2 SS_1] [P=(0,0,-1) Ep SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) E SS_0] [P=(0,0,-1) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) E SS_2] [P=(0,0,-1) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,1,1) A2 SS_0] [P=(0,-1,-1) B2p SS_2]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,1,1) B2 SS_3] [P=(0,-1,-1) A2m SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,0) A2 SS_0] [P=(-1,0,0) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,0) A2 SS_1] [P=(-1,0,0) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) A2m SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) B1p SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,1) B1 SS_1] [P=(-1,0,-1) A2m SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,1,1) A2 SS_0] [P=(-1,-1,-1) A2m SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(2,0,0) A2 SS_1] [P=(-2,0,0) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,0) A2 SS_1] [P=(-1,0,0) A2m SS_0]</OperatorString>   <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,0) A2 SS_0] [P=(-1,0,0) A2m SS_0]</OperatorString>   <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,1) A2 SS_1] [P=(-1,0,-1) A2m SS_0]</OperatorString>  <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) A2m SS_1]</OperatorString>  <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) E SS_3] [P=(0,0,-1) A2m SS_1]</OperatorString>    <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) E SS_2] [P=(0,0,-1) A2m SS_0]</OperatorString>    <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) A2 SS_0] [P=(0,0,-1) Ep SS_1]</OperatorString>    <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) A2 SS_1] [P=(0,0,-1) Ep SS_2]</OperatorString>    <!-- # secondary -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) A1 SS_2] [P=(0,0,-1) Ep SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) E SS_1] [P=(0,0,-1) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) E SS_2] [P=(0,0,-1) A1p SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,1) E TSD_8] [P=(0,0,-1) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(0,0,2) E SS_2] [P=(0,0,-2) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,0) A1 SS_2] [P=(-1,0,0) A1p SS_1]</OperatorString> <!-- #multiplicity 4 -->
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,0) A2 TSD_3] [P=(-1,0,0) A2m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,0,0) E SS_2] [P=(-1,0,0) Ep SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,1,1) A2 SS_0] [P=(-1,-1,-1) Ep SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_pion T1u_1 [P=(1,1,1) E SS_3] [P=(-1,-1,-1) A2m SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,0) A1u SS_0] [P=(0,0,0) T1gm SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,0) A1u SS_0] [P=(0,0,0) T1gp SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,0) T1g SS_0] [P=(0,0,0) A1up SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,1) A1 SS_2] [P=(0,0,-1) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,1) A2 SS_1] [P=(0,0,-1) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,1) A2 SS_1] [P=(0,0,-1) Em SS_2]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,1) E SS_2] [P=(0,0,-1) A1m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,0,1) E SS_2] [P=(0,0,-1) A2p SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,1,1) A2 SS_0] [P=(0,-1,-1) B2m SS_2]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(0,1,1) B2 SS_3] [P=(0,-1,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,0) A1 SS_2] [P=(-1,0,0) A1m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,0) A2 SS_1] [P=(-1,0,0) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,0) A2 SS_1] [P=(-1,0,0) A2p SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,0) E SS_2] [P=(-1,0,0) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) A2p LSD_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) B1m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,0,1) B1 SS_1] [P=(-1,0,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,1,1) A2 SS_0] [P=(-1,-1,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(1,1,1) A2 SS_0] [P=(-1,-1,-1) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_eta T1u_1 [P=(2,0,0) A2 SS_1] [P=(-2,0,0) A2p SS_1]</OperatorString>
+
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,0) A1u SS_0] [P=(0,0,0) T1gm SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,0) A1u SS_0] [P=(0,0,0) T1gp SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,0) T1g SS_0] [P=(0,0,0) A1up SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,1) A1 SS_2] [P=(0,0,-1) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,1) A2 SS_1] [P=(0,0,-1) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,1) A2 SS_1] [P=(0,0,-1) Em SS_2]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,1) E SS_2] [P=(0,0,-1) A1m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,0,1) E SS_2] [P=(0,0,-1) A2p SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,1,1) A2 SS_0] [P=(0,-1,-1) B2m SS_2]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(0,1,1) B2 SS_3] [P=(0,-1,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,0) A1 SS_2] [P=(-1,0,0) A1m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,0) A2 SS_1] [P=(-1,0,0) A2m LSD_3]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,0) A2 SS_1] [P=(-1,0,0) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,0) A2 SS_1] [P=(-1,0,0) A2p SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,0) E SS_2] [P=(-1,0,0) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) A2p LSD_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,1) A2 SS_0] [P=(-1,0,-1) B1m SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,0,1) B1 SS_1] [P=(-1,0,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,1,1) A2 SS_0] [P=(-1,-1,-1) A2p SS_0]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(1,1,1) A2 SS_0] [P=(-1,-1,-1) Em SS_1]</OperatorString>
+	  <OperatorString>isodoublet_kaon_phi T1u_1 [P=(2,0,0) A2 SS_1] [P=(-2,0,0) A2p SS_1]</OperatorString>
+
+
+	</HermitianCorrelationMatrix>
+      </Specifications>
+    </MCObservables>
+    <Bootstrapper>
+      <NumberResamplings>1024</NumberResamplings> 
+      <Seed>6754</Seed>
+      <BootSkip>127</BootSkip>
+      <Precompute/>
+    </Bootstrapper>
+  </Initialize>
+  <TaskSequence>
+<!--
+    <Task>                                        
+      <Action>DoCorrMatrixRotation</Action>
+      <MinTimeSep>3</MinTimeSep>  
+      <MaxTimeSep>25</MaxTimeSep> 
+      <Type>SinglePivot</Type>
+      <SinglePivotInitiate>
+        <RotationName>IsodoubletStrangeT1u</RotationName>
+        <AssignName>PivIsodoubletStrangeT1u</AssignName>
+        <CorrelatorMatrixInfo>                     
+          <Name>IsodoubletStrangeT1u</Name>
+        </CorrelatorMatrixInfo>                    
+        <NormTime>3</NormTime>
+        <MetricTime>5</MetricTime>
+        <DiagonalizeTime>10</DiagonalizeTime>
+        <MinimumInverseConditionNumber>1e-3</MinimumInverseConditionNumber>
+        <WriteToFile>
+          <FileName>SinglePivot1</FileName>
+          <Overwrite/>
+        </WriteToFile>
+      </SinglePivotInitiate>
+    </Task>
+-->
+    <Task>                                        
+      <Action>DoCorrMatrixRotation</Action>
+      <MinTimeSep>3</MinTimeSep>  
+      <MaxTimeSep>25</MaxTimeSep> 
+      <WriteToFile>
+        <FileName>RotatedCorrelators</FileName>
+        <Overwrite/>
+      </WriteToFile>
+      <Type>SinglePivot</Type>
+      <SinglePivotInitiate>
+        <ReadFromFile>
+          <FileName>SinglePivot1</FileName>
+        </ReadFromFile>
+        <AssignName>PivIsodoubletStrangeT1u</AssignName>
+      </SinglePivotInitiate>
+    </Task>                                       
+
+  </TaskSequence>
+
+
+
+</SigMonD>
