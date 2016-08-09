@@ -26,9 +26,21 @@ metric_time = 4
 diag_time = 6
 cond_num = "1e-3"
 
+# Fitting
+level = 1
+tmin = 6
+tmax = 25
+fitfn = "TimeSymGeomSeriesExponential"
+plotfile = "plot.agr"
+plotname = "Particle.energy"
+
 # Tasks
 oldrotateA(mintime, maxtime, proj_name, file_tail, norm_time, metric_time, diag_time, cond_num, tasks)
 oldrotateB(mintime, maxtime, proj_name, file_tail, tasks)
 
+readbins("RotatedCorrelators"+file_tail, tasks)
+dofit("Bootstrap", proj_name, level, tmin, tmax, fitfn, plotfile, plotname, tasks)
+
+    
 indent(root)
 tree.write("filename.xml")
