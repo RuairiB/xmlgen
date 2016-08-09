@@ -1,8 +1,9 @@
-import xml.etree.cElementTree as ET
+#import xml.etree.cElementTree as ET
+import lxml as ET
 
-root = ET.Element("SigMonD")
-init = ET.SubElement(root, "Initialize")
-tasks = ET.SubElement(root, "TaskSequence")
+# root = ET.Element("SigMonD")
+init = ET.Element("Initialize")
+# tasks = ET.SubElement(root, "TaskSequence")
 
 ET.SubElement(init, "ProjectName").text = "some project name"
 ET.SubElement(init, "LogFile").text = "some logfile.xml"
@@ -12,7 +13,7 @@ mcobs = ET.SubElement(init, "MCObservables")
 ET.SubElement(mcobs, "MCEnsembleInfo").text = "clover_s32_t256_ud860_s743"
 corrdat = ET.SubElement(mcobs, "CorrelatorData")
 files = ET.SubElement(corrdat, "FileListInfo")
-ET.Subelement(files, FileNameStub).text = correlator_path
+# ET.Subelement(files, FileNameStub).text = correlator_path
 
 
 # tree = ET.ElementTree(root)

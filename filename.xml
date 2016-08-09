@@ -1,0 +1,17 @@
+<SigMonD>
+  <Initialize>
+    <ProjectName>some project name</ProjectName>
+    <LogFile>some logfile.xml</LogFile>
+    <EchoXML/>
+    <MCObservables>
+      <MCEnsembleInfo>clover_s32_t256_ud860_s743</MCEnsembleInfo>
+      <CorrelatorData>
+        <FileListInfo>
+          <MinFileNumber>0</MinFileNumber>
+          <MaxFileNumber>1</MaxFileNumber>
+        </FileListInfo>
+      </CorrelatorData>
+    </MCObservables>
+  </Initialize>
+  <TaskSequence/>
+</SigMonD>
