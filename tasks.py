@@ -123,7 +123,7 @@ def dofit(tasks, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, sampli
     ET.SubElement(plot, "ShowApproach")
 
 
-# Check correlator data for outliers, zeros in the correlator
+# Check correlator data for outliers & zeros
 def dochecks_outliers(tasks, mintime, maxtime, proj_name, scale=20):
     task = ET.SubElement(tasks, "Task")
 
