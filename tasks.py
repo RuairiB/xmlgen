@@ -1,8 +1,18 @@
 import xml.etree.cElementTree as ET
 import os
 
+# SigMond tasks
+# Tasks To Do:
+# -> DoPlot - all
+# -> DoObs - all
+# -> Memory management
+# -> Reading/Writing to file
+# -> PrintXML - all
+#
+# Rewrite to allow for operator lists instead of Corr matrix name?
+
 # Read in (usually rotated) bins from file
-def readbins(binfile, tasks):
+def readbins(tasks, binfile):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "ReadBinsFromFile"
@@ -10,7 +20,7 @@ def readbins(binfile, tasks):
 
 
 # Old SigMond rotation inputs; routines need to be run separately for some unknown reason...
-def oldrotateA(mintime, maxtime, proj_name, file_tail, norm_time, metric_time, diag_time, cond_num, tasks):
+def oldrotateA(tasks, mintime, maxtime, proj_name, file_tail, norm_time, metric_time, diag_time, cond_num):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
@@ -34,7 +44,7 @@ def oldrotateA(mintime, maxtime, proj_name, file_tail, norm_time, metric_time, d
     ET.SubElement(fileout, "Filename").text = "SinglePivot_" + file_tail
     ET.SubElement(fileout, "Overwrite")
 
-def oldrotateB(mintime, maxtime, proj_name, file_tail, tasks):
+def oldrotateB(tasks, mintime, maxtime, proj_name, file_tail):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
@@ -53,7 +63,7 @@ def oldrotateB(mintime, maxtime, proj_name, file_tail, tasks):
 
 
 # Effective mass fit to (rotated) correlator data
-def dofit(sampling, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, tasks):
+def dofit(tasks, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, sampling="Bootstrap"):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
@@ -111,3 +121,34 @@ def dofit(sampling, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, tas
     ET.SubElement(plot, "SymbolType").text = "circle"
     ET.SubElement(plot, "Goodness").text = "chisq"
     ET.SubElement(plot, "ShowApproach")
+
+
+# Check correlator data for outliers, zeros in the correlator
+def dochecks_outliers(tasks, mintime, maxtime, proj_name, scale=20):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoChecks"
+    ET.SubElement(task, "Type").text = "TemporalCorrelatorMatrix"
+
+    corr = ET.SubElement(task, "CorrelatorMatrixInfo")
+    ET.SubElement(corr, "Name").text = proj_name
+
+    ET.SubElement(task, "MinTimeSep").text = str(mintime)
+    ET.SubElement(task, "MaxTimeSep").text = str(maxtime)
+    ET.SubElement(task, "OutlierScale").text = str(scale)
+    ET.SubElement(task, "Verbose")
+
+    
+# Check correlator data for hermiticity
+def dochecks_hermitian(tasks, mintime, maxtime, proj_name):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoChecks"
+    ET.SubElement(task, "Type").text = "TemporalCorrelatorMatrixIsHermitian"
+
+    corr = ET.SubElement(task, "CorrelatorMatrixInfo")
+    ET.SubElement(corr, "Name").text = proj_name
+
+    ET.SubElement(task, "MinTimeSep").text = str(mintime)
+    ET.SubElement(task, "MaxTimeSep").text = str(maxtime)
+    ET.SubElement(task, "Verbose")

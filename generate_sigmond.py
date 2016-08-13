@@ -3,10 +3,15 @@ import os
 from init import *
 from tasks import *
 
+# Rewrite to extract corr info (isospin, irrep, etc) from filenames
+# Decide on method of parameter specification, command line args?
+# Move indent fn from init.py to general XML util file?
+# Extract level info for fitting from old rotation tasks?
+
 # corr_path = "/latticeQCD/raid8/laph/clover_s32_t256_ud860_s743/bosonic_correlators/isodoublet_strange/mom_0_0_0/T1u_1/"
 corr_path = "test_data/"
 oplist_file = "oplist.txt"
-proj_name = "pro-jekt"
+proj_name = "pro-jekt"          # Project name = matrix name
 logfile = "good-filename.log"
 file_tail = "isospin_etc"
 
@@ -16,7 +21,7 @@ tree = ET.ElementTree(root)
 init = ET.SubElement(root, "Initialize")
 tasks = ET.SubElement(root, "TaskSequence")
 
-initialize(corr_path, oplist_file, proj_name, logfile, init)
+initialize(init, corr_path, oplist_file, proj_name, logfile)
 
 # Task variables
 mintime = 3
@@ -35,12 +40,15 @@ plotfile = "plot.agr"
 plotname = "Particle.energy"
 
 # Tasks
-oldrotateA(mintime, maxtime, proj_name, file_tail, norm_time, metric_time, diag_time, cond_num, tasks)
-oldrotateB(mintime, maxtime, proj_name, file_tail, tasks)
+oldrotateA(tasks, mintime, maxtime, proj_name, file_tail, norm_time, metric_time, diag_time, cond_num)
+oldrotateB(tasks, mintime, maxtime, proj_name, file_tail)
 
-readbins("RotatedCorrelators"+file_tail, tasks)
-dofit("Bootstrap", proj_name, level, tmin, tmax, fitfn, plotfile, plotname, tasks)
+readbins(tasks, "RotatedCorrelators"+file_tail)
+dofit(tasks, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, "Bootstrap")
 
-    
+dochecks_outliers(tasks, mintime, maxtime, proj_name)
+dochecks_hermitian(tasks, mintime, maxtime, proj_name)
+
+
 indent(root)
 tree.write("filename.xml")

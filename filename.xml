@@ -144,5 +144,26 @@
         </DoEffectiveEnergyPlot>
       </TemporalCorrelatorFit>
     </Task>
+    <Task>
+      <Action>DoChecks</Action>
+      <Type>TemporalCorrelatorMatrix</Type>
+      <CorrelatorMatrixInfo>
+        <Name>pro-jekt</Name>
+      </CorrelatorMatrixInfo>
+      <MinTimeSep>3</MinTimeSep>
+      <MaxTimeSep>26</MaxTimeSep>
+      <OutlierScale>20</OutlierScale>
+      <Verbose />
+    </Task>
+    <Task>
+      <Action>DoChecks</Action>
+      <Type>TemporalCorrelatorMatrixIsHermitian</Type>
+      <CorrelatorMatrixInfo>
+        <Name>pro-jekt</Name>
+      </CorrelatorMatrixInfo>
+      <MinTimeSep>3</MinTimeSep>
+      <MaxTimeSep>26</MaxTimeSep>
+      <Verbose />
+    </Task>
   </TaskSequence>
 </SigMonD>

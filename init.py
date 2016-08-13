@@ -1,7 +1,7 @@
 import xml.etree.cElementTree as ET
 import os
 
-def initialize(corr_path, oplist_file, proj_name, logfile, init):
+def initialize(init, corr_path, oplist_file, proj_name, logfile):
     # Get filenames, filenumbers, etc
     filenums = list()
     name = ""
