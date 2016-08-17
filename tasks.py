@@ -9,7 +9,8 @@ import os
 # -> Reading/Writing to file
 # -> PrintXML - all
 #
-# Rewrite to allow for operator lists instead of Corr matrix name?
+# Rewrite to allow for operator lists instead of Corr matrix name? - Use laph_query to get operators?
+# Want to input directory, extract all params from filenames & folders
 
 # Read in (usually rotated) bins from file
 def readbins(tasks, binfile):
@@ -123,7 +124,7 @@ def dofit(tasks, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, sampli
     ET.SubElement(plot, "ShowApproach")
 
 
-# Check correlator data for outliers & zeros
+# Check correlator matrix for outliers & zeros
 def dochecks_outliers(tasks, mintime, maxtime, proj_name, scale=20):
     task = ET.SubElement(tasks, "Task")
 
@@ -139,7 +140,7 @@ def dochecks_outliers(tasks, mintime, maxtime, proj_name, scale=20):
     ET.SubElement(task, "Verbose")
 
     
-# Check correlator data for hermiticity
+# Check correlator matrix for hermiticity
 def dochecks_hermitian(tasks, mintime, maxtime, proj_name):
     task = ET.SubElement(tasks, "Task")
 
@@ -152,3 +153,21 @@ def dochecks_hermitian(tasks, mintime, maxtime, proj_name):
     ET.SubElement(task, "MinTimeSep").text = str(mintime)
     ET.SubElement(task, "MaxTimeSep").text = str(maxtime)
     ET.SubElement(task, "Verbose")
+
+# # UNFINISHED
+# # Plot Correlator, Eff Energy, MCestimates, etc.
+# def doplot(tasks, data, plotfile, plotname="standard", subvev="false", time_type="TimeSymmetric")
+#     task = ET.SubElement(tasks, "Task")
+
+#     ET.SubElement(task, "Action").text = "DoPlot"
+#     if(data == "TemporalCorrelator"):
+#         ET.SubElement(task, "Type").text = "TemporalCorrelator"
+        
+
+#     elif(data == "EffectiveEnergy"):
+#         ET.SubElement(task, "Type").text = "EffectiveEnergy"
+#         ET.SubElement(task, "EffEnergyType").text = time_type
+
+        
+#     else:
+#         print("I don't know what to plot")

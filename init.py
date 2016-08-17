@@ -1,6 +1,7 @@
 import xml.etree.cElementTree as ET
 import os
 
+# Initialise SigMond, most of this can be taken from filenames?
 def initialize(init, corr_path, oplist_file, proj_name, logfile):
     # Get filenames, filenumbers, etc
     filenums = list()
@@ -41,20 +42,3 @@ def initialize(init, corr_path, oplist_file, proj_name, logfile):
     ET.SubElement(boots, "Seed").text = "6754"
     ET.SubElement(boots, "BootSkip").text = "127"
     ET.SubElement(boots, "Precompute")
-
-
-# Indent for easy reading
-def indent(elem, level=0):
-    i = "\n" + level*"  "
-    if len(elem):
-        if not elem.text or not elem.text.strip():
-            elem.text = i + "  "
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-        for elem in elem:
-            indent(elem, level+1)
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-    else:
-        if level and (not elem.tail or not elem.tail.strip()):
-            elem.tail = i
