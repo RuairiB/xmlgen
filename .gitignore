@@ -35,6 +35,5 @@
 .#*
 
 generate*
-freeparticle_spectrum/
 __pycache__
 logscraper/
