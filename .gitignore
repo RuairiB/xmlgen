@@ -34,6 +34,5 @@
 #*#
 .#*
 
-generate*
 __pycache__
 logscraper/
