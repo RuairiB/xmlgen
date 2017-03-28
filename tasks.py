@@ -1,89 +1,46 @@
 import xml.etree.cElementTree as ET
 import os
+import sys
+from utils import *
 
 # SigMond tasks
-# Tasks To Do:
-# -> DoPlot - all
-# -> DoObs - all
-# -> Memory management
-# -> Reading/Writing to file
-# -> PrintXML - all
-#
-# Rewrite to allow for operator lists instead of Corr matrix name? - Use laph_query to get operators?
-# Want to input directory, extract all params from filenames & folders
 
-# Read in (usually rotated) bins from file
-def readbins(tasks, binfile):
+# Effective mass fit to correlator data -- include GI operatorstringz
+def dofit(tasks, optype, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling="Bootstrap"):
     task = ET.SubElement(tasks, "Task")
 
-    ET.SubElement(task, "Action").text = "ReadBinsFromFile"
-    ET.SubElement(task, "FileName").text = binfile
-
-
-# Old SigMond rotation inputs; routines need to be run separately for some unknown reason...
-def oldrotateA(tasks, mintime, maxtime, proj_name, file_tail, norm_time, metric_time, diag_time, cond_num):
-    task = ET.SubElement(tasks, "Task")
-
-    ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
-    ET.SubElement(task, "MinTimeSep").text = str(mintime)
-    ET.SubElement(task, "MaxTimeSep").text = str(maxtime)
-    ET.SubElement(task, "Type").text = "SinglePivot"
-
-    piv = ET.SubElement(task, "SinglePivotInitiate")
-    ET.SubElement(piv, "RotationName").text = proj_name
-    ET.SubElement(piv, "AssignName").text = "Piv" + proj_name
-
-    corr = ET.SubElement(piv, "CorrelatorMatrixInfo")
-    ET.SubElement(corr, "Name").text = proj_name
-
-    ET.SubElement(piv, "NormTime").text = str(norm_time)
-    ET.SubElement(piv, "MetricTime").text = str(metric_time)
-    ET.SubElement(piv, "DiagonalizeTime").text = str(diag_time)
-    ET.SubElement(piv, "MinimumInverseConditionNumber").text = cond_num
-
-    fileout = ET.SubElement(piv, "WriteToFile")
-    ET.SubElement(fileout, "Filename").text = "SinglePivot_" + file_tail
-    ET.SubElement(fileout, "Overwrite")
-
-def oldrotateB(tasks, mintime, maxtime, proj_name, file_tail):
-    task = ET.SubElement(tasks, "Task")
-
-    ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
-    ET.SubElement(task, "MinTimeSep").text = str(mintime)
-    ET.SubElement(task, "MaxTimeSep").text = str(maxtime)
-    ET.SubElement(task, "Type").text = "SinglePivot"
-
-    piv = ET.SubElement(task, "SinglePivotInitiate")
-    piv_file = ET.SubElement(piv, "ReadFromFile")
-    ET.SubElement(piv_file, "Name").text = "SinglePivot_" + file_tail
-    ET.SubElement(piv, "AssignName").text = "Piv" + proj_name
-    
-    fileout = ET.SubElement(task, "WriteToFile")
-    ET.SubElement(fileout, "Filename").text = "RotatedCorrelators_" + file_tail
-    ET.SubElement(fileout, "Overwrite")
-
-
-# Effective mass fit to (rotated) correlator data
-def dofit(tasks, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, sampling="Bootstrap"):
-    task = ET.SubElement(tasks, "Task")
-
-    ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
+    ET.SubElement(task, "Action").text = "DoFit"
     ET.SubElement(task, "Type").text = "TemporalCorrelator"
-    
+
     mini = ET.SubElement(task, "MinimizerInfo")
-    ET.SubElement(mini, "Method").text = "Minuit2"
+    if minimizer == "Minuit2":
+        ET.SubElement(mini, "Method").text = "Minuit2"
+    elif minimizer == "Minuit2NoGradient":
+        ET.SubElement(mini, "Method").text = "Minuit2NoGradient"
+    elif minimizer == "LMDer":
+        ET.SubElement(mini, "Method").text = "LMDer"
+    elif minimizer == "NL2Sol":
+        ET.SubElement(mini, "Method").text = "NL2Sol"
+    else:
+        print("give me some minimizer info\n")
+        sys.exit()
+        
     ET.SubElement(mini, "ParameterRelTol").text = "1e-6"
     ET.SubElement(mini, "ChiSquareRelTol").text = "1e-4"
-    ET.SubElement(mini, "MaximumIterations").text = "1024"
+    ET.SubElement(mini, "MaximumIterations").text = "2048"
     ET.SubElement(mini, "Verbosity").text = "Low"
 
     ET.SubElement(task, "SamplingMode").text = sampling
 
     fit = ET.SubElement(task, "TemporalCorrelatorFit")
-    
-    op = ET.SubElement(fit, "RotatedOperator")
-    ET.SubElement(op, "ObsName").text = "proj_name"
-    ET.SubElement(op, "Level").text = str(level)
+
+    if(optype == "BasicLaph"):
+        op = ET.SubElement(fit, "BLOperatorString").text = operator
+    elif(optype == "GenIrreducible"):
+        op = ET.SubElement(fit, "GIOperatorString").text = operator
+    else:
+        print("Help please, I need an operator type I understand.")
+        sys.exit()
 
     ET.SubElement(fit, "MinimumTimeSeparation").text = str(tmin)
     ET.SubElement(fit, "MaximumTimeSeparation").text = str(tmax)
@@ -92,82 +49,317 @@ def dofit(tasks, proj_name, level, tmin, tmax, fitfn, plotfile, plotname, sampli
     model = ET.SubElement(fit, "Model")
     ET.SubElement(model, "Type").text = fitfn
 
+    if(fitfn == "TimeSymSingleExponential"):
+        fitmodel = "tsse"
+    elif(fitfn == "TimeSymSingleExponentialPlusConstant"):
+        fitmodel = "tsseC"
+    elif(fitfn == "TimeSymTwoExponential"):
+        fitmodel = "tste"
+    elif(fitfn == "TimeSymTwoExponentialPlusConstant"):
+        fitmodel = "tsteC"
+    elif(fitfn == "TimeSymGeomSeriesExponential"):
+        fitmodel = "tsgs"
+    else:
+        print("model confusion, fix me")
+        sys.exit()
+
+    if(len(fitname) < 8):
+        obsname = str(fitname) + "_" + str(tmin) + "_" + str(tmax) + "P" + str(psq) + fitmodel
+    else:
+        print("fitname: " + fitname + " may be too long for obsnames")
+        sys.exit()
+    # if(fitfn == "TimeSymSingleExponential" or fitfn == "TimeSymSingleExponentialPlusConstant"):
+    #     energies.append("En_" + obsname)
+    # else:
+    #     energies.append("En1_" + obsname)
+    energies.append("E1_" + obsname)
+
     eng = ET.SubElement(model, "Energy")
-    ET.SubElement(eng, "Name").text = "FitSE"
+    ET.SubElement(eng, "Name").text = "E1_" + obsname
     ET.SubElement(eng, "IDIndex").text = "0"
     amp = ET.SubElement(model, "Amplitude")
-    ET.SubElement(amp, "Name").text = "A0SE"
+    ET.SubElement(amp, "Name").text = "A1_" + obsname
     ET.SubElement(amp, "IDIndex").text = "0"
     eng1 = ET.SubElement(model, "FirstEnergy")
-    ET.SubElement(eng1, "Name").text = "FitTE"
+    ET.SubElement(eng1, "Name").text = "E1_" + obsname
     ET.SubElement(eng1, "IDIndex").text = "0"
     amp1 = ET.SubElement(model, "FirstAmplitude")
-    ET.SubElement(amp1, "Name").text = "A0TE"
+    ET.SubElement(amp1, "Name").text = "A1_" + obsname
     ET.SubElement(amp1, "IDIndex").text = "0"
     eng2 = ET.SubElement(model, "SqrtGapToSecondEnergy")
-    ET.SubElement(eng2, "Name").text = "FitGapTE"
+    ET.SubElement(eng2, "Name").text = "E2_" + obsname
     ET.SubElement(eng2, "IDIndex").text = "0"
     amp2 = ET.SubElement(model, "SecondAmplitudeRatio")
-    ET.SubElement(amp2, "Name").text = "A1TE"
+    ET.SubElement(amp2, "Name").text = "A2_" + obsname
     ET.SubElement(amp2, "IDIndex").text = "0"
     const = ET.SubElement(model, "AddedConstant")
-    ET.SubElement(const, "Name").text = "C"
+    ET.SubElement(const, "Name").text = "C_" + obsname
     ET.SubElement(const, "IDIndex").text = "0"
 
     plot = ET.SubElement(fit, "DoEffectiveEnergyPlot")
     ET.SubElement(plot, "PlotFile").text = plotfile
-    ET.SubElement(plot, "CorrName").text = plotname
+    ET.SubElement(plot, "CorrName").text = "standard"
     ET.SubElement(plot, "TimeStep").text = "3"
     ET.SubElement(plot, "SymbolColor").text = "blue"
     ET.SubElement(plot, "SymbolType").text = "circle"
     ET.SubElement(plot, "Goodness").text = "chisq"
+    if (refenergy != "none"):
+        ref = ET.SubElement(plot, "ReferenceEnergy")
+        ET.SubElement(ref, "Name").text = refenergy
+        ET.SubElement(ref, "IDIndex").text = "0"
     ET.SubElement(plot, "ShowApproach")
 
 
-# Check correlator matrix for outliers & zeros
-def dochecks_outliers(tasks, mintime, maxtime, proj_name, scale=20):
+def writesamplings(tasks, energies, energyfile, sampling="Bootstrap"):
     task = ET.SubElement(tasks, "Task")
 
-    ET.SubElement(task, "Action").text = "DoChecks"
-    ET.SubElement(task, "Type").text = "TemporalCorrelatorMatrix"
+    ET.SubElement(task, "Action").text = "WriteSamplingsToFile"
+    ET.SubElement(task, "SamplingMode").text = sampling
+    ET.SubElement(task, "FileName").text = energyfile
+    ET.SubElement(task, "FileMode").text = "overwrite"
 
-    corr = ET.SubElement(task, "CorrelatorMatrixInfo")
-    ET.SubElement(corr, "Name").text = proj_name
+    for x in energies:
+        obs = ET.SubElement(task, "MCObservable")
+        ET.SubElement(obs, "ObsName").text = x
+        ET.SubElement(obs, "Index").text = "0"
 
-    ET.SubElement(task, "MinTimeSep").text = str(mintime)
-    ET.SubElement(task, "MaxTimeSep").text = str(maxtime)
-    ET.SubElement(task, "OutlierScale").text = str(scale)
-    ET.SubElement(task, "Verbose")
+
+def readsamplings(tasks, filename, sampling, mcobs):
+    task = ET.SubElement(tasks, "Task")
+    ET.SubElement(task, "Action").text = "ReadSamplingsFromFile"
+    ET.SubElement(task, "SamplingMode").text = sampling
+    ET.SubElement(task, "FileName").text = filename
+    for x in mcobs:
+        obs = ET.SubElement(task, "MCObservable")
+        ET.SubElement(obs, "ObsName").text = str(x)
+        ET.SubElement(obs, "IDIndex").text = "0"
+
+        
+def diagonalenergyplots(tasks, oplist, filestub, sampling="Jackknife"):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoPlot"
+    ET.SubElement(task, "Type").text = "EffectiveEnergies"
+    ET.SubElement(task, "EffEnergyType").text = "TimeForward" # flag for forward vs symmetric?
+    ET.SubElement(task, "TimeStep").text = "3"
+
+    corrset = ET.SubElement(task, "DiagonalCorrelatorSet")
+    seq = ET.SubElement(corrset, "Sequential")
+    for x in oplist:
+        ET.SubElement(seq, "BLOperatorString").text = x
+
+    ET.SubElement(task, "Sampling").text = sampling
+    ET.SubElement(task, "PlotFileStub").text = filestub
+    ET.SubElement(task, "CorrName").text = "standard"
+
+
+def momaverage(tasks, opfile, psq, binfile, tmin, tmax, hermitian):
+    task = ET.SubElement(tasks, "Task")
+    operators = getopsdef(opfile, psq)
+    if not operators:
+        print("uuh operator list is empty for PSQ = " + str(psq) + ". try again.")
+        sys.exit()
+
+    # Make available constituent momenta
+    if(psq == 0):
+        mom = ["0,0,0"]
+    if(psq == 1):
+        mom = ["0,0,1", "0,0,-1", "0,1,0", "0,-1,0", "1,0,0", "-1,0,0"]
+    if(psq == 2):
+        mom = ["0,1,1", "0,-1,1", "0,1,-1", "0,-1,-1", "1,0,1", "1,0,-1", "-1,0,1", "-1,0,-1", "1,1,0", "1,-1,0", "-1,1,0", "-1,-1,0"]
+    if(psq == 3):
+        mom = ["1,1,1", "1,1,-1", "1,-1,1", "-1,1,1", "-1,-1,1", "-1,1,-1", "1,-1,-1", "-1,-1,-1"]
+    if(psq == 4):
+        mom = ["0,0,2", "0,0,-2", "0,2,0", "0,-2,0", "2,0,0", "-2,0,0"]
+    if(psq == 5):
+        mom = ["1,2,0", "-1,0,-2", "-1,0,2", "-1,2,0", "-2,-1,0", "-2,0,-1", "-2,0,1", "-2,1,0", "0,-1,-2", "0,-1,2", "0,-2,-1", "0,-2,1", "2,1,0", "2,0,1", "2,0,-1", "2,-1,0", "-1,-2,0", "1,0,2", "1,0,-2", "1,-2,0", "0,2,1", "0,1,2", "0,2,-1", "0,1,-2"]
+    if(psq == 6):
+        mom = ["1,1,2", "-1,-2,-1", "-1,-2,1", "-1,1,-2", "-1,1,2", "-1,-1,-2", "-1,2,-1", "-1,2,1", "-2,-1,-1", "-2,-1,1", "-2,1,-1", "-2,1,1", "1,-1,-2", "1,-1,2", "1,-2,-1", "1,-2,1", "1,1,-2", "-1,-1,2", "1,2,-1", "1,2,1", "2,-1,-1", "2,-1,1", "2,1,-1", "2,1,1"]
+
+    # Get flavour info -- assumes all the same for now
+    templist = []
+    for x in operators:
+        if("pion" in x):
+            isospin = "isotriplet"
+            flav = "pion"
+            templist.append(x)
+        elif("kaon" in x):
+            isospin = "isodoublet"
+            flav = "kaon"
+            templist.append(x)
+        elif("eta" in x):
+            isospin = "isosinglet"
+            flav = "eta"
+            templist.append(x)
+        elif("nucleon" in x):
+            isospin = "isodoublet"
+            flav = "nucleon"
+            templist.append(x)
+
+    # Strip all but displacement info
+    for i,s in enumerate(templist):
+        templist[i] = s.split(") ", 1)[-1]
+    # Remove duplicates
+    oplist = []
+    for i in templist:
+        if i not in oplist:
+            oplist.append(i)
+
+
+    ET.SubElement(task, "Action").text = "DoObsFunction"
+    ET.SubElement(task, "Type").text = "CorrelatorMatrixSuperposition"
+    results = ET.SubElement(task, "ResultOperatorOrderedList")
+    # GIOperatorStrings for resultant averaged matrix here
+    for opname in oplist:
+        ET.SubElement(results, "GIOperatorString").text = isospin + " " + "P=(" + mom[0] + ") " + opname
+
+    # BL (or GI??) OperatorStrings to be averaged here
+    # loop over list of matrices to be averaged for given psq
+    for x in mom:
+        matrix = ET.SubElement(task, "OperatorOrderedList")
+        for opname in oplist:
+            item = ET.SubElement(matrix, "Item")
+            ET.SubElement(item, "BLOperatorString").text = flav + " " + "P=(" + x + ") " + opname
+            ET.SubElement(item, "Coefficient").text = "1.0"
+
+    ET.SubElement(task, "MinimumTimeSeparation").text = str(tmin)
+    ET.SubElement(task, "MaximumTimeSeparation").text = str(tmax)
+    if(hermitian):
+        ET.SubElement(task, "HermitianMatrix")
+    ET.SubElement(task, "WriteToBinFile").text = binfile
+    ET.SubElement(task, "FileMode").text = "overwrite"
+    
+    
+def operatoraverage(tasks, ops, opresult, binfile, tmin, tmax, hermitian):
+    task = ET.SubElement(tasks, "Task")
+    if not ops:
+        print("uuh operator list is empty. try again.")
+        sys.exit()
+
+    flav = ["pion", "kaon", "eta", "phi", "kbar", "nucleon", "delta", "omega", "sigma", "lambda", "xi"]
+    isospin = ["singlet", "doublet", "triplet", "quartet"]
+        
+    # associate GI or BL with each operator? -- check for isospin of flavour
+    oplist = []
+    for x in ops:
+        if (any(i in x for i in flav)):
+            oplist.append((x, "BL"))
+        elif (any(i in x for i in isospin)):
+            oplist.append((x, "GI"))
+        else:
+            print("can't determine optype for " + x)
+            sys.exit()
+
+    ET.SubElement(task, "Type").text = "CorrelatorMatrixSuperposition"
+    results = ET.SubElement(task, "ResultOperatorOrderedList")
+    ET.SubElement(results, "GIOperatorString").text = opresult
+
+    for x in oplist:
+        matrix = ET.SubElement(task, "OperatorOrderedList")
+        item = ET.SubElement(matrix, "Item")
+        ET.SubElement(item, x[1] + "OperatorString").text = str(x[0])
+        ET.SubElement(item, "Coefficient").text = "1.0"
+
+    ET.SubElement(task, "MinimumTimeSeparation").text = str(tmin)
+    ET.SubElement(task, "MaximumTimeSeparation").text = str(tmax)
+    if(hermitian):
+        ET.SubElement(task, "HermitianMatrix")
+    ET.SubElement(task, "WriteToBinFile").text = binfile
+    ET.SubElement(task, "FileMode").text = "overwrite"
+
+
+def aspect_ratio(tasks, Ns, ordered_energies, xi_name, plotfile, sampling):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoFit"
+    ET.SubElement(task, "Type").text = "AnisotropyFromDispersion"
+
+    mini = ET.SubElement(task, "MinimizerInfo")
+    ET.SubElement(mini, "Method").text = "Minuit2"
+    ET.SubElement(mini, "ParameterRelTol").text = "1e-6"
+    ET.SubElement(mini, "ChiSquareRelTol").text = "1e-4"
+    ET.SubElement(mini, "MaximumIterations").text = "2048"
+    ET.SubElement(mini, "Verbosity").text = "Low"
+
+    ET.SubElement(task, "SamplingMode").text = sampling
+    ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
+    
+    fit = ET.SubElement(task, "AnisotropyFromDispersionFit")
+    ET.SubElement(fit, "SpatialExtentNumSites").text = str(Ns)
+    i = 0
+    for x in ordered_energies:
+        energy = ET.SubElement(fit, "Energy")
+        ET.SubElement(energy, "Name").text = x
+        ET.SubElement(energy, "IDIndex").text = "0"
+        ET.SubElement(energy, "IntMomSquared").text = str(i)
+        i += 1
+
+    anis = ET.SubElement(fit, "Anisotropy")
+    ET.SubElement(anis, "Name").text = "xi" + xi_name
+    ET.SubElement(anis, "IDIndex").text = "0"
+    
+    msq = ET.SubElement(fit, "RestMass")
+    ET.SubElement(msq, "Name").text = "msq" + xi_name
+    ET.SubElement(msq, "IDIndex").text = "0"
+
+    plot = ET.SubElement(fit, "DoPlot")
+    ET.SubElement(plot, "PlotFile").text = plotfile
+    ET.SubElement(plot, "CorrName").text = "standard"
+    ET.SubElement(plot, "TimeStep").text = "3"
+    ET.SubElement(plot, "SymbolColor").text = "blue"
+    ET.SubElement(plot, "SymbolType").text = "circle"
+    ET.SubElement(plot, "Goodness").text = "chisq"
+
+
+def add_obs(tasks, obs_strs, result_str, mode):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoObsFunction"
+    ET.SubElement(task, "Type").text = "LinearSuperposition"
+
+    result = ET.SubElement(task, "Result")
+    ET.SubElement(result, "Name").text = result_str
+    ET.SubElement(result, "IDIndex").text = "0"
+
+    # # Ensure obs_strs a list of tuples with ObsName and coefficient
+    # for i in obs_strs:
+    #     if(type(i) != tuple):
+    #         print("gis some tuples please")
+    #         sys.exit()
+    #     elif(len(i) != 2):
+    #         print("wrong tuple length")
+    #         sys.exit()
+
+    for x in obs_strs:
+        summand = ET.SubElement(task, "Summand")
+        obs = ET.SubElement(summand, "MCObservable")
+        ET.SubElement(obs, "ObsName").text = x
+        ET.SubElement(obs, "Index").text = "0"
+        ET.SubElement(summand, "Coefficient").text = "1.0"
+
+    # Sampling mode or "bins"
+    ET.SubElement(task, "Mode").text = mode
 
     
-# Check correlator matrix for hermiticity
-def dochecks_hermitian(tasks, mintime, maxtime, proj_name):
+def ref_ratio(tasks, obs_str, ref_str, result_str, mode):
     task = ET.SubElement(tasks, "Task")
 
-    ET.SubElement(task, "Action").text = "DoChecks"
-    ET.SubElement(task, "Type").text = "TemporalCorrelatorMatrixIsHermitian"
+    ET.SubElement(task, "Action").text = "DoObsFunction"
+    ET.SubElement(task, "Type").text = "Ratio"
 
-    corr = ET.SubElement(task, "CorrelatorMatrixInfo")
-    ET.SubElement(corr, "Name").text = proj_name
+    result = ET.SubElement(task, "Result")
+    ET.SubElement(result, "Name").text = result_str
+    ET.SubElement(result, "IDIndex").text = "0"
 
-    ET.SubElement(task, "MinTimeSep").text = str(mintime)
-    ET.SubElement(task, "MaxTimeSep").text = str(maxtime)
-    ET.SubElement(task, "Verbose")
+    numerator = ET.SubElement(task, "Numerator")
+    obs = ET.SubElement(numerator, "MCObservable")
+    ET.SubElement(obs, "ObsName").text = obs_str
+    ET.SubElement(obs, "Index").text = "0"
 
-# # UNFINISHED
-# # Plot Correlator, Eff Energy, MCestimates, etc.
-# def doplot(tasks, data, plotfile, plotname="standard", subvev="false", time_type="TimeSymmetric")
-#     task = ET.SubElement(tasks, "Task")
+    denominator = ET.SubElement(task, "Denominator")
+    obs = ET.SubElement(denominator, "MCObservable")
+    ET.SubElement(obs, "ObsName").text = ref_str
+    ET.SubElement(obs, "Index").text = "0"
 
-#     ET.SubElement(task, "Action").text = "DoPlot"
-#     if(data == "TemporalCorrelator"):
-#         ET.SubElement(task, "Type").text = "TemporalCorrelator"
-        
-
-#     elif(data == "EffectiveEnergy"):
-#         ET.SubElement(task, "Type").text = "EffectiveEnergy"
-#         ET.SubElement(task, "EffEnergyType").text = time_type
-
-        
-#     else:
-#         print("I don't know what to plot")
+    # Sampling mode or "bins"
+    ET.SubElement(task, "Mode").text = mode
