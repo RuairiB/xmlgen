@@ -238,7 +238,7 @@ class fitlog:
             print("no sampling info found")
             sys.exit()
         
-        self.plotlocation = "/home/ruairi/research/freeparticle_energies/SH_fits/" + ensem + "^3/" + i.flav + "/fits/PSQ" + i.psq + "/pdfs/" + i.flav + "_" + ensem2 + "_PSQ" + i.psq + "_" + fitfn + "_tmin" + i.tmin + "tmax" + i.tmax + "_" + samp + ".pdf"
+        self.plotlocation = "/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits/" + ensem + "^3/" + i.flav + "/fits/PSQ" + i.psq + "/pdfs/" + i.flav + "_" + ensem2 + "_PSQ" + i.psq + "_" + fitfn + "_tmin" + i.tmin + "tmax" + i.tmax + "_" + samp + ".pdf"
 
         
     def findflav(self):

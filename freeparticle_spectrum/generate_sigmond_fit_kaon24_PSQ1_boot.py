@@ -1,14 +1,14 @@
 import xml.etree.cElementTree as ET
 import os
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-corr_paths = ["/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_su_mesons_PSQ1"]
+corr_paths = ["/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_su_mesons_PSQ1"]
 proj_name = "fit_24_840_kaon_su_meson_PSQ1"
-inputdir = "/home/ruairi/research/freeparticle_energies/SH_fits/24^3/kaon/"
+inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits/24^3/kaon/"
 logfile = inputdir + "log_fit_24_840_kaon_su_meson_PSQ1_boot.log"
 
 root = ET.Element("SigMonD")
@@ -37,7 +37,7 @@ operator = "isodoublet P=(0,0,1) A2_1 SS_1"
 # dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_ref_5_35P0tsgs", sampling="Bootstrap")
 # writesamplings(tasks, energies, energyfile, sampling="Bootstrap")
 
-readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_boot", "Bootstrap", ["E1_ref_5_35P0tsgs"])
+readsamplings(tasks, "/latticeQCD/raid6/ruairi/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_boot", "Bootstrap", ["E1_ref_5_35P0tsgs"])
 #Time symmetric single exponential
 tmin = 3
 tmax = 35
