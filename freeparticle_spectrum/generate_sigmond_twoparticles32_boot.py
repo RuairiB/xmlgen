@@ -2,21 +2,21 @@ import xml.etree.cElementTree as ET
 import os
 import itertools
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
 from logutils import *
 from bestfits import *
 
 corr_paths = []
 for flav in "pion", "kaon", "eta", "nucleon":
     for p in range(0, 5):
-        corr_paths.append("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_boot")
+        corr_paths.append("/home/ruairi/research/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_boot")
 proj_name = "twoparticles32_boot"
-inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/two_particles/"
+inputdir = "/home/ruairi/research/freeparticle_energies/two_particles/"
 logfile = inputdir + "log_twoparticles32_boot.log"
 
 root = ET.Element("SigMonD")
@@ -29,9 +29,9 @@ initialize(init, corr_paths, proj_name, logfile, "Bootstrap", "32_860", "samplin
 
 # Tasks
 refmass_name = "E1_tmin8tmax34P0tsgs"
-readsamplings(tasks, "/latticeQCD/raid6/ruairi/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_boot", "Bootstrap", [refmass_name])
+readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_boot", "Bootstrap", [refmass_name])
 
-best = bestfits("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits")
+best = bestfits("/home/ruairi/research/freeparticle_energies/SH_fits")
 fits = []
 for x in best:
     if "32" in x.ensemble and x.sampling == "Bootstrap":

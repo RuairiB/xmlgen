@@ -4,6 +4,77 @@ import sys
 from utils import *
 
 # SigMond tasks
+# TO DO:
+# DoCorrMatrixZMagSquares
+# DoRotCorrMatReorderLevelsByEnergy
+# Flesh out reading/writing bins/samplings, etc
+# C(t+1) - C(t)
+# Fit to two correlators?
+
+# Go through header files for single pivot and rolling pivot, this could do with some more fleshing out
+def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, plotstub):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
+    ET.SubElement(task, "MinTimeSep").text = str(tmin)
+    ET.SubElement(task, "MinTimeSep").text = str(tmax)
+    if piv_type == "SinglePivot":
+        ET.SubElement(task, "Type").text = "SinglePivot"
+        pivoter = ET.SubElement(task, "SinglePivotInitiate")
+    elif piv_type == "RollingPivot":
+        ET.SubElement(task, "Type").text = "RollingPivot"
+        pivoter = ET.SubElement(task, "RollingPivotInitiate")
+    else:
+        print("need to implement other pivot types, check if in SigMonD first")
+        sys.exit()
+
+    matrixinfo = ET.SubElement(pivoter, "CorrelatorMatrixInfo")
+    for x in oplist:
+        if any(isospin in x for isospin in ["isosinglet", "isodoublet", "isotriplet", "isoquartet"]):
+            ET.SubElement(matrixinfo, "GIOperatorString").text = x
+        else:
+            ET.SubElement(matrixinfo, "BLOperatorString").text = x
+            
+    if herm:
+        ET.SubElement(matrixinfo, "HermitianMatrix")
+    if vev:
+        ET.SubElement(matrixinfo, "SubtractVEV")
+
+    rotatedop = ET.SubElement(pivoter, "RotatedCorrelator")
+    ET.SubElement(rotatedop, "GIOperatorString").text = rotop
+
+    ET.SubElement(pivoter, "AssignName").text = piv_name
+    ET.SubElement(pivoter, "NormTime").text = str(tnorm)
+    ET.SubElement(pivoter, "MetricTime").text = str(tmet)
+    ET.SubElement(pivoter, "DiagonalizeTime").text = str(tdiag)
+    ET.SubElement(pivoter, "MinimumInverseConditionNumber").text = "0.01"
+    ET.SubElement(pivoter, "NegativeEigenvalueAlarm").text = "-0.01"    
+    ET.SubElement(pivoter, "CheckMetricErrors")
+    ET.SubElement(pivoter, "CheckCommonMetrixMatrixNullSpace")
+    
+    writepiv = ET.SubElement(pivoter, "WritePivotToFile")
+    ET.SubElement(writepiv, "PivotFileName").text = piv_file
+    ET.SubElement(writepiv, "Overwrite")
+
+    writecorr = ET.SubElement(task, "WriteRotatedCorrToFile")
+    ET.SubElement(writecorr, "RotatedCorrFileName").text = rotcorr_file
+    ET.SubElement(writecorr, "Type").text = "bins" # Or samplings for single pivot?
+    ET.SubElement(writecorr, "Overwrite")
+
+    plots = ET.SubElement(task, "PlotRotatedEffectiveEnergies")
+    ET.SubElement(plots, "SamplingMode").text = plot_sampling
+    if any(effenergytype == x for x in ["TimeForward", "TimeForwardPlusConst", "TimeSymmetric", "TimeSymmetricPlusConst"]):
+        ET.SubElement(plots, "EffEnergyType").text = effenergytype
+    else:
+        print("give a better eff energy type")
+        sys.exit()
+
+    ET.SubElement(plots, "TimeStep").text = "3"
+    ET.SubElement(plots, "PlotFileStub").text = plotstub
+    ET.SubElement(plots, "SymbolColor").text = "blue"
+    ET.SubElement(plots, "SymbolType").text = "circle"
+    ET.SubElement(plots, "MaxErrorToPlot").text = "1.0"
+   
 
 # Effective mass fit to correlator data -- include GI operatorstringz
 def dofit(tasks, optype, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling="Bootstrap"):

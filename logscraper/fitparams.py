@@ -3,7 +3,7 @@ import os
 from glob import glob
 from logutils import *
 
-inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits"
+inputdir = "/home/ruairi/research/freeparticle_energies/SH_fits"
 
 # Make sure all logfiles have .log extension (or start with log_ -- might be better to avoid bash logs)
 logfiles = [y for x in os.walk(inputdir) for y in glob(os.path.join(x[0], 'log_*'))]
@@ -109,14 +109,14 @@ for x in fit24:
 # # shit out latex tables
 for psq in ["0", "1", "2", "3", "4"]:
     for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
-        textable_fits(kaon24, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/kaon24_PSQ" + psq + "_" + samp[1])
-        textable_fits(kaon32, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/kaon32_PSQ" + psq + "_" + samp[1])
+        textable_fits(kaon24, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/kaon24_PSQ" + psq + "_" + samp[1])
+        textable_fits(kaon32, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/kaon32_PSQ" + psq + "_" + samp[1])
 
-        textable_fits(pion24, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/pion24_PSQ" + psq + "_" + samp[1])
-        textable_fits(pion32, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/pion32_PSQ" + psq + "_" + samp[1])
+        textable_fits(pion24, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/pion24_PSQ" + psq + "_" + samp[1])
+        textable_fits(pion32, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/pion32_PSQ" + psq + "_" + samp[1])
 
-        textable_fits(nucleon24, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/nucleon24_PSQ" + psq + "_" + samp[1])
-        textable_fits(nucleon32, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/nucleon32_PSQ" + psq + "_" + samp[1])
+        textable_fits(nucleon24, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/nucleon24_PSQ" + psq + "_" + samp[1])
+        textable_fits(nucleon32, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/nucleon32_PSQ" + psq + "_" + samp[1])
 
-        textable_fits(eta24, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/eta24_PSQ" + psq + "_" + samp[1])
-        textable_fits(eta32, psq, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/eta32_PSQ" + psq + "_" + samp[1])
+        textable_fits(eta24, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/eta24_PSQ" + psq + "_" + samp[1])
+        textable_fits(eta32, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/eta32_PSQ" + psq + "_" + samp[1])
