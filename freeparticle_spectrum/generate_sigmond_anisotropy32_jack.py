@@ -52,7 +52,6 @@ for flav in ["pion", "kaon", "eta", "nucleon"]:
     
     aspect_ratio(tasks, 32, energies, flav + "32_jack", "fits/" + flav + "32_dispersion_jack.agr", "Jackknife")
 
-
 #writesamplings(tasks, energies, inputdir + "samplings/32_860_PSQ0_jack", sampling="Jackknife")
     
 indent(root)

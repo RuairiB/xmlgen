@@ -52,7 +52,6 @@ for flav in ["pion", "kaon", "eta", "nucleon"]:
     
     aspect_ratio(tasks, 32, energies, flav + "32_boot", "fits/" + flav + "32_dispersion_boot.agr", "Bootstrap")
 
-
 #writesamplings(tasks, energies, inputdir + "samplings/32_860_PSQ0_boot", sampling="Bootstrap")
     
 indent(root)

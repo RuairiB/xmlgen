@@ -1,5 +1,6 @@
 import xml.etree.cElementTree as ET
 import os
+import sys
 sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
 from utils import *
 from init import *
@@ -46,8 +47,6 @@ while tmax > 20:
     tmax-=1
     tmin=3
 
-
-
 #Time symmetric two exponential    
 tmin = 3
 tmax = 25
@@ -58,8 +57,6 @@ while tmax > 20:
         tmin+=1
     tmax-=1
     tmin=3
-
-
 
 #Time symmetric geometric series    
 tmin = 3

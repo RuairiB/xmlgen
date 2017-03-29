@@ -1,6 +1,7 @@
 import xml.etree.cElementTree as ET
 import os
 import itertools
+import sys
 sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
 from utils import *
 from init import *
@@ -35,7 +36,6 @@ fits = []
 for x in best:
     if "32" in x.ensemble and x.sampling == "Jackknife":
         fits.append(x)
-
 
 # Two particle energy combinations:
 pairs = list(itertools.combinations(fits, 2))

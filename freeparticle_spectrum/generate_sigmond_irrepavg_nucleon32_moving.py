@@ -1,5 +1,6 @@
 import xml.etree.cElementTree as ET
 import os
+import sys
 sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
 from utils import *
 from init import *
@@ -30,7 +31,6 @@ operatoraverage(tasks, oplist, "isodoublet P=(1,1,1) G_1 SS_0", inputdir + "avgb
 
 oplist = ["isodoublet P=(0,0,2) G1_1 SS_0", "isodoublet P=(0,0,2) G1_2 SS_0"]
 operatoraverage(tasks, oplist, "isodoublet P=(0,0,2) G1_1 SS_0", inputdir + "avgbins/irrepavg_32_860_uud_baryons_PSQ4", 3, 40, True)
-
 
 indent(root)
 tree.write(inputdir + "input_irrepavg_nucleon32_moving.xml")
