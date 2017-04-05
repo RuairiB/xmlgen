@@ -45,7 +45,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, "GenIrreducible", operator, "nucleon", str(tmin), str(tmax), tsse, "Minuit2", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tsse, "Minuit2", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -56,7 +56,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 10):
-        dofit(tasks, "GenIrreducible", operator, "nucleon", str(tmin), str(tmax), tste, "Minuit2", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tste, "Minuit2", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -67,7 +67,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 10):
-        dofit(tasks, "GenIrreducible", operator, "nucleon", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3

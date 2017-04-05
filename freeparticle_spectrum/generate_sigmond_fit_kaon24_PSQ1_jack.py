@@ -44,7 +44,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 6):
-        dofit(tasks, "GenIrreducible", operator, "kaon", str(tmin), str(tmax), tsseC, "Minuit2", inputdir + "fits/PSQ1/kaon_24_840_PSQ1_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", "1", energies, "E1_ref_5_35P0tsgs", "Jackknife")
+        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tsseC, "Minuit2", inputdir + "fits/PSQ1/kaon_24_840_PSQ1_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", "1", energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -55,7 +55,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, "GenIrreducible", operator, "kaon", str(tmin), str(tmax), tsteC, "Minuit2", inputdir + "fits/PSQ1/kaon_24_840_PSQ1_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", "1", energies, "E1_ref_5_35P0tsgs", "Jackknife")
+        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tsteC, "Minuit2", inputdir + "fits/PSQ1/kaon_24_840_PSQ1_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", "1", energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -66,7 +66,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, "GenIrreducible", operator, "kaon", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ1/kaon_24_840_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", "1", energies, "E1_ref_5_35P0tsgs", "Jackknife")
+        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ1/kaon_24_840_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", "1", energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3

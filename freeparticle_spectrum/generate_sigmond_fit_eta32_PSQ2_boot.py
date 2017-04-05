@@ -45,7 +45,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, "GenIrreducible", operator, "eta", str(tmin), str(tmax), tsse, "Minuit2", inputdir + "fits/PSQ2/eta_32_860_PSQ2_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsse, "Minuit2", inputdir + "fits/PSQ2/eta_32_860_PSQ2_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -56,7 +56,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 10):
-        dofit(tasks, "GenIrreducible", operator, "eta", str(tmin), str(tmax), tste, "Minuit2", inputdir + "fits/PSQ2/eta_32_860_PSQ2_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tste, "Minuit2", inputdir + "fits/PSQ2/eta_32_860_PSQ2_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -67,7 +67,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 10):
-        dofit(tasks, "GenIrreducible", operator, "eta", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ2/eta_32_860_PSQ2_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ2/eta_32_860_PSQ2_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3

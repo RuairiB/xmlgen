@@ -3,7 +3,7 @@ import os
 import sys
 
 # Initialise SigMond, most of this can be taken from filenames?
-def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_type):
+def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_type, echo=True):
     # Get filenames, filenumbers, etc
     # TODO: use map/dict to associate filemax with given corr_path -- current while loops look shite
     i = 0
@@ -26,7 +26,8 @@ def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_typ
     # Start the XML here:
     ET.SubElement(init, "ProjectName").text = proj_name
     ET.SubElement(init, "LogFile").text = logfile
-    ET.SubElement(init, "EchoXML")
+    if echo:
+        ET.SubElement(init, "EchoXML")
 
     # MCBinsInfo -- Change to take EnsembleInfo from filenames or as argument?
     mcbins = ET.SubElement(init, "MCBinsInfo")

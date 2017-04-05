@@ -17,7 +17,7 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
     ET.SubElement(task, "MinTimeSep").text = str(tmin)
-    ET.SubElement(task, "MinTimeSep").text = str(tmax)
+    ET.SubElement(task, "MaxTimeSep").text = str(tmax)
     if piv_type == "SinglePivot":
         ET.SubElement(task, "Type").text = "SinglePivot"
         pivoter = ET.SubElement(task, "SinglePivotInitiate")
@@ -48,10 +48,10 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
     ET.SubElement(pivoter, "MetricTime").text = str(tmet)
     ET.SubElement(pivoter, "DiagonalizeTime").text = str(tdiag)
     ET.SubElement(pivoter, "MinimumInverseConditionNumber").text = "0.01"
-    ET.SubElement(pivoter, "NegativeEigenvalueAlarm").text = "-0.01"    
+    ET.SubElement(pivoter, "NegativeEigenvalueAlarm").text = "-0.01"
     ET.SubElement(pivoter, "CheckMetricErrors")
     ET.SubElement(pivoter, "CheckCommonMetrixMatrixNullSpace")
-    
+
     writepiv = ET.SubElement(pivoter, "WritePivotToFile")
     ET.SubElement(writepiv, "PivotFileName").text = piv_file
     ET.SubElement(writepiv, "Overwrite")
@@ -74,10 +74,28 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
     ET.SubElement(plots, "SymbolColor").text = "blue"
     ET.SubElement(plots, "SymbolType").text = "circle"
     ET.SubElement(plots, "MaxErrorToPlot").text = "1.0"
-   
 
-# Effective mass fit to correlator data -- include GI operatorstringz
-def dofit(tasks, optype, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling="Bootstrap"):
+
+# def zfactors(tasks, piv_type, ):
+#     task = ET.SubElement(tasks, "Task")
+
+#     ET.SubElement(task, "Action").text = "DoCorrMatrixZMagSquares"
+#     if piv_type == "SinglePivot":
+#         ET.SubElement(task, "Type").text = "SinglePivot"
+#         pivoter = ET.SubElement(task, "SinglePivotInitiate")
+#     elif piv_type == "RollingPivot":
+#         ET.SubElement(task, "Type").text = "RollingPivot"
+#         pivoter = ET.SubElement(task, "RollingPivotInitiate")
+#     else:
+#         print("need to implement other pivot types, check if in SigMonD first")
+#         sys.exit()
+
+    
+
+
+
+# Effective mass fit to correlator data
+def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling="Bootstrap"):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoFit"
@@ -105,9 +123,13 @@ def dofit(tasks, optype, operator, fitname, tmin, tmax, fitfn, minimizer, plotfi
 
     fit = ET.SubElement(task, "TemporalCorrelatorFit")
 
-    if(optype == "BasicLaph"):
+    # remove need for optype variable, check operator string for flav vs isospin to determine type
+    flav = ["pion", "kaon", "eta", "phi", "kbar", "nucleon", "delta", "omega", "sigma", "lambda", "xi"]
+    isospin = ["singlet", "doublet", "triplet", "quartet"]
+
+    if any(i in operator for i in flav):
         op = ET.SubElement(fit, "BLOperatorString").text = operator
-    elif(optype == "GenIrreducible"):
+    elif any(i in operator for i in isospin):
         op = ET.SubElement(fit, "GIOperatorString").text = operator
     else:
         print("Help please, I need an operator type I understand.")
@@ -339,14 +361,25 @@ def operatoraverage(tasks, ops, opresult, binfile, tmin, tmax, hermitian):
     ET.SubElement(task, "FileMode").text = "overwrite"
 
 
-def aspect_ratio(tasks, Ns, ordered_energies, xi_name, plotfile, sampling):
+def aspect_ratio(tasks, Ns, ordered_energies, xi_name, plotfile, minimizer, sampling):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoFit"
     ET.SubElement(task, "Type").text = "AnisotropyFromDispersion"
 
     mini = ET.SubElement(task, "MinimizerInfo")
-    ET.SubElement(mini, "Method").text = "Minuit2"
+    if minimizer == "Minuit2":
+        ET.SubElement(mini, "Method").text = "Minuit2"
+    elif minimizer == "Minuit2NoGradient":
+        ET.SubElement(mini, "Method").text = "Minuit2NoGradient"
+    elif minimizer == "LMDer":
+        ET.SubElement(mini, "Method").text = "LMDer"
+    elif minimizer == "NL2Sol":
+        ET.SubElement(mini, "Method").text = "NL2Sol"
+    else:
+        print("give me some minimizer info\n")
+        sys.exit()
+        
     ET.SubElement(mini, "ParameterRelTol").text = "1e-6"
     ET.SubElement(mini, "ChiSquareRelTol").text = "1e-4"
     ET.SubElement(mini, "MaximumIterations").text = "2048"

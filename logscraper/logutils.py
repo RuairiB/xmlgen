@@ -172,6 +172,7 @@ class fitlog:
         self.chisq = str(format(float(self.chisq), '.2f'))
         # write this function
         zeros = math.ceil(abs(math.log10(float(self.fiterr)))) - 1
+        self.fiterr_zeros = zeros
         # strip non zero part of error (& e-05, etc) and pull out first two non zero bits (rounded)
         err_decimal = self.fiterr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
         err_print = str(round(float(err_decimal[:3]), -1))[:2]
@@ -269,6 +270,7 @@ class fitlog:
         self.chisq_full = ''
         self.fitname = ''
         self.fitenergy = ''
+        self.fiterr_zeros = ''
         self.fiterr = ''
         self.fitprint = ''
         self.sampling = ''
@@ -323,6 +325,7 @@ class linsuperlog:
     # Combine error formatting and sig fig cut offs into one function -- comment this better...
     def sigfigs(self, err_nprec):
         zeros = math.ceil(abs(math.log10(float(self.energyerr)))) - 1
+        self.energyerr_zeros = zeros
         # strip non zero part of error (& e-05, etc) and pull out first two non zero bits (rounded)
         err_decimal = self.energyerr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
         err_print = str(round(float(err_decimal[:3]), -1))[:2]
@@ -426,6 +429,7 @@ class linsuperlog:
         self.flav2 = ''
         self.energy = ''
         self.energyerr = ''
+        self.energyerr_zeros = ''
         self.energyratio = ''
         self.energyratioerr = ''
         self.energyprint = ''

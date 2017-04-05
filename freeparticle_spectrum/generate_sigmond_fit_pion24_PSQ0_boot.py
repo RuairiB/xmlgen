@@ -42,7 +42,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 6):
-        dofit(tasks, "BasicLaph", "pion P=(0,0,0) A1um_1 SS_0", "pion", str(tmin), str(tmax), tsseC, "Minuit2", inputdir + "fits/PSQ0/pion_24_840_PSQ0_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, "pion P=(0,0,0) A1um_1 SS_0", "pion", str(tmin), str(tmax), tsseC, "Minuit2", inputdir + "fits/PSQ0/pion_24_840_PSQ0_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -53,7 +53,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, "BasicLaph", "pion P=(0,0,0) A1um_1 SS_0", "pion", str(tmin), str(tmax), tsteC, "Minuit2", inputdir + "fits/PSQ0/pion_24_840_PSQ0_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, "pion P=(0,0,0) A1um_1 SS_0", "pion", str(tmin), str(tmax), tsteC, "Minuit2", inputdir + "fits/PSQ0/pion_24_840_PSQ0_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -64,7 +64,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, "BasicLaph", "pion P=(0,0,0) A1um_1 SS_0", "pion", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ0/pion_24_840_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, "pion P=(0,0,0) A1um_1 SS_0", "pion", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ0/pion_24_840_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3

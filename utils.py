@@ -1,10 +1,7 @@
 ## Various functions and classes for using XMLgen with SigMond
 import xml.etree.cElementTree as ET
 import os
-
-# # UNFINISHED - CLASSES FOR MCOBSERVABLES, OPERATORS, ETC??
-
-# Write operator class -- figure out classes in Python
+import sys
 
 # Indent for easy reading
 def indent(elem, level=0):
@@ -73,3 +70,32 @@ def getopsdef(filename, psq):
         operators[i] = s.strip()
 
     return operators
+
+
+def str_name(blah):
+    return [ k for k,v in locals().iteritems() if v is blah][0]
+
+def shortform(fitfn):
+    if fitfn == "TimeSymSingleExponential":
+        return "tsse"
+    elif fitfn == "TimeSymSingleExponentialPlusConstant":
+        return "tsseC"
+    elif fitfn == "TimeSymTwoExponential":
+        return "tste"
+    elif fitfn == "TimeSymTwoExponentialPlusConstant":
+        return "tsteC"
+    elif fitfn == "TimeSymGeomSeriesExponential":
+        return "tsgs"
+    elif fitfn == "TimeForwardSingleExponential":
+        return "tfse"
+    elif fitfn == "TimeForwardSingleExponentialPlusConstant":
+        return "tfseC"
+    elif fitfn == "TimeForwardTwoExponential":
+        return "tfte"
+    elif fitfn == "TimeForwardTwoExponentialPlusConstant":
+        return "tfteC"
+    elif fitfn == "TimeForwardGeomSeriesExponential":
+        return "tfgs"
+    else:
+        print("I need a valid fit function dickhead.")
+        sys.exit()

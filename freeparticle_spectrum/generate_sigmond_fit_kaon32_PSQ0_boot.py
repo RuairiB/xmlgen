@@ -42,7 +42,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 6):
-        dofit(tasks, "BasicLaph", "kaon P=(0,0,0) A1u_1 SS_0", "kaon", str(tmin), str(tmax), tsse, "Minuit2", inputdir + "fits/PSQ0/kaon_32_860_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, "kaon P=(0,0,0) A1u_1 SS_0", "kaon", str(tmin), str(tmax), tsse, "Minuit2", inputdir + "fits/PSQ0/kaon_32_860_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -53,7 +53,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, "BasicLaph", "kaon P=(0,0,0) A1u_1 SS_0", "kaon", str(tmin), str(tmax), tste, "Minuit2", inputdir + "fits/PSQ0/kaon_32_860_PSQ0_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, "kaon P=(0,0,0) A1u_1 SS_0", "kaon", str(tmin), str(tmax), tste, "Minuit2", inputdir + "fits/PSQ0/kaon_32_860_PSQ0_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -64,7 +64,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, "BasicLaph", "kaon P=(0,0,0) A1u_1 SS_0", "kaon", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ0/kaon_32_860_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, "kaon P=(0,0,0) A1u_1 SS_0", "kaon", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ0/kaon_32_860_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
