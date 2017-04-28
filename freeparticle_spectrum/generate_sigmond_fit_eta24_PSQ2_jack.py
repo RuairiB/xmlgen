@@ -45,7 +45,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "Minuit2", inputdir + "fits/PSQ2/eta_24_840_PSQ2_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ2/eta_24_840_PSQ2_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -55,8 +55,8 @@ tmin = 3
 tmax = 25
 
 while tmax > 20:
-    while tmin < (tmax - 10):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsteC, "Minuit2", inputdir + "fits/PSQ2/eta_24_840_PSQ2_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
+    while tmin < (tmax - 3):
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsteC, "LMDer", inputdir + "fits/PSQ2/eta_24_840_PSQ2_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -66,8 +66,8 @@ tmin = 3
 tmax = 25
 
 while tmax > 20:
-    while tmin < (tmax - 10):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ2/eta_24_840_PSQ2_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
+    while tmin < (tmax - 3):
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ2/eta_24_840_PSQ2_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3

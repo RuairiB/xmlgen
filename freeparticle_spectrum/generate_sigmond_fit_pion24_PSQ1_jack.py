@@ -45,7 +45,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 6):
-        dofit(tasks, operator, "pion", str(tmin), str(tmax), tsseC, "Minuit2", inputdir + "fits/PSQ1/pion_24_840_PSQ1_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
+        dofit(tasks, operator, "pion", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ1/pion_24_840_PSQ1_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -56,7 +56,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 10):
-        dofit(tasks, operator, "pion", str(tmin), str(tmax), tsteC, "Minuit2", inputdir + "fits/PSQ1/pion_24_840_PSQ1_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
+        dofit(tasks, operator, "pion", str(tmin), str(tmax), tsteC, "LMDer", inputdir + "fits/PSQ1/pion_24_840_PSQ1_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -67,7 +67,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 10):
-        dofit(tasks, operator, "pion", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ1/pion_24_840_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
+        dofit(tasks, operator, "pion", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ1/pion_24_840_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_ref_5_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3

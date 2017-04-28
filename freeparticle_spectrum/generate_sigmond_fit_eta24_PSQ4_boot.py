@@ -45,7 +45,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "Minuit2", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -55,8 +55,8 @@ tmin = 3
 tmax = 25
 
 while tmax > 20:
-    while tmin < (tmax - 10):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsteC, "Minuit2", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+    while tmin < (tmax - 3):
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsteC, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -66,8 +66,8 @@ tmin = 3
 tmax = 25
 
 while tmax > 20:
-    while tmin < (tmax - 10):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+    while tmin < (tmax - 3):
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3

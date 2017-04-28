@@ -61,7 +61,7 @@ def gen_aspect_fit(flav):
             # print(x.psq)
             energies.append(x.fitname)
 
-        aspect_ratio(tasks, 32, energies, flav + "32_" + str(i) + "_boot", inputdir + "fits/" + flav + "32_dispersion_" + str(flav) + "_" + str(i) + "_boot.agr", "LMDer", "Bootstrap")
+        aspect_ratio(tasks, 32, energies, flav + "32_" + str(i) + "_boot", inputdir + "fits/" + flav + "/" + flav + "32_dispersion_" + str(flav) + "_" + str(i) + "_boot.agr", "LMDer", "Bootstrap")
 
     indent(root)
     filename = str(inputdir + "input_anisotropy32_" + str(flav) + "_boot.xml")

@@ -53,7 +53,7 @@ def bestfits(inputdir):
                     temp.stripindex()
                     temp.findflav()
                     temp.findplot()
-                    # Only add to list of fit results if good fit
+
                     fits.append(temp)
 
 
@@ -70,66 +70,26 @@ def bestfits(inputdir):
         elif "24" in x.ensemble:
             fit24.append(x)
 
-    # Separate by flavour
-    kaon32 = []
-    pion32 = []
-    eta32 = []
-    nucleon32 = []
-
-    for x in fit32:
-        if x.flav == "kaon":
-            kaon32.append(x)
-        elif x.flav == "nucleon":
-            nucleon32.append(x)
-        elif x.flav == "pion":
-            pion32.append(x)
-        elif x.flav == "eta":
-            eta32.append(x)
-        else:
-            print("Unknown operator32 flavour")
-            sys.exit()
-
-    kaon24 = []
-    pion24 = []
-    eta24 = []
-    nucleon24 = []
-
-    for x in fit24:
-        if x.flav == "kaon":
-            kaon24.append(x)
-        elif x.flav == "nucleon":
-            nucleon24.append(x)
-        elif x.flav == "pion":
-            pion24.append(x)
-        elif x.flav == "eta":
-            eta24.append(x)
-        else:
-            print("Unknown operator24 flavour")
-            sys.exit()
 
     best = []
     for psq in ["0", "1", "2", "3", "4"]:
         for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
-            best.append(bestfit(kaon32, psq, samp[0]))
-            best.append(bestfit(kaon24, psq, samp[0]))
+            for flav in ["kaon", "pion", "eta", "nucleon"]:
+                x = bestfit(fit32, flav, psq, samp[0])
+                y = bestfit(fit24, flav, psq, samp[0])
+                if x:
+                    best.append(x)
+                if y:
+                    best.append(y)
 
-            best.append(bestfit(pion32, psq, samp[0]))
-            best.append(bestfit(pion24, psq, samp[0]))
-
-            if psq != "4":
-                best.append(bestfit(eta32, psq, samp[0]))
-                best.append(bestfit(eta24, psq, samp[0]))
-
-            best.append(bestfit(nucleon32, psq, samp[0]))
-            best.append(bestfit(nucleon24, psq, samp[0]))
-
-
+    print("This is unfinished, see logutils:bestfit()")
     best.sort(key=lambda k: (k.ensemble, k.flav, k.psq))
-    for i in best:
+    for i in fits:
         destination = "/home/ruairi/research/freeparticle_energies/notes/plots/" + i.flav + i.plotlocation.split(i.flav)[2]
         if destination.endswith('.pdf'):
             destination = destination[:-4]
         texfig(i.plotlocation, destination, i)
+        print(destination)
 
     return best
 

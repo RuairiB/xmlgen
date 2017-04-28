@@ -18,7 +18,7 @@ def textable_fits(fits, psq, sampling, filename):
     table = []
     for i in fits:
         if i.psq == psq and i.sampling == str(sampling):
-            if float(i.chisq) < 2.0:
+            if float(i.chisq) < 5.0:
                 table.append(i)
 
     if table:
@@ -87,12 +87,12 @@ def textable_fits(fits, psq, sampling, filename):
 
         
 
-def bestfit(fits, psq, sampling):
-    # determine 'best' fit from given list of fits for given psq & sampling mode - extend to pull out flavour?
+def bestfit(fits, flav, psq, sampling):
+    # determine 'best' fit from given list of fits for given psq & sampling mode
     # 'best' determined by chi^2 (and error?)
     wanted_fits = []
     for i in fits:
-        if i.psq == psq and i.sampling == str(sampling):
+        if i.psq == psq and i.sampling == str(sampling) and i.flav == flav:
             wanted_fits.append(i)
 
     # wanted_fits.sort(key=lambda k:(k.fiterr, abs(float(k.chisq_full) - 1)))
@@ -102,12 +102,17 @@ def bestfit(fits, psq, sampling):
     #     print("something is empty for " + psq + "  " + sampling)
     #     sys.exit()
 
-    # 'best' fit by chi^2 closest to 1
     if wanted_fits:
-        return min(wanted_fits, key=lambda x:abs(float(x.chisq_full) - 1))
+        if any(x.bestparams == True for x in wanted_fits):
+            return x
+        else:
+            print("Need to pick best fit for " + flav + fits[0].ensemble + "  " + psq + "  " + sampling)
+
+            # 'best' fit by chi^2 closest to 1 -- worthless way to pick best fit
+            # return min(wanted_fits, key=lambda x:abs(float(x.chisq_full) - 1))
     else:
-        print("something is empty for " + psq + "  " + sampling)
-        sys.exit()
+        print("something is empty for " + flav + fits[0].ensemble + "  " + psq + "  " + sampling)
+        # sys.exit()
 
 def twopart_fitname(fits, samp):
     if(type(fits) != tuple):
@@ -129,7 +134,7 @@ def twopart_fitname(fits, samp):
     elif samp == "none":
         return name
     else:
-        print("wrong sampling cunt")
+        print("wrong sampling")
         sys.exit()
 
 
@@ -170,16 +175,20 @@ class fitlog:
     def sigfigs(self, err_nprec):
         self.chisq_full = self.chisq
         self.chisq = str(format(float(self.chisq), '.2f'))
-        # write this function
-        zeros = math.ceil(abs(math.log10(float(self.fiterr)))) - 1
-        self.fiterr_zeros = zeros
-        # strip non zero part of error (& e-05, etc) and pull out first two non zero bits (rounded)
-        err_decimal = self.fiterr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
-        err_print = str(round(float(err_decimal[:3]), -1))[:2]
 
-        # truncate fit energy & add error
-        self.fitprint = self.fitenergy[:2+int(zeros)+err_nprec] + "(" + err_print + ")"
+        if self.fiterr != "0":
+            zeros = math.ceil(abs(math.log10(float(self.fiterr)))) - 1
+            self.fiterr_zeros = zeros
+            # strip non zero part of error (& e-05, etc) and pull out first two non zero bits (rounded)
+            err_decimal = self.fiterr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
+            err_print = str(round(float(err_decimal[:3]), -1))[:2]
 
+            # truncate fit energy & add error
+            self.fitprint = self.fitenergy[:2+int(zeros)+err_nprec] + "(" + err_print + ")"
+        else:
+            self.fitprint = self.fitenergy[:2+err_nprec] + "(" + self.fiterr + ")"
+        
+            
     # put octahedral irrep and displacement into latex math mode
     def texopstring(self):
         self.opstring = self.opstring.replace("_0 0", "_0")
@@ -194,6 +203,7 @@ class fitlog:
         
     def stripindex(self):
         self.fitname = self.fitname.split(" Index", 1)[0]
+        self.xistring = self.xistring.split(" Index", 1)[0]
 
     def findplot(self):
         i = self
@@ -206,7 +216,7 @@ class fitlog:
         else:
             print("something is going bad, can't find ensemble")
             sys.exit()
-        
+
         if i.model == "TimeSymSingleExponential":
             fitfn = "tsse"
         elif i.model == "TimeForwardSingleExponential":
@@ -238,24 +248,37 @@ class fitlog:
         else:
             print("no sampling info found")
             sys.exit()
-        
+
         self.plotlocation = "/home/ruairi/research/freeparticle_energies/SH_fits/" + ensem + "^3/" + i.flav + "/fits/PSQ" + i.psq + "/pdfs/" + i.flav + "_" + ensem2 + "_PSQ" + i.psq + "_" + fitfn + "_tmin" + i.tmin + "tmax" + i.tmax + "_" + samp + ".pdf"
 
-        
-    def findflav(self):
-        if any(flav in self.opstring for flav in ["pion", "isotriplet"]):
-            self.flav = "pion"
-        elif any(flav in self.opstring for flav in ["G1g_", "G1_", "G_"]):
-            self.flav = "nucleon"
-        elif any(flav in self.opstring for flav in ["kaon", "A1_", "A2_"]):
-            self.flav = "kaon"
-        elif any(flav in self.opstring for flav in ["eta", "isosinglet"]):
-            self.flav = "eta"
-        else:
-            print("Unknown operator flavour")
-            sys.exit()
 
-        
+    def findflav(self, xi=False):
+        if xi != True:
+            if any(flav in self.opstring for flav in ["pion", "isotriplet"]):
+                self.flav = "pion"
+            elif any(flav in self.opstring for flav in ["G1g_", "G1_", "G_"]):
+                self.flav = "nucleon"
+            elif any(flav in self.opstring for flav in ["kaon", "A1_", "A2_"]):
+                self.flav = "kaon"
+            elif any(flav in self.opstring for flav in ["eta", "isosinglet"]):
+                self.flav = "eta"
+            else:
+                print("Unknown operator flavour")
+                sys.exit()
+        else:
+            if "pion" in self.xistring:
+                self.flav = "pion"
+            elif "nucleon" in self.xistring:
+                self.flav = "nucleon"
+            elif "kaon" in self.xistring:
+                self.flav = "kaon"
+            elif "eta" in self.xistring:
+                self.flav = "eta"
+            else:
+                print("Unknown xi fit flavour")
+                sys.exit()            
+
+
     def __init__(self):
         self.ensemble = ''
         self.opstring = ''
@@ -275,7 +298,10 @@ class fitlog:
         self.fitprint = ''
         self.sampling = ''
         self.plotlocation = ''
+        self.xistring = ''
+        self.bestparams = False
 
+        
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 

@@ -41,34 +41,22 @@ tmin = 3
 tmax = 25
 
 while tmax > 20:
-    while tmin < (tmax - 6):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsse, "Minuit2", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+    while tmin < (tmax - 3):
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
 
-#Time symmetric two exponential    
+#Time symmetric single exponential + C
 tmin = 3
 tmax = 25
 
 while tmax > 20:
-    while tmin < (tmax - 15):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tste, "Minuit2", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+    while tmin < (tmax - 3):
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
-
-#Time symmetric geometric series    
-tmin = 3
-tmax = 25
-
-while tmax > 20:
-    while tmin < (tmax - 15):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsgs, "Minuit2", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
-        tmin+=1
-    tmax-=1
-    tmin=3
-
     
 writesamplings(tasks, energies, inputdir + "energies/eta_32_860_PSQ0_boot", sampling="Bootstrap")
     

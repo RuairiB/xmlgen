@@ -61,7 +61,7 @@ def gen_aspect_fit(flav):
             # print(x.psq)
             energies.append(x.fitname)
 
-        aspect_ratio(tasks, 24, energies, flav + "24_" + str(i) + "_jack", inputdir + "fits/" + flav + "24_dispersion_" + str(flav) + "_" + str(i) + "_jack.agr", "LMDer", "Jackknife")
+        aspect_ratio(tasks, 24, energies, flav + "24_" + str(i) + "_jack", inputdir + "fits/" + flav + "/" + flav + "24_dispersion_" + str(flav) + "_" + str(i) + "_jack.agr", "LMDer", "Jackknife")
 
     indent(root)
     filename = str(inputdir + "input_anisotropy24_" + str(flav) + "_jack.xml")

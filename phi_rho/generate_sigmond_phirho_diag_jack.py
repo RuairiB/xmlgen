@@ -48,13 +48,13 @@ oplistP1 = ["isosinglet P=(0,0,1) A1_1 Phi(1)",
 
 rotopP1 = "isosinglet P=(0,0,1) A1g_1 rotop_P1"
 
-rotatematrix(tasks, "SinglePivot", oplistP0, True, True, rotopP0, "pivotsingle_phi_rho_P0_jack", "0", "15", "2", "2", "4", inputdir + "pivots/pivotsingle_phi_rho_P0_2_2_4_jack", inputdir + "rotated_matrices/rotcorr_single_phi_rho_P0_2_2_4_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_singlepiv_P0_2_2_4_jack_level")
+rotatematrix(tasks, "SinglePivot", oplistP0, True, True, rotopP0, "pivotsingle_phi_rho_P0_jack", "0", "15", "0", "0", "1", inputdir + "pivots/pivotsingle_phi_rho_P0_0_0_1_jack", inputdir + "rotated_matrices/rotcorr_single_phi_rho_P0_0_0_1_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_singlepiv_P0_0_0_1_jack_level")
 
-rotatematrix(tasks, "SinglePivot", oplistP1, True, False, rotopP1, "pivotsingle_phi_rho_P1_jack", "0", "15", "2", "2", "4", inputdir + "pivots/pivotsingle_phi_rho_P1_2_2_4_jack", inputdir + "rotated_matrices/rotcorr_single_phi_rho_P1_2_2_4_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_singlepiv_P1_2_2_4_jack_level")
+rotatematrix(tasks, "SinglePivot", oplistP1, True, False, rotopP1, "pivotsingle_phi_rho_P1_jack", "0", "15", "0", "0", "1", inputdir + "pivots/pivotsingle_phi_rho_P1_0_0_1_jack", inputdir + "rotated_matrices/rotcorr_single_phi_rho_P1_0_0_1_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_singlepiv_P1_0_0_1_jack_level")
 
-# rotatematrix(tasks, "RollingPivot", oplistP0, True, True, rotopP0, "pivotrolling_phi_rho_P0_jack", "0", "15", "2", "2", "4", inputdir + "pivots/pivotrolling_phi_rho_P0_2_2_4_jack", inputdir + "rotated_matrices/rotcorr_rolling_phi_rho_P0_2_2_4_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_rollingpiv_P0_2_2_4_jack_level")
+# rotatematrix(tasks, "RollingPivot", oplistP0, True, True, rotopP0, "pivotrolling_phi_rho_P0_jack", "0", "15", "0", "0", "1", inputdir + "pivots/pivotrolling_phi_rho_P0_0_0_1_jack", inputdir + "rotated_matrices/rotcorr_rolling_phi_rho_P0_0_0_1_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_rollingpiv_P0_0_0_1_jack_level")
 
-# rotatematrix(tasks, "RollingPivot", oplistP1, True, False, rotopP1, "pivotrolling_phi_rho_P1_jack", "0", "15", "2", "2", "4", inputdir + "pivots/pivotrolling_phi_rho_P1_2_2_4_jack", inputdir + "rotated_matrices/rotcorr_rolling_phi_rho_P1_2_2_4_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_rollingpiv_P1_2_2_4_jack_level")
+# rotatematrix(tasks, "RollingPivot", oplistP1, True, False, rotopP1, "pivotrolling_phi_rho_P1_jack", "0", "15", "0", "0", "1", inputdir + "pivots/pivotrolling_phi_rho_P1_0_0_1_jack", inputdir + "rotated_matrices/rotcorr_rolling_phi_rho_P1_0_0_1_jack", "Jackknife", "TimeSymmetric", inputdir + "plots/phi_rho_rollingpiv_P1_0_0_1_jack_level")
 
 #writesamplings(tasks, energies, inputdir + "samplings/32_860_PSQ0_jack", sampling="Jackknife")
     

@@ -6,7 +6,7 @@ from utils import *
 from init import *
 from tasks import *
 
-corr_paths = ["/home/ruairi/research/phi_rho/working/rotated_matrices/rotcorr_single_phi_rho_P1_2_2_4_jack"]
+corr_paths = ["/home/ruairi/research/phi_rho/working/rotated_matrices/rotcorr_single_phi_rho_P1_0_0_1_jack"]
 
 proj_name = "phi_rho_fit_PSQ1_jack"
 inputdir = "/home/ruairi/research/phi_rho/working/"

@@ -95,7 +95,7 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
 
 
 # Effective mass fit to correlator data
-def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling="Bootstrap"):
+def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling, exclude="none"):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoFit"
@@ -137,6 +137,8 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
 
     ET.SubElement(fit, "MinimumTimeSeparation").text = str(tmin)
     ET.SubElement(fit, "MaximumTimeSeparation").text = str(tmax)
+    if(exclude != "none"):
+        ET.SubElement(fit, "ExcludeTimes").text = exclude
     ET.SubElement(fit, "LargeTimeNoiseCutoff").text = "1.0"
 
     model = ET.SubElement(fit, "Model")
@@ -152,6 +154,16 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
         fitmodel = "tsteC"
     elif(fitfn == "TimeSymGeomSeriesExponential"):
         fitmodel = "tsgs"
+    elif(fitfn == "TimeForwardSingleExponential"):
+        fitmodel = "tfse"
+    elif(fitfn == "TimeForwardSingleExponentialPlusConstant"):
+        fitmodel = "tfseC"
+    elif(fitfn == "TimeForwardTwoExponential"):
+        fitmodel = "tfte"
+    elif(fitfn == "TimeForwardTwoExponentialPlusConstant"):
+        fitmodel = "tfteC"
+    elif(fitfn == "TimeForwardGeomSeriesExponential"):
+        fitmodel = "tfgs"
     else:
         print("model confusion, fix me")
         sys.exit()
