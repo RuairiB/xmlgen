@@ -45,7 +45,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -56,7 +56,18 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 3):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsteC, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsteC, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
+        tmin+=1
+    tmax-=1
+    tmin=3
+
+#Time symmetric single exponential
+tmin = 3
+tmax = 25
+
+while tmax > 20:
+    while tmin < (tmax - 3):
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -67,7 +78,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 3):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ4/eta_24_840_PSQ4_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3

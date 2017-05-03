@@ -34,8 +34,11 @@ def bestfits(inputdir):
                 temp.psqfromstring()
                 temp.texopstring()
                 temp.texensemble()
-                temp.tmin = str(fitparams.find("MinimumTimeSeparation").text)
-                temp.tmax = str(fitparams.find("MaximumTimeSeparation").text)
+
+                timeseps = str(fitparams.find("TimeSeparations").text)
+                timeseps = timeseps.split()
+                temp.tmin = str(min(int(t) for t in timeseps))
+                temp.tmax = str(max(int(t) for t in timeseps))
                 temp.model = str(fitparams.find("Model").text)
 
                 fitresult = x.find("BestFitResult")
@@ -56,7 +59,6 @@ def bestfits(inputdir):
 
                     fits.append(temp)
 
-
     # Sort list by P^2
     # fits.sort(key=lambda k: k.psq)
 
@@ -72,15 +74,15 @@ def bestfits(inputdir):
 
 
     best = []
-    for psq in ["0", "1", "2", "3", "4"]:
-        for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
-            for flav in ["kaon", "pion", "eta", "nucleon"]:
-                x = bestfit(fit32, flav, psq, samp[0])
-                y = bestfit(fit24, flav, psq, samp[0])
-                if x:
-                    best.append(x)
-                if y:
-                    best.append(y)
+    # for psq in ["0", "1", "2", "3", "4"]:
+    #     for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
+    #         for flav in ["kaon", "pion", "eta", "nucleon"]:
+    #             x = bestfit(fit32, flav, psq, samp[0])
+    #             y = bestfit(fit24, flav, psq, samp[0])
+    #             if x:
+    #                 best.append(x)
+    #             if y:
+    #                 best.append(y)
 
     print("This is unfinished, see logutils:bestfit()")
     best.sort(key=lambda k: (k.ensemble, k.flav, k.psq))
@@ -89,7 +91,7 @@ def bestfits(inputdir):
         if destination.endswith('.pdf'):
             destination = destination[:-4]
         texfig(i.plotlocation, destination, i)
-        print(destination)
+        # print(destination)
 
     return best
 

@@ -45,7 +45,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ3/eta_32_860_PSQ3_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ3/eta_32_860_PSQ3_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -56,7 +56,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 10):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tste, "LMDer", inputdir + "fits/PSQ3/eta_32_860_PSQ3_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tste, "LMDer", inputdir + "fits/PSQ3/eta_32_860_PSQ3_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -67,7 +67,18 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 3):
-        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ3/eta_32_860_PSQ3_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ3/eta_32_860_PSQ3_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap", "16")
+        tmin+=1
+    tmax-=1
+    tmin=3
+
+#Time symmetric geometric series    
+tmin = 3
+tmax = 25
+
+while tmax > 20:
+    while tmin < (tmax - 3):
+        dofit(tasks, operator, "eta", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ3/eta_32_860_PSQ3_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3

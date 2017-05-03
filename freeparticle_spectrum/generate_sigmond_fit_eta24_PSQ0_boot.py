@@ -42,7 +42,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ0/eta_24_840_PSQ0_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ0/eta_24_840_PSQ0_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -52,8 +52,19 @@ tmin = 3
 tmax = 25
 
 while tmax > 20:
-    while tmin < (tmax - 15):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsteC, "LMDer", inputdir + "fits/PSQ0/eta_24_840_PSQ0_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+    while tmin < (tmax - 6):
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsteC, "LMDer", inputdir + "fits/PSQ0/eta_24_840_PSQ0_tsteC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
+        tmin+=1
+    tmax-=1
+    tmin=3
+
+#Time symmetric single exponential + C
+tmin = 3
+tmax = 25
+
+while tmax > 20:
+    while tmin < (tmax - 6):
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ0/eta_24_840_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -64,7 +75,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ0/eta_24_840_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap")
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ0/eta_24_840_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_ref_5_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3

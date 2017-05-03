@@ -35,8 +35,11 @@ def allfits(inputdir):
                 temp.psqfromstring()
                 temp.texopstring()
                 temp.texensemble()
-                temp.tmin = str(fitparams.find("MinimumTimeSeparation").text)
-                temp.tmax = str(fitparams.find("MaximumTimeSeparation").text)
+
+                timeseps = str(fitparams.find("TimeSeparations").text)
+                timeseps = timeseps.split()
+                temp.tmin = str(min(int(t) for t in timeseps))
+                temp.tmax = str(max(int(t) for t in timeseps))
                 temp.model = str(fitparams.find("Model").text)
             
                 fitresult = x.find("BestFitResult")
