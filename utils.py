@@ -99,3 +99,77 @@ def shortform(fitfn):
     else:
         print("I need a valid fit function dickhead.")
         sys.exit()
+
+def readpivot(task, piv_type, piv_file, piv_name):
+    if piv_type == "SinglePivot":
+        ET.SubElement(task, "Type").text = "SinglePivot"
+        pivoter = ET.SubElement(task, "SinglePivotInitiate")
+    elif piv_type == "RollingPivot":
+        ET.SubElement(task, "Type").text = "RollingPivot"
+        pivoter = ET.SubElement(task, "RollingPivotInitiate")
+    else:
+        print("need to implement other pivot types, check if in SigMonD first")
+        sys.exit()
+    
+    read = ET.SubElement(pivoter, "ReadPivotFromFile")
+    ET.SubElement(read, "PivotFileName").text = piv_file
+    ET.SubElement(pivoter, "AssignName").text = piv_name
+
+
+def getoptype(operator):
+    flav = ["pion", "kaon", "eta", "phi", "kbar", "nucleon", "delta", "omega", "sigma", "lambda", "xi"]
+    isospin = ["singlet", "doublet", "triplet", "quartet"]
+
+    if any(i in operator for i in flav):
+        return "BLOperatorString"
+    elif any(i in operator for i in isospin):
+        return "GIOperatorString"
+    else:
+        print("Help please, I need an operator type I understand.")
+        sys.exit()
+
+
+def modelparams(elem, obsname):
+    eng = ET.SubElement(elem, "Energy")
+    ET.SubElement(eng, "Name").text = "E1_" + obsname
+    ET.SubElement(eng, "IDIndex").text = "0"
+    amp = ET.SubElement(elem, "Amplitude")
+    ET.SubElement(amp, "Name").text = "A1_" + obsname
+    ET.SubElement(amp, "IDIndex").text = "0"
+    eng1 = ET.SubElement(elem, "FirstEnergy")
+    ET.SubElement(eng1, "Name").text = "E1_" + obsname
+    ET.SubElement(eng1, "IDIndex").text = "0"
+    amp1 = ET.SubElement(elem, "FirstAmplitude")
+    ET.SubElement(amp1, "Name").text = "A1_" + obsname
+    ET.SubElement(amp1, "IDIndex").text = "0"
+    eng2 = ET.SubElement(elem, "SqrtGapToSecondEnergy")
+    ET.SubElement(eng2, "Name").text = "E2_" + obsname
+    ET.SubElement(eng2, "IDIndex").text = "0"
+    amp2 = ET.SubElement(elem, "SecondAmplitudeRatio")
+    ET.SubElement(amp2, "Name").text = "A2_" + obsname
+    ET.SubElement(amp2, "IDIndex").text = "0"
+    const = ET.SubElement(elem, "AddedConstant")
+    ET.SubElement(const, "Name").text = "C_" + obsname
+    ET.SubElement(const, "IDIndex").text = "0"
+
+
+def minimizerinfo(task, minimizer):
+    mini = ET.SubElement(task, "MinimizerInfo")
+    if minimizer == "Minuit2":
+        ET.SubElement(mini, "Method").text = "Minuit2"
+    elif minimizer == "Minuit2NoGradient":
+        ET.SubElement(mini, "Method").text = "Minuit2NoGradient"
+    elif minimizer == "LMDer":
+        ET.SubElement(mini, "Method").text = "LMDer"
+    elif minimizer == "NL2Sol":
+        ET.SubElement(mini, "Method").text = "NL2Sol"
+    else:
+        print("give me some minimizer info\n")
+        sys.exit()
+
+    ET.SubElement(mini, "ParameterRelTol").text = "1e-6"
+    ET.SubElement(mini, "ChiSquareRelTol").text = "1e-4"
+    ET.SubElement(mini, "MaximumIterations").text = "2048"
+    ET.SubElement(mini, "Verbosity").text = "Low"
+
+

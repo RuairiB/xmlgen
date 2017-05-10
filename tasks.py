@@ -30,11 +30,8 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
 
     matrixinfo = ET.SubElement(pivoter, "CorrelatorMatrixInfo")
     for x in oplist:
-        if any(isospin in x for isospin in ["isosinglet", "isodoublet", "isotriplet", "isoquartet"]):
-            ET.SubElement(matrixinfo, "GIOperatorString").text = x
-        else:
-            ET.SubElement(matrixinfo, "BLOperatorString").text = x
-            
+        ET.SubElement(matrixinfo, getoptype(x)).text = x
+
     if herm:
         ET.SubElement(matrixinfo, "HermitianMatrix")
     if vev:
@@ -76,65 +73,39 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
     ET.SubElement(plots, "MaxErrorToPlot").text = "1.0"
 
 
-# def zfactors(tasks, piv_type, ):
-#     task = ET.SubElement(tasks, "Task")
+def zfactors(tasks, piv_type, piv_file, piv_name, ampstub, plotstub, opstrings):
+    task = ET.SubElement(tasks, "Task")
 
-#     ET.SubElement(task, "Action").text = "DoCorrMatrixZMagSquares"
-#     if piv_type == "SinglePivot":
-#         ET.SubElement(task, "Type").text = "SinglePivot"
-#         pivoter = ET.SubElement(task, "SinglePivotInitiate")
-#     elif piv_type == "RollingPivot":
-#         ET.SubElement(task, "Type").text = "RollingPivot"
-#         pivoter = ET.SubElement(task, "RollingPivotInitiate")
-#     else:
-#         print("need to implement other pivot types, check if in SigMonD first")
-#         sys.exit()
-
+    ET.SubElement(task, "Action").text = "DoCorrMatrixZMagSquares"
+    readpivot(task, piv_type, piv_file, piv_name)
     
+    ET.SubElement(task, "RotatedAmplitudeCommonName").text = str(ampstub)
+    plots = ET.SubElement(task, "DoPlots")
+    ET.SubElement(plots, "PlotFileStub").text = plotstub
+    ET.SubElement(plots, "BarColor").text = "cyan" # include option to pick/change this?
 
+    for x in opstrings:
+        zplot = ET.SubElement(plots, "ZMagSqPlot")
+        ET.SubElement(zplot, getoptype(x)).text = x
+        ET.SubElement(zplot, "ObsName").text = standard
+        # ET.SubElement(zplot, "FileSuffix").text = uhh..
 
 
 # Effective mass fit to correlator data
-def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling, exclude="none"):
+def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling, exclude="none", pivot="none", level="none"):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoFit"
     ET.SubElement(task, "Type").text = "TemporalCorrelator"
 
-    mini = ET.SubElement(task, "MinimizerInfo")
-    if minimizer == "Minuit2":
-        ET.SubElement(mini, "Method").text = "Minuit2"
-    elif minimizer == "Minuit2NoGradient":
-        ET.SubElement(mini, "Method").text = "Minuit2NoGradient"
-    elif minimizer == "LMDer":
-        ET.SubElement(mini, "Method").text = "LMDer"
-    elif minimizer == "NL2Sol":
-        ET.SubElement(mini, "Method").text = "NL2Sol"
-    else:
-        print("give me some minimizer info\n")
-        sys.exit()
-        
-    ET.SubElement(mini, "ParameterRelTol").text = "1e-6"
-    ET.SubElement(mini, "ChiSquareRelTol").text = "1e-4"
-    ET.SubElement(mini, "MaximumIterations").text = "2048"
-    ET.SubElement(mini, "Verbosity").text = "Low"
-
+    minimizerinfo(task, minimizer)
+    
     ET.SubElement(task, "SamplingMode").text = sampling
-
+    ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
+    
     fit = ET.SubElement(task, "TemporalCorrelatorFit")
 
-    # remove need for optype variable, check operator string for flav vs isospin to determine type
-    flav = ["pion", "kaon", "eta", "phi", "kbar", "nucleon", "delta", "omega", "sigma", "lambda", "xi"]
-    isospin = ["singlet", "doublet", "triplet", "quartet"]
-
-    if any(i in operator for i in flav):
-        op = ET.SubElement(fit, "BLOperatorString").text = operator
-    elif any(i in operator for i in isospin):
-        op = ET.SubElement(fit, "GIOperatorString").text = operator
-    else:
-        print("Help please, I need an operator type I understand.")
-        sys.exit()
-
+    ET.SubElement(fit, getoptype(operator)).text = operator
     ET.SubElement(fit, "MinimumTimeSeparation").text = str(tmin)
     ET.SubElement(fit, "MaximumTimeSeparation").text = str(tmax)
     if(exclude != "none"):
@@ -144,63 +115,17 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
     model = ET.SubElement(fit, "Model")
     ET.SubElement(model, "Type").text = fitfn
 
-    if(fitfn == "TimeSymSingleExponential"):
-        fitmodel = "tsse"
-    elif(fitfn == "TimeSymSingleExponentialPlusConstant"):
-        fitmodel = "tsseC"
-    elif(fitfn == "TimeSymTwoExponential"):
-        fitmodel = "tste"
-    elif(fitfn == "TimeSymTwoExponentialPlusConstant"):
-        fitmodel = "tsteC"
-    elif(fitfn == "TimeSymGeomSeriesExponential"):
-        fitmodel = "tsgs"
-    elif(fitfn == "TimeForwardSingleExponential"):
-        fitmodel = "tfse"
-    elif(fitfn == "TimeForwardSingleExponentialPlusConstant"):
-        fitmodel = "tfseC"
-    elif(fitfn == "TimeForwardTwoExponential"):
-        fitmodel = "tfte"
-    elif(fitfn == "TimeForwardTwoExponentialPlusConstant"):
-        fitmodel = "tfteC"
-    elif(fitfn == "TimeForwardGeomSeriesExponential"):
-        fitmodel = "tfgs"
-    else:
-        print("model confusion, fix me")
-        sys.exit()
-
+    fitmodel = shortform(fitfn)
+    
     if(len(fitname) < 8):
         obsname = str(fitname) + "_" + str(tmin) + "_" + str(tmax) + "P" + str(psq) + fitmodel
     else:
         print("fitname: " + fitname + " may be too long for obsnames")
         sys.exit()
-    # if(fitfn == "TimeSymSingleExponential" or fitfn == "TimeSymSingleExponentialPlusConstant"):
-    #     energies.append("En_" + obsname)
-    # else:
-    #     energies.append("En1_" + obsname)
+
     energies.append("E1_" + obsname)
-
-    eng = ET.SubElement(model, "Energy")
-    ET.SubElement(eng, "Name").text = "E1_" + obsname
-    ET.SubElement(eng, "IDIndex").text = "0"
-    amp = ET.SubElement(model, "Amplitude")
-    ET.SubElement(amp, "Name").text = "A1_" + obsname
-    ET.SubElement(amp, "IDIndex").text = "0"
-    eng1 = ET.SubElement(model, "FirstEnergy")
-    ET.SubElement(eng1, "Name").text = "E1_" + obsname
-    ET.SubElement(eng1, "IDIndex").text = "0"
-    amp1 = ET.SubElement(model, "FirstAmplitude")
-    ET.SubElement(amp1, "Name").text = "A1_" + obsname
-    ET.SubElement(amp1, "IDIndex").text = "0"
-    eng2 = ET.SubElement(model, "SqrtGapToSecondEnergy")
-    ET.SubElement(eng2, "Name").text = "E2_" + obsname
-    ET.SubElement(eng2, "IDIndex").text = "0"
-    amp2 = ET.SubElement(model, "SecondAmplitudeRatio")
-    ET.SubElement(amp2, "Name").text = "A2_" + obsname
-    ET.SubElement(amp2, "IDIndex").text = "0"
-    const = ET.SubElement(model, "AddedConstant")
-    ET.SubElement(const, "Name").text = "C_" + obsname
-    ET.SubElement(const, "IDIndex").text = "0"
-
+    modelparams(model, obsname)
+    
     plot = ET.SubElement(fit, "DoEffectiveEnergyPlot")
     ET.SubElement(plot, "PlotFile").text = plotfile
     ET.SubElement(plot, "CorrName").text = "standard"
@@ -214,6 +139,12 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
         ET.SubElement(ref, "IDIndex").text = "0"
     ET.SubElement(plot, "ShowApproach")
 
+    if pivot != "none":
+        insert = ET.SubElement(fit, "InsertIntoPivot")
+        ET.SubElement(insert, "Type").text = "Single" # Only single pivot implemented so far
+        ET.SubElement(insert, "Name").text = str(pivot) # Object name, NOT filename. Must already be in memory
+        ET.SubElement(insert, "Level").text = str(level)
+    
 
 def writesamplings(tasks, energies, energyfile, sampling="Bootstrap"):
     task = ET.SubElement(tasks, "Task")
@@ -239,13 +170,13 @@ def readsamplings(tasks, filename, sampling, mcobs):
         ET.SubElement(obs, "ObsName").text = str(x)
         ET.SubElement(obs, "IDIndex").text = "0"
 
-        
+
 def diagonalenergyplots(tasks, oplist, filestub, sampling="Jackknife"):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoPlot"
     ET.SubElement(task, "Type").text = "EffectiveEnergies"
-    ET.SubElement(task, "EffEnergyType").text = "TimeForward" # flag for forward vs symmetric?
+    ET.SubElement(task, "EffEnergyType").text = "TimeSymmetric" # flag for forward vs symmetric?
     ET.SubElement(task, "TimeStep").text = "3"
 
     corrset = ET.SubElement(task, "DiagonalCorrelatorSet")
@@ -333,8 +264,8 @@ def momaverage(tasks, opfile, psq, binfile, tmin, tmax, hermitian):
         ET.SubElement(task, "HermitianMatrix")
     ET.SubElement(task, "WriteToBinFile").text = binfile
     ET.SubElement(task, "FileMode").text = "overwrite"
-    
-    
+
+
 def operatoraverage(tasks, ops, opresult, binfile, tmin, tmax, hermitian):
     task = ET.SubElement(tasks, "Task")
     if not ops:
@@ -343,8 +274,8 @@ def operatoraverage(tasks, ops, opresult, binfile, tmin, tmax, hermitian):
 
     flav = ["pion", "kaon", "eta", "phi", "kbar", "nucleon", "delta", "omega", "sigma", "lambda", "xi"]
     isospin = ["singlet", "doublet", "triplet", "quartet"]
-        
-    # associate GI or BL with each operator? -- check for isospin of flavour
+
+    # associate GI or BL with each operator? -- check for isospin or flavour -- fix this with getoptype fn
     oplist = []
     for x in ops:
         if (any(i in x for i in flav)):
@@ -379,27 +310,11 @@ def aspect_ratio(tasks, Ns, ordered_energies, xi_name, plotfile, minimizer, samp
     ET.SubElement(task, "Action").text = "DoFit"
     ET.SubElement(task, "Type").text = "AnisotropyFromDispersion"
 
-    mini = ET.SubElement(task, "MinimizerInfo")
-    if minimizer == "Minuit2":
-        ET.SubElement(mini, "Method").text = "Minuit2"
-    elif minimizer == "Minuit2NoGradient":
-        ET.SubElement(mini, "Method").text = "Minuit2NoGradient"
-    elif minimizer == "LMDer":
-        ET.SubElement(mini, "Method").text = "LMDer"
-    elif minimizer == "NL2Sol":
-        ET.SubElement(mini, "Method").text = "NL2Sol"
-    else:
-        print("give me some minimizer info\n")
-        sys.exit()
-        
-    ET.SubElement(mini, "ParameterRelTol").text = "1e-6"
-    ET.SubElement(mini, "ChiSquareRelTol").text = "1e-4"
-    ET.SubElement(mini, "MaximumIterations").text = "2048"
-    ET.SubElement(mini, "Verbosity").text = "Low"
-
+    minimizerinfo(task, minimizer)
+    
     ET.SubElement(task, "SamplingMode").text = sampling
     ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
-    
+
     fit = ET.SubElement(task, "AnisotropyFromDispersionFit")
     ET.SubElement(fit, "SpatialExtentNumSites").text = str(Ns)
     i = 0
@@ -413,7 +328,7 @@ def aspect_ratio(tasks, Ns, ordered_energies, xi_name, plotfile, minimizer, samp
     anis = ET.SubElement(fit, "Anisotropy")
     ET.SubElement(anis, "Name").text = "xi" + xi_name
     ET.SubElement(anis, "IDIndex").text = "0"
-    
+
     msq = ET.SubElement(fit, "RestMass")
     ET.SubElement(msq, "Name").text = "msq" + xi_name
     ET.SubElement(msq, "IDIndex").text = "0"
@@ -456,7 +371,7 @@ def add_obs(tasks, obs_strs, result_str, mode):
     # Sampling mode or "bins"
     ET.SubElement(task, "Mode").text = mode
 
-    
+
 def ref_ratio(tasks, obs_str, ref_str, result_str, mode):
     task = ET.SubElement(tasks, "Task")
 
@@ -479,3 +394,85 @@ def ref_ratio(tasks, obs_str, ref_str, result_str, mode):
 
     # Sampling mode or "bins"
     ET.SubElement(task, "Mode").text = mode
+
+
+# Effective mass fits to two single real-valued correlators -- ratio or something?
+def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2, fitfn1, fitfn2, minimizer, plotfile, psq1, psq2, ratio_name, energies, sampling, exclude1="none", exclude2="none", pivot="none", level="none"):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoFit"
+    ET.SubElement(task, "Type").text = "TwoTemporalCorrelator"
+
+    minimizerinfo(task, minimizer)
+    
+    ET.SubElement(task, "SamplingMode").text = sampling
+    ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
+
+    fit = ET.SubElement(task, "TwoTemporalCorrelatorFit")
+
+    
+    corr1 = ET.SubElement(fit, "CorrelatorOne")
+    ET.SubElement(corr1, getoptype(op1)).text = op1
+    ET.SubElement(corr1, "MinimumTimeSeparation").text = str(tmin1)
+    ET.SubElement(corr1, "MaximumTimeSeparation").text = str(tmax1)
+    if(exclude != "none"):
+        ET.SubElement(corr1, "ExcludeTimes").text = exclude
+    ET.SubElement(corr1, "LargeTimeNoiseCutoff").text = "1.0"
+
+    model = ET.SubElement(corr1, "Model")
+    ET.SubElement(model, "Type").text = fitfn1
+
+    fitmodel = shortform(fitfn1)
+
+    if(len(fitname1) < 8):
+        obsname = str(fitname1) + "_" + str(tmin1) + "_" + str(tmax1) + "P" + str(psq1) + fitmodel
+    else:
+        print("fitname1: " + fitname1 + " may be too long for obsnames")
+        sys.exit()
+
+    energies.append("E1_" + obsname)
+    modelparams(model, obsname)
+    
+
+    corr2 = ET.SubElement(fit, "CorrelatorOne")
+    ET.SubElement(corr2, getoptype(op2)).text = op2
+    ET.SubElement(corr2, "MinimumTimeSeparation").text = str(tmin2)
+    ET.SubElement(corr2, "MaximumTimeSeparation").text = str(tmax2)
+    if(exclude != "none"):
+        ET.SubElement(corr2, "ExcludeTimes").text = exclude
+    ET.SubElement(corr2, "LargeTimeNoiseCutoff").text = "1.0"
+
+    model = ET.SubElement(corr2, "Model")
+    ET.SubElement(model, "Type").text = fitfn2
+
+    fitmodel = shortform(fitfn2)
+
+    if(len(fitname2) < 8):
+        obsname = str(fitname2) + "_" + str(tmin2) + "_" + str(tmax2) + "P" + str(psq2) + fitmodel
+    else:
+        print("fitname2: " + fitname2 + " may be too long for obsnames")
+        sys.exit()
+
+    energies.append("E1_" + obsname)
+    modelparams(model, obsname)
+    
+    
+    rat = ET.SubElement(fit, "EnergyRatio")
+    ET.SubElement(rat, "Name").text = ratio_name
+    ET.SubElement(rat, "IDIndex").text = "0"
+
+    plot = ET.SubElement(fit, "DoEffectiveEnergyPlot")
+    ET.SubElement(plot, "PlotFile").text = plotfile
+    ET.SubElement(plot, "CorrName").text = "standard"
+    ET.SubElement(plot, "TimeStep").text = "3"
+    ET.SubElement(plot, "SymbolColor").text = "blue"
+    ET.SubElement(plot, "SymbolType").text = "circle"
+    ET.SubElement(plot, "Goodness").text = "chisq"
+    ET.SubElement(plot, "ShowApproach")
+
+    if pivot != "none":
+        insert = ET.SubElement(fit, "InsertIntoPivot")
+        ET.SubElement(insert, "Type").text = "Single" # Only single pivot implemented so far
+        ET.SubElement(insert, "Name").text = str(pivot) # Object name, NOT filename. Must already be in memory
+        ET.SubElement(insert, "Level").text = str(level)
+
