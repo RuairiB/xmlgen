@@ -34,6 +34,14 @@ tsgs = "TimeSymGeomSeriesExponential"
 operator = "isosinglet P=(0,0,2) A2p_1 SS_0"
 psq = "4"
 
+print(getisospin(operator))
+oplist = ["eta P=(0,0,2) A2p_1 SS_0",
+          "eta P=(0,0,2) A1p_1 SS_2",
+          "eta P=(0,0,2) A2p_1 SD_0",
+          "kaon P=(-4,0,6) A2p_1 SD_124",
+          "pion P=(0,0,2) A2m_1 SS_0"]
+corr_timediff(tasks, oplist, 3, 38, filename="filename.file", hermitian=True, overwrite=True)
+
 # Tasks
 # dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_ref_5_35P0tsgs", sampling="Bootstrap")
 # writesamplings(tasks, energies, energyfile, sampling="Bootstrap")

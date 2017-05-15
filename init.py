@@ -3,13 +3,23 @@ import os
 import sys
 
 # Initialise SigMond, most of this can be taken from filenames?
-def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_type, echo=True):
+def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_type, echo=False):
     # Get filenames, filenumbers, etc
-    # TODO: use map/dict to associate filemax with given corr_path -- current while loops look shite
+    # TODO: use map/dict to associate filemax with given corr_path -- current loops look shite
+    if isinstance(obs_type, basestring):
+        temp = obs_type
+        obs_type = []
+        for x in corr_paths:
+            obs_type.append(temp)
+
+    if len(obs_type) != len(corr_paths):
+        print("some list length problems")
+        sys.exit()
+
     i = 0
     filemax = []
-    if(obs_type == "BLCorr"):
-        while i < len(corr_paths):
+    while i < len(corr_paths):
+        if(obs_type[i] == "BLCorr"):
             filenums = list()
             name = ""
             for corr_paths[i],dirnames,filenames in os.walk(corr_paths[i]):
@@ -21,8 +31,10 @@ def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_typ
             filemax.append(max(filenums))
 
             corr_paths[i] += name
-            i += 1
-        
+        else:
+            filemax.append(0)
+        i += 1
+
     # Start the XML here:
     ET.SubElement(init, "ProjectName").text = proj_name
     ET.SubElement(init, "LogFile").text = logfile
@@ -61,24 +73,25 @@ def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_typ
 
     # MCObservables
     mcobs = ET.SubElement(init, "MCObservables")
-    if(obs_type == "BLCorr"):
+    i = 0
+    if any(x == "BLCorr" for x in obs_type):
         BLcorrs = ET.SubElement(mcobs, "BLCorrelatorData")
-        i = 0
-        while i < len(corr_paths):
+    if any(x == "bins" for x in obs_type):
+            bins = ET.SubElement(mcobs, "BinData")
+    if any(x == "samplings" for x in obs_type):
+            samps = ET.SubElement(mcobs, "SamplingData")
+
+    while i < len(corr_paths):
+        if(obs_type[i] == "BLCorr"):
             files = ET.SubElement(BLcorrs, "FileListInfo")
             ET.SubElement(files, "FileNameStub").text = corr_paths[i]
             ET.SubElement(files, "MinFileNumber").text = "0"
             ET.SubElement(files, "MaxFileNumber").text = str(filemax[i])
-            # ET.SubElement(files, "FileMode").text = "Overwrite"
-            i +=1
-    elif(obs_type == "bins"):
-        bins = ET.SubElement(mcobs, "BinData")
-        for x in corr_paths:
-            ET.SubElement(bins, "FileName").text = str(x)
-    elif(obs_type == "samplings"):
-        bins = ET.SubElement(mcobs, "SamplingData")
-        for x in corr_paths:
-            ET.SubElement(bins, "FileName").text = str(x)        
-    else:
-        print("Wrong MCObs type, fit it.")
-        sys.exit()
+        elif(obs_type[i] == "bins"):
+            ET.SubElement(bins, "FileName").text = corr_paths[i]
+        elif(obs_type[i] == "samplings"):
+            ET.SubElement(samps, "FileName").text = corr_paths[i]
+        else:
+            print("Wrong MCObs type, fit it.")
+            sys.exit()
+        i += 1

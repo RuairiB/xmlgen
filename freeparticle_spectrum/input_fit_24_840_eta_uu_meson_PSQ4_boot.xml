@@ -2,7 +2,6 @@
   <Initialize>
     <ProjectName>fit_24_840_eta_uu_meson_PSQ4</ProjectName>
     <LogFile>/home/ruairi/research/xmlgen/freeparticle_spectrum/log_fit_24_840_eta_uu_meson_PSQ4_boot.log</LogFile>
-    <EchoXML />
     <MCBinsInfo>
       <MCEnsembleInfo>clover_s24_t128_ud840_s743</MCEnsembleInfo>
     </MCBinsInfo>
@@ -21,6 +20,29 @@
     </MCObservables>
   </Initialize>
   <TaskSequence>
+    <Task>
+      <Action>DoObsFunction</Action>
+      <Type>CorrelatorMatrixTimeDifferences</Type>
+      <NewOperatorOrderedList>
+        <GIOperatorString>isosinglet P=(0,0,2) A2p_1 subSS_0</GIOperatorString>
+        <GIOperatorString>isosinglet P=(0,0,2) A1p_1 subSS_2</GIOperatorString>
+        <GIOperatorString>isosinglet P=(0,0,2) A2p_1 subSD_0</GIOperatorString>
+        <GIOperatorString>isodoublet P=(-4,0,6) A2p_1 subSD_124</GIOperatorString>
+        <GIOperatorString>isotriplet P=(0,0,2) A2m_1 subSS_0</GIOperatorString>
+      </NewOperatorOrderedList>
+      <OldOperatorOrderedList>
+        <BLOperatorString>eta P=(0,0,2) A2p_1 SS_0</BLOperatorString>
+        <BLOperatorString>eta P=(0,0,2) A1p_1 SS_2</BLOperatorString>
+        <BLOperatorString>eta P=(0,0,2) A2p_1 SD_0</BLOperatorString>
+        <BLOperatorString>kaon P=(-4,0,6) A2p_1 SD_124</BLOperatorString>
+        <BLOperatorString>pion P=(0,0,2) A2m_1 SS_0</BLOperatorString>
+      </OldOperatorOrderedList>
+      <MinimumTimeSeparation>3</MinimumTimeSeparation>
+      <MaximumTimeSeparation>38</MaximumTimeSeparation>
+      <HermitianMatrix />
+      <WriteToBinFile>filename.file</WriteToBinFile>
+      <FileMode>overwrite</FileMode>
+    </Task>
     <Task>
       <Action>ReadSamplingsFromFile</Action>
       <SamplingMode>Bootstrap</SamplingMode>

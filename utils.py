@@ -100,6 +100,7 @@ def shortform(fitfn):
         print("I need a valid fit function dickhead.")
         sys.exit()
 
+
 def readpivot(task, piv_type, piv_file, piv_name):
     if piv_type == "SinglePivot":
         ET.SubElement(task, "Type").text = "SinglePivot"
@@ -110,7 +111,7 @@ def readpivot(task, piv_type, piv_file, piv_name):
     else:
         print("need to implement other pivot types, check if in SigMonD first")
         sys.exit()
-    
+
     read = ET.SubElement(pivoter, "ReadPivotFromFile")
     ET.SubElement(read, "PivotFileName").text = piv_file
     ET.SubElement(pivoter, "AssignName").text = piv_name
@@ -127,6 +128,35 @@ def getoptype(operator):
     else:
         print("Help please, I need an operator type I understand.")
         sys.exit()
+
+
+def getisospin(operator):
+    flav = ["pion", "kaon", "eta", "phi", "kbar", "nucleon", "delta", "omega", "sigma", "lambda", "xi"]
+    isospin = ["singlet", "doublet", "triplet", "quartet"]
+    FLAV_MAP = {
+        'eta': 'singlet',
+        'phi': 'singlet',
+        'lambda': 'singlet',
+        'omega': 'singlet',
+        'kaon': 'doublet',
+        'kbar': 'doublet',
+        'nucleon': 'doublet',
+        'xi': 'doublet',
+        'pion': 'triplet',
+        'sigma': 'triplet',
+        'delta': 'quartet'
+    }
+
+    if any(i in operator for i in flav):
+        flav = next((i for i in flav if i in operator), False)
+        isospin = FLAV_MAP[flav]
+    elif any(i in operator for i in isospin):
+        isospin = next((i for i in isospin if i in operator), False)
+    else:
+        print("Help please, I need an operator type I understand.")
+        sys.exit()
+
+    return "iso" + isospin
 
 
 def modelparams(elem, obsname):
@@ -173,3 +203,11 @@ def minimizerinfo(task, minimizer):
     ET.SubElement(mini, "Verbosity").text = "Low"
 
 
+def getTsubopstring(opstring):
+    isospin = getisospin(opstring)
+    stringbits = opstring.split(" ")
+    flav = stringbits[0]
+    mom = stringbits[1]
+    irrep = stringbits[2]
+    disp = stringbits[3]
+    return isospin + " " + mom + " " + irrep + " " + "sub" + disp

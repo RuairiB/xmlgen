@@ -396,6 +396,30 @@ def ref_ratio(tasks, obs_str, ref_str, result_str, mode):
     ET.SubElement(task, "Mode").text = mode
 
 
+def corr_timediff(tasks, oplist, tmin, tmax, filename="none", hermitian=True, overwrite=True):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoObsFunction"
+    ET.SubElement(task, "Type").text = "CorrelatorMatrixTimeDifferences"
+
+    newlist = ET.SubElement(task, "NewOperatorOrderedList")
+    for x in oplist:
+        ET.SubElement(newlist, "GIOperatorString").text = getTsubopstring(x)
+
+    oldlist = ET.SubElement(task, "OldOperatorOrderedList")
+    for x in oplist:
+        ET.SubElement(oldlist, getoptype(x)).text = x
+
+    ET.SubElement(task, "MinimumTimeSeparation").text = str(tmin)
+    ET.SubElement(task, "MaximumTimeSeparation").text = str(tmax)
+    if hermitian:
+        ET.SubElement(task, "HermitianMatrix")
+    if filename != "none":
+        ET.SubElement(task, "WriteToBinFile").text = filename
+    if overwrite:
+        ET.SubElement(task, "FileMode").text = "overwrite"
+
+
 # Effective mass fits to two single real-valued correlators -- ratio or something?
 def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2, fitfn1, fitfn2, minimizer, plotfile, psq1, psq2, ratio_name, energies, sampling, exclude1="none", exclude2="none", pivot="none", level="none"):
     task = ET.SubElement(tasks, "Task")
@@ -415,8 +439,8 @@ def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2,
     ET.SubElement(corr1, getoptype(op1)).text = op1
     ET.SubElement(corr1, "MinimumTimeSeparation").text = str(tmin1)
     ET.SubElement(corr1, "MaximumTimeSeparation").text = str(tmax1)
-    if(exclude != "none"):
-        ET.SubElement(corr1, "ExcludeTimes").text = exclude
+    if(exclude1 != "none"):
+        ET.SubElement(corr1, "ExcludeTimes").text = exclude1
     ET.SubElement(corr1, "LargeTimeNoiseCutoff").text = "1.0"
 
     model = ET.SubElement(corr1, "Model")
@@ -434,12 +458,12 @@ def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2,
     modelparams(model, obsname)
     
 
-    corr2 = ET.SubElement(fit, "CorrelatorOne")
+    corr2 = ET.SubElement(fit, "CorrelatorTwo")
     ET.SubElement(corr2, getoptype(op2)).text = op2
     ET.SubElement(corr2, "MinimumTimeSeparation").text = str(tmin2)
     ET.SubElement(corr2, "MaximumTimeSeparation").text = str(tmax2)
-    if(exclude != "none"):
-        ET.SubElement(corr2, "ExcludeTimes").text = exclude
+    if(exclude2 != "none"):
+        ET.SubElement(corr2, "ExcludeTimes").text = exclude2
     ET.SubElement(corr2, "LargeTimeNoiseCutoff").text = "1.0"
 
     model = ET.SubElement(corr2, "Model")
@@ -475,4 +499,3 @@ def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2,
         ET.SubElement(insert, "Type").text = "Single" # Only single pivot implemented so far
         ET.SubElement(insert, "Name").text = str(pivot) # Object name, NOT filename. Must already be in memory
         ET.SubElement(insert, "Level").text = str(level)
-
