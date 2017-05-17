@@ -29,7 +29,7 @@ initialize(init, corr_paths, proj_name, logfile, "Bootstrap", "24_840", "samplin
 
 # Tasks
 refmass_name = "E1_ref_5_35P0tsgs"
-readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_boot", "Bootstrap", [refmass_name])
+# readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_boot", "Bootstrap", [refmass_name])
 
 best = bestfits("/home/ruairi/research/freeparticle_energies/SH_fits")
 fits = []

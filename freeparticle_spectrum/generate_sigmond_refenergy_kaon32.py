@@ -19,7 +19,7 @@ tasks = ET.SubElement(root, "TaskSequence")
 
 initialize(init, corr_paths, proj_name, logfile, "Bootstrap", "32_860", "samplings")
 
-writesamplings(tasks, ["E1_tmin8tmax34P0tsgs"], inputdir + "kaon32_PSQ0_reference_bins", "Bootstrap")
+writesamplings(tasks, ["E1_kaon_4_35P0tsgs"], inputdir + "kaon32_PSQ0_reference_bins", "Bootstrap")
 
     
 indent(root)

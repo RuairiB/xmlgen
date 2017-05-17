@@ -32,17 +32,17 @@ tsteC = "TimeSymTwoExponentialPlusConstant"
 tsgs = "TimeSymGeomSeriesExponential"
 
 # Tasks
-# dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_tmin8tmax34P0tsgs", sampling="Bootstrap")
+# dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_kaon_4_35P0tsgs", sampling="Bootstrap")
 # writesamplings(tasks, energies, energyfile, sampling="Bootstrap")
 
-readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_boot", "Bootstrap", ["E1_tmin8tmax34P0tsgs"])
+readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_boot", "Bootstrap", ["E1_kaon_4_35P0tsgs"])
 #Time symmetric single exponential
 tmin = 3
 tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 3):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap", "16")
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_kaon_4_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -53,7 +53,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 3):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap", "16")
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsseC, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsseC_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_kaon_4_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3
@@ -64,7 +64,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 3):
-        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_tmin8tmax34P0tsgs", "Bootstrap", "16")
+        dofit(tasks, "eta P=(0,0,0) A1up_1 SS_0", "eta", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ0/eta_32_860_PSQ0_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", "0", energies, "E1_kaon_4_35P0tsgs", "Bootstrap", "16")
         tmin+=1
     tmax-=1
     tmin=3

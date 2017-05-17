@@ -87,7 +87,7 @@ def textable_fits(fits, psq, sampling, filename):
 
         
 
-def bestfit(fits, flav, psq, sampling):
+def bestfit(fits, flav, psq, sampling, ensem):
     # determine 'best' fit from given list of fits for given psq & sampling mode
     # 'best' determined by chi^2 (and error?)
     wanted_fits = []
@@ -95,19 +95,54 @@ def bestfit(fits, flav, psq, sampling):
         if i.psq == psq and i.sampling == str(sampling) and i.flav == flav:
             wanted_fits.append(i)
 
-    # wanted_fits.sort(key=lambda k:(k.fiterr, abs(float(k.chisq_full) - 1)))
-    # if wanted_fits:
-    #     return wanted_fits[0]
-    # else:
-    #     print("something is empty for " + psq + "  " + sampling)
-    #     sys.exit()
+    if ensem == "32_860":
+        fudge = ["E1_kaon_4_35P0tsgs",
+                 "E1_kaon_5_34P1tsgs",
+                 "E1_kaon_5_35P2tsgs",
+                 "E1_kaon_5_35P3tsgs",
+                 "E1_kaon_4_35P4tsgs",
+                 "E1_pion_3_35P0tsgs",
+                 "E1_pion_4_35P1tsgs",
+                 "E1_pion_4_35P2tsgs",
+                 "E1_pion_4_35P3tsgs",
+                 "E1_pion_4_35P4tsgs",
+                 "E1_nucleon_3_24P0tste",
+                 "E1_nucleon_3_25P1tsgs",
+                 "E1_nucleon_3_25P2tsgs",
+                 "E1_nucleon_4_25P3tste",
+                 "E1_nucleon_3_25P4tsgs",
+                 "E1_eta_17_24P0tsseC",
+                 "E1_eta_17_24P1tsseC",
+                 "E1_eta_17_25P2tsseC",
+                 "E1_eta_17_25P3tsse",
+                 "E1_eta_17_25P4tsse"]
+    elif ensem == "24_840":
+        fudge = ["E1_kaon_4_35P0tsgs",
+                 "E1_kaon_4_35P1tsgs",
+                 "E1_kaon_4_35P2tsgs",
+                 "E1_kaon_4_35P3tsgs",
+                 "E1_kaon_3_35P4tsgs",
+                 "E1_pion_4_35P0tsgs",
+                 "E1_pion_4_35P1tsgs",
+                 "E1_pion_4_35P2tsgs",
+                 "E1_pion_3_35P3tsgs",
+                 "E1_pion_4_35P4tsgs",
+                 "E1_nucleon_3_25P0tsgs",
+                 "E1_nucleon_3_25P1tsgs",
+                 "E1_nucleon_3_25P2tsgs",
+                 "E1_nucleon_3_25P3tsgs",
+                 "E1_nucleon_3_25P4tsgs",
+                 "E1_eta_17_25P0tsseC",
+                 "E1_eta_17_25P1tsseC",
+                 "E1_eta_17_25P2tsseC",
+                 "E1_eta_17_25P3tsseC"]
+    else:
+        print("give better ensemble for best fit")
+        sys.exit()
 
     if wanted_fits:
-        if any(x.bestparams == True for x in wanted_fits):
-            return x
-        else:
-            print("Need to pick best fit for " + flav + fits[0].ensemble + "  " + psq + "  " + sampling)
-
+        temp = [x for x in wanted_fits if x.fitname in fudge]
+        return temp[0]
             # 'best' fit by chi^2 closest to 1 -- worthless way to pick best fit
             # return min(wanted_fits, key=lambda x:abs(float(x.chisq_full) - 1))
     else:
@@ -130,6 +165,30 @@ def twopart_fitname(fits, samp):
         return name
     elif samp == "Jackknife":
         name += "_jack"
+        return name
+    elif samp == "none":
+        return name
+    else:
+        print("wrong sampling")
+        sys.exit()
+
+def threepart_fitname(fits, samp):
+    if(type(fits) != tuple):
+        print("gis a tuple please")
+        sys.exit()
+    elif(len(fits) != 3):
+        print("wrong tuple length")
+        sys.exit()
+
+    name = fits[0].flav + "_" + fits[1].flav + "_" + fits[2].flav + "_"
+    # name += fits[0].mom.replace(",", "") + fits[1].mom.replace(",", "") + fits[2].mom.replace(",", "")
+    name += fits[0].psq + "_" + fits[1].psq + "_" + fits[2].psq
+
+    if samp == "Bootstrap":
+        name += "boot"
+        return name
+    elif samp == "Jackknife":
+        name += "jack"
         return name
     elif samp == "none":
         return name
@@ -170,7 +229,11 @@ class fitlog:
             self.mom = next((y for y in mom6 if y in mom6), False)
         else:
             print("Couldn't determine operator momentum")
-            
+
+    def psqfromfitname(self):
+        self.psq = self.fitname.split("P")[1]
+        self.psq = self.psq[:1]
+        
     # Combine error formatting and sig fig cut offs into one function -- comment this better...
     def sigfigs(self, err_nprec):
         self.chisq_full = self.chisq
@@ -278,6 +341,19 @@ class fitlog:
                 print("Unknown xi fit flavour")
                 sys.exit()            
 
+    def findflavfitname(self):
+        if "pion" in self.fitname:
+            self.flav = "pion"
+        elif "nucleon" in self.fitname:
+            self.flav = "nucleon"
+        elif "kaon" in self.fitname:
+            self.flav = "kaon"
+        elif "eta" in self.fitname:
+            self.flav = "eta"
+        else:
+            print("Unknown fit flavour")
+            sys.exit()            
+
 
     def __init__(self):
         self.ensemble = ''
@@ -370,7 +446,7 @@ class linsuperlog:
 
         
     # Flava flav has gone missing, can you find him?
-    def findflav(self):
+    def findflav(self, num=2):
         self.flav1 = self.resultstr.split("_")[0]
         self.flav2 = self.resultstr.split("_")[1]
         if not any(x in self.flav1 for x in ("pion", "kaon", "eta", "nucleon")):
@@ -378,16 +454,36 @@ class linsuperlog:
         if not any(x in self.flav2 for x in ("pion", "kaon", "eta", "nucleon")):
             print("what flavour are you particle 2?")
 
+        if num > 2:
+            self.flav3 = self.resultstr.split("_")[2]
+            if not any(x in self.flav3 for x in ("pion", "kaon", "eta", "nucleon")):
+                print("what flavour are you particle 3?")
+
+        if num > 3:
+            self.flav4 = self.resultstr.split("_")[3]
+            if not any(x in self.flav4 for x in ("pion", "kaon", "eta", "nucleon")):
+                print("what flavour are you particle 4?")
+
     # Where is she?
-    def findmom(self):
+    def findmom(self, num=2):
         # perform some sort of check to make sure a momentum (rather than flav, etc) has been extracted
-        self.mom1 = self.resultstr.split("_")[2]
-        self.mom2 = self.resultstr.split("_")[3]
+        if num == 2:
+            self.mom1 = self.resultstr.split("_")[2]
+            self.mom2 = self.resultstr.split("_")[3]
+        if num == 3:
+            self.mom1 = self.resultstr.split("_")[3]
+            self.mom2 = self.resultstr.split("_")[4]
+            self.mom3 = self.resultstr.split("_")[5]
+        elif num == 4:
+            self.mom1 = self.resultstr.split("_")[4]
+            self.mom2 = self.resultstr.split("_")[5]
+            self.mom3 = self.resultstr.split("_")[6]
+            self.mom4 = self.resultstr.split("_")[7]
 
 
-    def texresultstr(self):
+    def texresultstr(self, num=2):
         tex = ''
-
+        
         if self.flav1 == "pion":
             tex += "\pi \left( "
         elif self.flav1 == "kaon":
@@ -422,25 +518,29 @@ class linsuperlog:
                 tex = tex + "-" + p + ","
             else:
                 tex = tex + p + ","
-
+        
         tex = tex[:-1] + " \\right) "
 
         self.resultstr_tex = tex
 
 
-    def calcptot(self):
+    def calcptot(self, num=2):
         ptot = []
-        for i,junk in enumerate(self.mom1):
-            ptot.append(str(int(self.mom1[i]) - int(self.mom2[i])))
+        if num == 2:
+            for i,junk in enumerate(self.mom1):
+                ptot.append(str(int(self.mom1[i]) - int(self.mom2[i])))
 
-        self.ptot = ",".join(ptot)
+            self.ptot = ",".join(ptot)
 
-        psq = 0
-        for p in ptot:
-            psq += int(p)*int(p)
+            psq = 0
+            for p in ptot:
+                psq += int(p)*int(p)
             
-        self.psq = str(psq)
+            self.psq = str(psq)
 
+        elif num > 2:
+            print("not implemented yet")
+            sys.exit()
             
     def __init__(self):
         self.ensemble = ''

@@ -35,17 +35,17 @@ operator = "isodoublet P=(0,0,1) G1_1 SS_0"
 psq = "1"
 
 # Tasks
-# dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_tmin8tmax34P0tsgs", sampling="Jackknife")
+# dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_kaon_4_35P0tsgs", sampling="Jackknife")
 # writesamplings(tasks, energies, energyfile, sampling="Jackknife")
 
-readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_jack", "Jackknife", ["E1_tmin8tmax34P0tsgs"])
+readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_jack", "Jackknife", ["E1_kaon_4_35P0tsgs"])
 #Time symmetric single exponential
 tmin = 3
 tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 6):
-        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Jackknife")
+        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_kaon_4_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -56,7 +56,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 10):
-        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tste, "LMDer", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Jackknife")
+        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tste, "LMDer", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_kaon_4_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3
@@ -67,7 +67,7 @@ tmax = 25
 
 while tmax > 20:
     while tmin < (tmax - 10):
-        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Jackknife")
+        dofit(tasks, operator, "nucleon", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ1/nucleon_32_860_PSQ1_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_jack.agr", psq, energies, "E1_kaon_4_35P0tsgs", "Jackknife")
         tmin+=1
     tmax-=1
     tmin=3

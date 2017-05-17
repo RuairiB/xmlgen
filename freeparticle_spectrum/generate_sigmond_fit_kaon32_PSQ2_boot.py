@@ -35,17 +35,17 @@ operator = "isodoublet P=(0,1,1) A2_1 SS_0"
 psq = "2"
 
 # Tasks
-# dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_tmin8tmax34P0tsgs", sampling="Bootstrap")
+# dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, "E1_kaon_4_35P0tsgs", sampling="Bootstrap")
 # writesamplings(tasks, energies, energyfile, sampling="Bootstrap")
 
-readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_boot", "Bootstrap", ["E1_tmin8tmax34P0tsgs"])
+readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_boot", "Bootstrap", ["E1_kaon_4_35P0tsgs"])
 #Time symmetric single exponential
 tmin = 3
 tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 6):
-        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ2/kaon_32_860_PSQ2_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tsse, "LMDer", inputdir + "fits/PSQ2/kaon_32_860_PSQ2_tsse_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_kaon_4_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -56,7 +56,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tste, "LMDer", inputdir + "fits/PSQ2/kaon_32_860_PSQ2_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tste, "LMDer", inputdir + "fits/PSQ2/kaon_32_860_PSQ2_tste_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_kaon_4_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3
@@ -67,7 +67,7 @@ tmax = 35
 
 while tmax > 30:
     while tmin < (tmax - 15):
-        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ2/kaon_32_860_PSQ2_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_tmin8tmax34P0tsgs", "Bootstrap")
+        dofit(tasks, operator, "kaon", str(tmin), str(tmax), tsgs, "LMDer", inputdir + "fits/PSQ2/kaon_32_860_PSQ2_tsgs_tmin" + str(tmin) + "tmax" + str(tmax) + "_boot.agr", psq, energies, "E1_kaon_4_35P0tsgs", "Bootstrap")
         tmin+=1
     tmax-=1
     tmin=3

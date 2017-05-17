@@ -28,8 +28,7 @@ tasks = ET.SubElement(root, "TaskSequence")
 initialize(init, corr_paths, proj_name, logfile, "Jackknife", "32_860", "samplings")
 
 # Tasks
-refmass_name = "E1_tmin8tmax34P0tsgs"
-readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon32_PSQ0_reference_bins_jack", "Jackknife", [refmass_name])
+refmass_name = "E1_kaon_4_35P0tsgs"
 
 best = bestfits("/home/ruairi/research/freeparticle_energies/SH_fits")
 fits = []
