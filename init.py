@@ -51,7 +51,7 @@ def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_typ
         ET.SubElement(mcbins, "MCEnsembleInfo").text = "clover_s24_t128_ud840_s743"
     elif(ensemble == "16_840"):
         ET.SubElement(mcbins, "MCEnsembleInfo").text = "clover_s16_t128_ud840_s743"
-    elif(ensemble == "phi_rho"):
+    elif(ensemble == "phi_rho32"):
         ET.SubElement(mcbins, "MCEnsembleInfo").text = "phirho_s32_t48_mp0150_mr0350_lm0050_0300|9695|1|32|32|32|48"
     else:
         print("You fucked up the ensemble info, fix it.")

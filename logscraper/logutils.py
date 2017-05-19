@@ -142,9 +142,11 @@ def bestfit(fits, flav, psq, sampling, ensem):
 
     if wanted_fits:
         temp = [x for x in wanted_fits if x.fitname in fudge]
-        return temp[0]
-            # 'best' fit by chi^2 closest to 1 -- worthless way to pick best fit
-            # return min(wanted_fits, key=lambda x:abs(float(x.chisq_full) - 1))
+        if temp:
+            return temp[0]
+        else:
+            print("temp is no good for " + flav + "  " + psq + "  " + ensem)
+            sys.exit()
     else:
         print("something is empty for " + flav + fits[0].ensemble + "  " + psq + "  " + sampling)
         # sys.exit()
@@ -426,25 +428,30 @@ class linsuperlog:
         
     # Combine error formatting and sig fig cut offs into one function -- comment this better...
     def sigfigs(self, err_nprec):
-        zeros = math.ceil(abs(math.log10(float(self.energyerr)))) - 1
-        self.energyerr_zeros = zeros
-        # strip non zero part of error (& e-05, etc) and pull out first two non zero bits (rounded)
-        err_decimal = self.energyerr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
-        err_print = str(round(float(err_decimal[:3]), -1))[:2]
-
-        # truncate fit energy & add error
-        self.energyprint = self.energy[:2+int(zeros)+err_nprec] + "(" + err_print + ")"
-
-        if self.energyratio != "":
-            zeros = math.ceil(abs(math.log10(float(self.energyratioerr)))) - 1
+        if self.energyerr != "0":
+            zeros = math.ceil(abs(math.log10(float(self.energyerr)))) - 1
+            self.energyerr_zeros = zeros
             # strip non zero part of error (& e-05, etc) and pull out first two non zero bits (rounded)
-            err_decimal = self.energyratioerr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
+            err_decimal = self.energyerr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
             err_print = str(round(float(err_decimal[:3]), -1))[:2]
 
             # truncate fit energy & add error
-            self.energyratioprint = self.energyratio[:2+int(zeros)+err_nprec] + "(" + err_print + ")"
+            self.energyprint = self.energy[:2+int(zeros)+err_nprec] + "(" + err_print + ")"
+        else:
+            self.energyprint = self.energy[:2+err_nprec] + "(" + self.energyerr + ")"
 
-        
+        if self.energyratio != "":
+            if self.energyratioerr != "0":
+                zeros = math.ceil(abs(math.log10(float(self.energyratioerr)))) - 1
+                # strip non zero part of error (& e-05, etc) and pull out first two non zero bits (rounded)
+                err_decimal = self.energyratioerr.split(".", 1)[1].lstrip("0").split("e", 1)[0] 
+                err_print = str(round(float(err_decimal[:3]), -1))[:2]
+
+                # truncate fit energy & add error
+                self.energyratioprint = self.energyratio[:2+int(zeros)+err_nprec] + "(" + err_print + ")"
+            else:
+                self.energyratioprint = self.energyratio[:2+err_nprec] + "(" + self.energyratioerr + ")"
+            
     # Flava flav has gone missing, can you find him?
     def findflav(self, num=2):
         self.flav1 = self.resultstr.split("_")[0]

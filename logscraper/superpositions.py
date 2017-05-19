@@ -13,8 +13,18 @@ particles = []
 for xmlin in logfiles:
     tree = ET.parse(xmlin)
     root = tree.getroot()
+    ensemble = None
     for a in root.iter("MCBinsInfo"):
         ensemble = a.find("MCEnsembleInfo").text
+
+    if not ensemble:
+        if "32" in xmlin:
+            ensemble = "clover_s32_t256_ud860_s743"
+        elif "24" in xmlin:
+            ensemble = "clover_s24_t128_ud840_s743"
+        else:
+            print("can't find the ensemble info")
+            sys.exit()
 
     for x in root.iter("DoObsFunction"):
         obstype = x.find("Type")
@@ -22,7 +32,7 @@ for xmlin in logfiles:
         if obstype.text == "LinearSuperposition":
             temp = linsuperlog()
             temp.ensemble = ensemble
-        
+
             resultinfo = x.find("ResultInfo")
             mcobs = resultinfo.find("MCObservable")
             temp.resultstr = mcobs.find("Info").text

@@ -14,8 +14,18 @@ def bestfits(inputdir):
     for xmlin in logfiles:
         tree = ET.parse(xmlin)
         root = tree.getroot()
+        ensemble = None
         for a in root.iter("MCBinsInfo"):
             ensemble = a.find("MCEnsembleInfo").text
+
+        if not ensemble:
+            if "32" in xmlin:
+                ensemble = "clover_s32_t256_ud860_s743"
+            elif "24" in xmlin:
+                ensemble = "clover_s24_t128_ud840_s743"
+            else:
+                print("can't find the ensemble info")
+                sys.exit()
 
         for x in root.iter("DoFit"):
             fitparams = x.find("TemporalCorrelatorFit")

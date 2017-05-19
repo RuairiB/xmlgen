@@ -53,8 +53,8 @@ dofit(tasks, op, "pion1", 3, 35, tsgs, "LMDer", inputdir + "fits/pion32_onefit_P
 op = "eta P=(0,0,0) A1up_1 SS_0"
 refop = "kaon P=(0,0,0) A1u_1 SS_0"
 plotfile = inputdir + "fits/eta32_PSQ0_doublefit_boot.agr"
-dodoublefit(tasks, op, refop, "eta", "KrefE", 17, 24, 4, 35, tsse, tsgs, "LMDer", plotfile, 0, 0, "eta32_Kref_P0", energies, "Bootstrap", "16", exclude2="none", pivot="none", level="none")
-dofit(tasks, op, "eta1", 17, 24, tsse, "LMDer", inputdir + "fits/eta32_onefit_PSQ0_tsse_tmin" + str(17) + "tmax" + str(24) + "_boot.agr", 0, energies, Eref, "Bootstrap", "16")
+dodoublefit(tasks, op, refop, "eta", "KrefE", 17, 24, 4, 35, tsseC, tsgs, "LMDer", plotfile, 0, 0, "eta32_Kref_P0", energies, "Bootstrap", "16", exclude2="none", pivot="none", level="none")
+dofit(tasks, op, "eta1", 17, 24, tsseC, "LMDer", inputdir + "fits/eta32_onefit_PSQ0_tsseC_tmin" + str(17) + "tmax" + str(24) + "_boot.agr", 0, energies, Eref, "Bootstrap", "16")
 
 
 op = "isodoublet P=(0,0,0) G1g_1 SS_0"

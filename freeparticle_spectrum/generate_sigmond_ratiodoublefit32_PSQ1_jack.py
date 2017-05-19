@@ -55,8 +55,8 @@ dofit(tasks, op, "pion1", 4, 35, tsgs, "LMDer", inputdir + "fits/pion32_onefit_P
 op = "isosinglet P=(0,0,1) A2p_1 SS_1"
 refop = "kaon P=(0,0,0) A1u_1 SS_0"
 plotfile = inputdir + "fits/eta32_PSQ1_doublefit_jack.agr"
-dodoublefit(tasks, op, refop, "eta", "KrefE", 17, 24, 4, 35, tsse, tsgs, "LMDer", plotfile, 1, 0, "eta32_Kref_P1", energies, "Jackknife", "16", exclude2="none", pivot="none", level="none")
-dofit(tasks, op, "eta1", 17, 24, tsse, "LMDer", inputdir + "fits/eta32_onefit_PSQ1_tsse_tmin" + str(17) + "tmax" + str(24) + "_jack.agr", 1, energies, Eref, "Jackknife", "16")
+dodoublefit(tasks, op, refop, "eta", "KrefE", 17, 24, 4, 35, tsseC, tsgs, "LMDer", plotfile, 1, 0, "eta32_Kref_P1", energies, "Jackknife", "16", exclude2="none", pivot="none", level="none")
+dofit(tasks, op, "eta1", 17, 24, tsseC, "LMDer", inputdir + "fits/eta32_onefit_PSQ1_tsseC_tmin" + str(17) + "tmax" + str(24) + "_jack.agr", 1, energies, Eref, "Jackknife", "16")
 
 
 op = "isodoublet P=(0,0,1) G1_1 SS_0"
