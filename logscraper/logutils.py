@@ -89,7 +89,7 @@ def textable_fits(fits, psq, sampling, filename):
 
 def bestfit(fits, flav, psq, sampling, ensem):
     # determine 'best' fit from given list of fits for given psq & sampling mode
-    # 'best' determined by chi^2 (and error?)
+    # 'best' fits hand picked for now
     wanted_fits = []
     for i in fits:
         if i.psq == psq and i.sampling == str(sampling) and i.flav == flav:
@@ -182,8 +182,15 @@ def threepart_fitname(fits, samp):
         print("wrong tuple length")
         sys.exit()
 
-    name = fits[0].flav + "_" + fits[1].flav + "_" + fits[2].flav + "_"
-    # name += fits[0].mom.replace(",", "") + fits[1].mom.replace(",", "") + fits[2].mom.replace(",", "")
+    flavs = []
+    for i in fits:
+        if i.flav == "nucleon":
+            flavs.append("nucl")
+        else:
+            flavs.append(i.flav)
+            
+    name = flavs[0] + "_" + flavs[1] + "_" + flavs[2] + "_"
+
     name += fits[0].psq + "_" + fits[1].psq + "_" + fits[2].psq
 
     if samp == "Bootstrap":

@@ -1,8 +1,0 @@
-xikaon32_768_jack
-xipion32_1751_boot
-xinucleon32_3258_jack
-xieta32_4595_boot
-xikaon24_1079_boot
-xipion24_2869_jack
-xinucleon24_15784_jack
-xieta24_611_boot

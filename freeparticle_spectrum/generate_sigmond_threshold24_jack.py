@@ -30,6 +30,8 @@ initialize(init, corr_paths, proj_name, logfile, "Jackknife", "24_840", "samplin
 # Tasks
 refmass_name = "E1_ref_5_35P0tsgs"
 
+readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_jack", "Jackknife", [refmass_name])
+
 fudge = ["E1_kaon_4_35P0tsgs",
          "E1_kaon_4_35P1tsgs",
          "E1_kaon_4_35P2tsgs",
