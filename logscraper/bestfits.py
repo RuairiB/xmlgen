@@ -95,6 +95,18 @@ def bestfits(inputdir):
                 if y:
                     best.append(y)
 
+
+    for psq in ["5", "6"]:
+        for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
+            for flav in ["kaon", "pion"]:
+                x = bestfit(fit32, flav, psq, samp[0], "32_860")
+                if flav != "kaon":
+                    y = bestfit(fit24, flav, psq, samp[0], "24_840")
+                if x:
+                    best.append(x)
+                if y:
+                    best.append(y)
+
     print("This is unfinished, see logutils:bestfit()")
     best.sort(key=lambda k: (k.ensemble, k.flav, k.psq))
     for i in fits:

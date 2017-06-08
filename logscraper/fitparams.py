@@ -137,6 +137,13 @@ def allfits(inputdir):
             textable_fits(eta32, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/eta32_PSQ" + psq + "_" + samp[1])
 
 
+    for psq in ["5", "6"]:
+        for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
+            textable_fits(kaon32, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/kaon32_PSQ" + psq + "_" + samp[1])
+            textable_fits(pion24, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/pion24_PSQ" + psq + "_" + samp[1])
+            textable_fits(pion32, psq, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/pion32_PSQ" + psq + "_" + samp[1])
+
+            
     return fits
 
 

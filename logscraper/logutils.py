@@ -101,11 +101,15 @@ def bestfit(fits, flav, psq, sampling, ensem):
                  "E1_kaon_5_35P2tsgs",
                  "E1_kaon_5_35P3tsgs",
                  "E1_kaon_4_35P4tsgs",
+                 "E1_kaon_4_35P5tsgs",
+                 "E1_kaon_4_35P6tsgs",
                  "E1_pion_3_35P0tsgs",
                  "E1_pion_4_35P1tsgs",
                  "E1_pion_4_35P2tsgs",
                  "E1_pion_4_35P3tsgs",
                  "E1_pion_4_35P4tsgs",
+                 "E1_pion_4_35P5tsgs",
+                 "E1_pion_4_35P6tsgs",
                  "E1_nucleon_3_24P0tste",
                  "E1_nucleon_3_25P1tsgs",
                  "E1_nucleon_3_25P2tsgs",
@@ -127,6 +131,8 @@ def bestfit(fits, flav, psq, sampling, ensem):
                  "E1_pion_4_35P2tsgs",
                  "E1_pion_3_35P3tsgs",
                  "E1_pion_4_35P4tsgs",
+                 "E1_pion_4_35P5tsgs",
+                 "E1_pion_4_35P6tsgs",
                  "E1_nucleon_3_25P0tsgs",
                  "E1_nucleon_3_25P1tsgs",
                  "E1_nucleon_3_25P2tsgs",
@@ -146,7 +152,7 @@ def bestfit(fits, flav, psq, sampling, ensem):
             return temp[0]
         else:
             print("temp is no good for " + flav + "  " + psq + "  " + ensem)
-            sys.exit()
+            # sys.exit()
     else:
         print("something is empty for " + flav + fits[0].ensemble + "  " + psq + "  " + sampling)
         # sys.exit()
@@ -185,13 +191,58 @@ def threepart_fitname(fits, samp):
     flavs = []
     for i in fits:
         if i.flav == "nucleon":
-            flavs.append("nucl")
+            flavs.append("N")
+        elif i.flav == "pion":
+            flavs.append("Pi")
+        elif i.flav == "kaon":
+            flavs.append("K")
+        elif i.flav == "eta":
+            flavs.append("eta")
         else:
-            flavs.append(i.flav)
+            print("what flav is this? " + i.flav)
+            # flavs.append(i.flav)
             
     name = flavs[0] + "_" + flavs[1] + "_" + flavs[2] + "_"
 
     name += fits[0].psq + "_" + fits[1].psq + "_" + fits[2].psq
+
+    if samp == "Bootstrap":
+        name += "boot"
+        return name
+    elif samp == "Jackknife":
+        name += "jack"
+        return name
+    elif samp == "none":
+        return name
+    else:
+        print("wrong sampling")
+        sys.exit()
+
+def fourpart_fitname(fits, samp):
+    if(type(fits) != tuple):
+        print("gis a tuple please")
+        sys.exit()
+    elif(len(fits) != 4):
+        print("wrong tuple length")
+        sys.exit()
+
+    flavs = []
+    for i in fits:
+        if i.flav == "nucleon":
+            flavs.append("N")
+        elif i.flav == "pion":
+            flavs.append("Pi")
+        elif i.flav == "kaon":
+            flavs.append("K")
+        elif i.flav == "eta":
+            flavs.append("eta")
+        else:
+            print("what flav is this? " + i.flav)
+            # flavs.append(i.flav)
+            
+    name = flavs[0] + "_" + flavs[1] + "_" + flavs[2] + "_" + flavs[3] + "_"
+
+    name += fits[0].psq + "_" + fits[1].psq + "_" + fits[2].psq + "_" + fits[3].psq
 
     if samp == "Bootstrap":
         name += "boot"
@@ -458,25 +509,66 @@ class linsuperlog:
                 self.energyratioprint = self.energyratio[:2+int(zeros)+err_nprec] + "(" + err_print + ")"
             else:
                 self.energyratioprint = self.energyratio[:2+err_nprec] + "(" + self.energyratioerr + ")"
-            
+
+
+    def numparticles(self):
+        num = self.resultstr.count("_")
+        if num == 1 or num == 2:
+            self.numpart = 1
+        elif num == 3 or num == 4:
+            self.numpart = 2
+        elif num == 5 or num == 6:
+            self.numpart = 3
+        elif num == 7 or num == 8:
+            self.numpart = 4
+        else:
+            print("how many particles are you?")
+            sys.exit()
+        
     # Flava flav has gone missing, can you find him?
     def findflav(self, num=2):
         self.flav1 = self.resultstr.split("_")[0]
         self.flav2 = self.resultstr.split("_")[1]
-        if not any(x in self.flav1 for x in ("pion", "kaon", "eta", "nucleon")):
+        if not any(x in self.flav1 for x in ("pion", "kaon", "eta", "nucleon", "N", "Pi", "K")):
             print("what flavour are you particle 1?")
-        if not any(x in self.flav2 for x in ("pion", "kaon", "eta", "nucleon")):
+        if not any(x in self.flav2 for x in ("pion", "kaon", "eta", "nucleon", "N", "Pi", "K")):
             print("what flavour are you particle 2?")
+
+        if self.flav1 == "K":
+            self.flav1 = "kaon"    
+        elif self.flav1 == "Pi":
+            self.flav1 = "pion"    
+        elif self.flav1 == "N":
+            self.flav1 = "nucleon" 
+
+        if self.flav2 == "K":
+            self.flav2 = "kaon"    
+        elif self.flav2 == "Pi":
+            self.flav2 = "pion"    
+        elif self.flav2 == "N":
+            self.flav2 = "nucleon" 
 
         if num > 2:
             self.flav3 = self.resultstr.split("_")[2]
-            if not any(x in self.flav3 for x in ("pion", "kaon", "eta", "nucleon")):
-                print("what flavour are you particle 3?")
+            if not any(x in self.flav3 for x in ("pion", "kaon", "eta", "nucleon", "N", "Pi", "K")):
+                print("what flavour are you particle 3? " + self.resultstr)
+            if self.flav3 == "K":
+                self.flav3 = "kaon"    
+            elif self.flav3 == "Pi":
+                self.flav3 = "pion"    
+            elif self.flav3 == "N":
+                self.flav3 = "nucleon" 
 
         if num > 3:
             self.flav4 = self.resultstr.split("_")[3]
-            if not any(x in self.flav4 for x in ("pion", "kaon", "eta", "nucleon")):
-                print("what flavour are you particle 4?")
+            if not any(x in self.flav4 for x in ("pion", "kaon", "eta", "nucleon", "N", "Pi", "K")):
+                print("what flavour are you particle 4? " + self.resultstr)
+            if self.flav4 == "K":
+                self.flav4 = "kaon"    
+            elif self.flav4 == "Pi":
+                self.flav4 = "pion"    
+            elif self.flav4 == "N":
+                self.flav4 = "nucleon" 
 
     # Where is she?
     def findmom(self, num=2):
@@ -485,14 +577,14 @@ class linsuperlog:
             self.mom1 = self.resultstr.split("_")[2]
             self.mom2 = self.resultstr.split("_")[3]
         if num == 3:
-            self.mom1 = self.resultstr.split("_")[3]
-            self.mom2 = self.resultstr.split("_")[4]
-            self.mom3 = self.resultstr.split("_")[5]
+            self.psq1 = self.resultstr.split("_")[3]
+            self.psq2 = self.resultstr.split("_")[4]
+            self.psq3 = self.resultstr.split("_")[5]
         elif num == 4:
-            self.mom1 = self.resultstr.split("_")[4]
-            self.mom2 = self.resultstr.split("_")[5]
-            self.mom3 = self.resultstr.split("_")[6]
-            self.mom4 = self.resultstr.split("_")[7]
+            self.psq1 = self.resultstr.split("_")[4]
+            self.psq2 = self.resultstr.split("_")[5]
+            self.psq3 = self.resultstr.split("_")[6]
+            self.psq4 = self.resultstr.split("_")[7]
 
 
     def texresultstr(self, num=2):
@@ -524,7 +616,7 @@ class linsuperlog:
         elif self.flav2 == "nucleon":
             tex = tex + "N \left( "
         else:
-            print("can't find flav1")
+            print("can't find flav2")
             sys.exit()
 
         for p in self.mom2:
@@ -535,8 +627,112 @@ class linsuperlog:
         
         tex = tex[:-1] + " \\right) "
 
+        if num > 2:
+            if self.flav3 == "pion":
+                tex = tex + "\pi \left( "
+            elif self.flav3 == "kaon":
+                tex = tex + "K \left( "
+            elif self.flav3 == "eta":
+                tex = tex + "\eta \left( "
+            elif self.flav3 == "nucleon":
+                tex = tex + "N \left( "
+            else:
+                print("can't find flav3")
+                sys.exit()
+
+            for p in self.mom3:
+                if p != "0":
+                    tex = tex + "-" + p + ","
+                else:
+                    tex = tex + p + ","
+
+            tex = tex[:-1] + " \\right) "
+
+        if num > 3:
+            if self.flav4 == "pion":
+                tex = tex + "\pi \left( "
+            elif self.flav4 == "kaon":
+                tex = tex + "K \left( "
+            elif self.flav4 == "eta":
+                tex = tex + "\eta \left( "
+            elif self.flav4 == "nucleon":
+                tex = tex + "N \left( "
+            else:
+                print("can't find flav4")
+                sys.exit()
+
+            for p in self.mom4:
+                if p != "0":
+                    tex = tex + "-" + p + ","
+                else:
+                    tex = tex + p + ","
+
+            tex = tex[:-1] + " \\right) "
+
         self.resultstr_tex = tex
 
+    def texthreshstr(self, num=2):
+        tex = ''
+        
+        if self.flav1 == "pion":
+            tex += "\pi \left( "
+        elif self.flav1 == "kaon":
+            tex += "K \left( "
+        elif self.flav1 == "eta":
+            tex += "\eta \left( "
+        elif self.flav1 == "nucleon":
+            tex += "N \left( "
+        else:
+            print("can't find flav1")
+            sys.exit()
+
+        tex += self.psq1 + " \\right) "
+
+        if self.flav2 == "pion":
+            tex = tex + "\pi \left( "
+        elif self.flav2 == "kaon":
+            tex = tex + "K \left( "
+        elif self.flav2 == "eta":
+            tex = tex + "\eta \left( "
+        elif self.flav2 == "nucleon":
+            tex = tex + "N \left( "
+        else:
+            print("can't find flav2")
+            sys.exit()
+
+        tex += self.psq2 + " \\right) "        
+
+        if num > 2:
+            if self.flav3 == "pion":
+                tex = tex + "\pi \left( "
+            elif self.flav3 == "kaon":
+                tex = tex + "K \left( "
+            elif self.flav3 == "eta":
+                tex = tex + "\eta \left( "
+            elif self.flav3 == "nucleon":
+                tex = tex + "N \left( "
+            else:
+                print("can't find flav3")
+                sys.exit()
+
+            tex += self.psq3 + " \\right) "        
+
+        if num > 3:
+            if self.flav4 == "pion":
+                tex = tex + "\pi \left( "
+            elif self.flav4 == "kaon":
+                tex = tex + "K \left( "
+            elif self.flav4 == "eta":
+                tex = tex + "\eta \left( "
+            elif self.flav4 == "nucleon":
+                tex = tex + "N \left( "
+            else:
+                print("can't find flav4")
+                sys.exit()
+
+            tex += self.psq4 + " \\right) "        
+
+        self.resultstr_tex = tex
 
     def calcptot(self, num=2):
         ptot = []
@@ -555,18 +751,27 @@ class linsuperlog:
         elif num > 2:
             print("not implemented yet")
             sys.exit()
-            
+
     def __init__(self):
         self.ensemble = ''
         self.resultstr = ''
         self.resultstr_tex = ''
         self.ratio_str = ''
+        self.numpart = ''
         self.mom1 = ''
         self.mom2 = ''
+        self.mom3 = ''
+        self.mom4 = ''
         self.psq = ''
+        self.psq1 = ''
+        self.psq2 = ''
+        self.psq3 = ''
+        self.psq4 = ''
         self.ptot = ''
         self.flav1 = ''
         self.flav2 = ''
+        self.flav3 = ''
+        self.flav4 = ''
         self.energy = ''
         self.energyerr = ''
         self.energyerr_zeros = ''

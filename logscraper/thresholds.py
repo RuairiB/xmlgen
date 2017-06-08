@@ -19,32 +19,32 @@ for xmlin in logfiles:
     if not ensemble:
         print("you need to echo the XML to find ensemble info")
         sys.exit()
-        
+
     for x in root.iter("DoObsFunction"):
         obstype = x.find("Type")
 
         if obstype.text == "LinearSuperposition":
             temp = linsuperlog()
             temp.ensemble = ensemble
-        
+
             resultinfo = x.find("ResultInfo")
             mcobs = resultinfo.find("MCObservable")
             temp.resultstr = mcobs.find("Info").text
-            
+
             mcest = x.find("MCEstimate")
             temp.energy = mcest.find("FullEstimate").text
             temp.energyerr = mcest.find("SymmetricError").text
             temp.sampling = mcest.find("ResamplingMode").text
 
-            
+
             temp.sigfigs(2)
+            temp.numparticles()
             temp.stripindex()
-            temp.findmom()
-            temp.findflav()
-            temp.calcptot()
+            temp.findmom(temp.numpart)
+            temp.findflav(temp.numpart)
             temp.texensemble()
-            temp.texresultstr()
-            
+            temp.texthreshstr(temp.numpart)
+
             particles.append(temp)
 
 
@@ -54,23 +54,23 @@ for xmlin in logfiles:
             resultinfo = x.find("ResultInfo")
             mcobs = resultinfo.find("MCObservable")
             temp.ratio_str = mcobs.find("Info").text
-                
+
             mcest = x.find("MCEstimate")
             temp.energyratio = mcest.find("FullEstimate").text
             temp.energyratioerr = mcest.find("SymmetricError").text
 
             temp.sigfigs(2)
             temp.stripindex()
-            
+
             particles[-1] = temp
         else:
-            print("can't find ratio for " + particles[-1].resultstr)
+            print("can't find ratio for " + particles[-1].resultstr + ". Or it's some other sort of DoObs I don't know.")
 
+print(len(particles))
 
 # Loop over particles and write tex-table function
-particles.sort(key=lambda k: (k.psq, k.mom1, k.mom2, k.energy, k.flav1, k.flav2))
+particles.sort(key=lambda k: (k.numpart, k.psq1, k.flav1, k.psq2, k.flav2, k.psq3, k.flav3, k.psq4, k.flav4))
+for x in particles:
+    print(x.flav1 + x.psq1 + " " + x.flav2 + x.psq2 + " " + x.flav3 + x.psq3 + " " + x.flav4 + x.psq4)
 
-# for ensem in ("32", "24"):
-#     for psq in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]:
-#         for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
-#             textable_super(particles, psq, ensem, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/thresholds" + ensem + "_P" + psq + "_" + samp[1])
+# Read/parse threshold files and store each threshold
