@@ -40,7 +40,7 @@ operator = "isodoublet P=(0,0,1) A2_1 SS_1"
 readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_boot", "Bootstrap", ["E1_ref_5_35P0tsgs"])
 #Time symmetric single exponential
 tmin = 3
-tmax = 35
+tmax = 38
 
 while tmax > 30:
     while tmin < (tmax - 6):
@@ -51,7 +51,7 @@ while tmax > 30:
 
 #Time symmetric two exponential    
 tmin = 3
-tmax = 35
+tmax = 38
 
 while tmax > 30:
     while tmin < (tmax - 15):
@@ -62,7 +62,7 @@ while tmax > 30:
 
 #Time symmetric geometric series    
 tmin = 3
-tmax = 35
+tmax = 38
 
 while tmax > 30:
     while tmin < (tmax - 15):

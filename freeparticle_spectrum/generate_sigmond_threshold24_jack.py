@@ -61,23 +61,44 @@ for delight in fudge:
     temp.findflavfitname()
     fits.append(temp)
 
-# Two particle energy combinations:
-pairs = list(itertools.combinations(fits, 3))
+# Three particle energy combinations:
+triplets = list(itertools.combinations(fits, 3))
 
 for c in fits:
-    pairs.append(tuple((c, c, c))) # include \pi \pi, \eta \eta, etc states
+    triplets.append(tuple((c, c, c))) # include \pi \pi, \eta \eta, etc states
 
 energies = []
 # add_obs(tasks, fits, "result_str", "Jackknife")
-for x in pairs:
+for x in triplets:
     temp = []
     # add_obs(tasks, pair_of_fitnames, result_str_from_pair_params, "Jackknife")
     result = threepart_fitname(x, "none")
     energies.append(result)
     energies.append(result + "_ref")
 
-    temp.append(x[0].fitname)
-    temp.append(x[1].fitname)
+    for y in x:
+        temp.append(y.fitname)
+
+    add_obs(tasks, temp, result, "Jackknife")
+    ref_ratio(tasks, result, refmass_name, result + "_ref", "Jackknife")
+
+# Four particle energy combinations:
+fours = list(itertools.combinations(fits, 4))
+
+for c in fits:
+    fours.append(tuple((c, c, c, c))) # include \pi \pi, \eta \eta, etc states
+
+# add_obs(tasks, fits, "result_str", "Jackknife")
+for x in fours:
+    temp = []
+    # add_obs(tasks, pair_of_fitnames, result_str_from_pair_params, "Jackknife")
+    result = fourpart_fitname(x, "none")
+    energies.append(result)
+    energies.append(result + "_ref")
+
+    for y in x:
+        temp.append(y.fitname)
+
     add_obs(tasks, temp, result, "Jackknife")
     ref_ratio(tasks, result, refmass_name, result + "_ref", "Jackknife")
 

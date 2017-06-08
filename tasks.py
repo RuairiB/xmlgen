@@ -47,7 +47,7 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
     ET.SubElement(pivoter, "MinimumInverseConditionNumber").text = "0.01"
     ET.SubElement(pivoter, "NegativeEigenvalueAlarm").text = "-0.01"
     ET.SubElement(pivoter, "CheckMetricErrors")
-    ET.SubElement(pivoter, "CheckCommonMetrixMatrixNullSpace")
+    ET.SubElement(pivoter, "CheckCommonMetricMatrixNullSpace")
 
     writepiv = ET.SubElement(pivoter, "WritePivotToFile")
     ET.SubElement(writepiv, "PivotFileName").text = piv_file
@@ -351,15 +351,6 @@ def add_obs(tasks, obs_strs, result_str, mode):
     result = ET.SubElement(task, "Result")
     ET.SubElement(result, "Name").text = result_str
     ET.SubElement(result, "IDIndex").text = "0"
-
-    # # Ensure obs_strs a list of tuples with ObsName and coefficient
-    # for i in obs_strs:
-    #     if(type(i) != tuple):
-    #         print("gis some tuples please")
-    #         sys.exit()
-    #     elif(len(i) != 2):
-    #         print("wrong tuple length")
-    #         sys.exit()
 
     for x in obs_strs:
         summand = ET.SubElement(task, "Summand")
