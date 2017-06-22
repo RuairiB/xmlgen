@@ -15,6 +15,8 @@ corr_paths = []
 for flav in "pion", "kaon", "eta", "nucleon":
     for p in range(0, 5):
         corr_paths.append("/home/ruairi/research/freeparticle_energies/SH_fits/24^3/" + flav + "/energies/" + flav + "_24_840_PSQ" + str(p) + "_jack")
+
+corr_paths.append("/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_jack")
 proj_name = "twoparticles24_jack"
 inputdir = "/home/ruairi/research/freeparticle_energies/two_particles/"
 logfile = inputdir + "log_twoparticles24_jack.log"

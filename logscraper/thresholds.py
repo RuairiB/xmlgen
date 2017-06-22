@@ -3,74 +3,82 @@ import os
 from glob import glob
 from logutils import *
 
-inputdir = "/home/ruairi/research/freeparticle_energies/thresholds"
+# inputdir = "/home/ruairi/research/freeparticle_energies/thresholds"
 
-# Make sure all logfiles have .log extension (or start with log_ -- might be better to avoid bash logs)
-logfiles = [y for x in os.walk(inputdir) for y in glob(os.path.join(x[0], 'log_*'))]
+def supers(inputdir):
+    # Make sure all logfiles have .log extension (or start with log_ -- might be better to avoid bash logs)
+    logfiles = [y for x in os.walk(inputdir) for y in glob(os.path.join(x[0], 'log_*'))]
 
-particles = []
+    particles = []
 
-for xmlin in logfiles:
-    tree = ET.parse(xmlin)
-    root = tree.getroot()
-    for a in root.iter("MCBinsInfo"):
-        ensemble = a.find("MCEnsembleInfo").text
+    for xmlin in logfiles:
+        tree = ET.parse(xmlin)
+        root = tree.getroot()
+        for a in root.iter("MCBinsInfo"):
+            ensemble = a.find("MCEnsembleInfo").text
 
-    if not ensemble:
-        print("you need to echo the XML to find ensemble info")
-        sys.exit()
+        if not ensemble:
+            print("you need to echo the XML to find ensemble info")
+            sys.exit()
 
-    for x in root.iter("DoObsFunction"):
-        obstype = x.find("Type")
+        for x in root.iter("DoObsFunction"):
+            obstype = x.find("Type")
 
-        if obstype.text == "LinearSuperposition":
-            temp = linsuperlog()
-            temp.ensemble = ensemble
+            if obstype.text == "LinearSuperposition":
+                temp = linsuperlog()
+                temp.ensemble = ensemble
 
-            resultinfo = x.find("ResultInfo")
-            mcobs = resultinfo.find("MCObservable")
-            temp.resultstr = mcobs.find("Info").text
+                resultinfo = x.find("ResultInfo")
+                mcobs = resultinfo.find("MCObservable")
+                temp.resultstr = mcobs.find("Info").text
 
-            mcest = x.find("MCEstimate")
-            temp.energy = mcest.find("FullEstimate").text
-            temp.energyerr = mcest.find("SymmetricError").text
-            temp.sampling = mcest.find("ResamplingMode").text
-
-
-            temp.sigfigs(2)
-            temp.numparticles()
-            temp.stripindex()
-            temp.findmom(temp.numpart)
-            temp.findflav(temp.numpart)
-            temp.texensemble()
-            temp.texthreshstr(temp.numpart)
-
-            particles.append(temp)
+                mcest = x.find("MCEstimate")
+                temp.energy = mcest.find("FullEstimate").text
+                temp.energyerr = mcest.find("SymmetricError").text
+                temp.sampling = mcest.find("ResamplingMode").text
 
 
-        elif obstype.text == "Ratio":
-            temp = particles[-1]
+                temp.sigfigs(2)
+                temp.numparticles()
+                temp.stripindex()
+                temp.findmom(temp.numpart)
+                temp.findflav(temp.numpart)
+                temp.texensemble()
+                # temp.texresultstr(temp.numpart)
+                temp.texthreshstr(temp.numpart)
 
-            resultinfo = x.find("ResultInfo")
-            mcobs = resultinfo.find("MCObservable")
-            temp.ratio_str = mcobs.find("Info").text
+                particles.append(temp)
 
-            mcest = x.find("MCEstimate")
-            temp.energyratio = mcest.find("FullEstimate").text
-            temp.energyratioerr = mcest.find("SymmetricError").text
 
-            temp.sigfigs(2)
-            temp.stripindex()
+            elif obstype.text == "Ratio":
+                temp = particles[-1]
 
-            particles[-1] = temp
-        else:
-            print("can't find ratio for " + particles[-1].resultstr + ". Or it's some other sort of DoObs I don't know.")
+                resultinfo = x.find("ResultInfo")
+                mcobs = resultinfo.find("MCObservable")
+                temp.ratio_str = mcobs.find("Info").text
 
-print(len(particles))
+                mcest = x.find("MCEstimate")
+                temp.energyratio = mcest.find("FullEstimate").text
+                temp.energyratioerr = mcest.find("SymmetricError").text
 
-# Loop over particles and write tex-table function
-particles.sort(key=lambda k: (k.numpart, k.psq1, k.flav1, k.psq2, k.flav2, k.psq3, k.flav3, k.psq4, k.flav4))
-for x in particles:
-    print(x.flav1 + x.psq1 + " " + x.flav2 + x.psq2 + " " + x.flav3 + x.psq3 + " " + x.flav4 + x.psq4)
+                temp.sigfigs(2)
+                temp.stripindex()
 
-# Read/parse threshold files and store each threshold
+                particles[-1] = temp
+            else:
+                print("can't find ratio for " + particles[-1].resultstr + ". Or it's some other sort of DoObs I don't know.")
+
+    # print(len(particles))
+
+    # Loop over particles and write tex-table function
+    particles.sort(key=lambda k: (k.numpart, k.psq1, k.flav1, k.psq2, k.flav2, k.psq3, k.flav3, k.psq4, k.flav4))
+    # for x in particles:
+    #     print(x.flav1 + x.psq1 + " " + x.flav2 + x.psq2 + " " + x.flav3 + x.psq3 + " " + x.flav4 + x.psq4)
+
+    # Read/parse threshold files and store each threshold
+
+    return particles
+    
+if __name__ == "__main__":
+    junk = supers("/home/ruairi/research/freeparticle_energies/thresholds")
+    

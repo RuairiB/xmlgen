@@ -88,8 +88,11 @@ def bestfits(inputdir):
         for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
             for flav in ["kaon", "pion", "eta", "nucleon"]:
                 x = bestfit(fit32, flav, psq, samp[0], "32_860")
-                if psq != "4" and flav != "eta":
+                if psq != "4":
                     y = bestfit(fit24, flav, psq, samp[0], "24_840")
+                elif psq == "4" and flav != "eta":
+                    y = bestfit(fit24, flav, psq, samp[0], "24_840")
+                    
                 if x:
                     best.append(x)
                 if y:

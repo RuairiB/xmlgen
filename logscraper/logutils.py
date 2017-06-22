@@ -157,6 +157,23 @@ def bestfit(fits, flav, psq, sampling, ensem):
         print("something is empty for " + flav + fits[0].ensemble + "  " + psq + "  " + sampling)
         # sys.exit()
 
+def onepart_fitname(fit, samp):
+    name = fit.flav + "_" 
+    name += fit.psq
+
+    if samp == "Bootstrap":
+        name += "_boot"
+        return name
+    elif samp == "Jackknife":
+        name += "_jack"
+        return name
+    elif samp == "none":
+        return name
+    else:
+        print("wrong sampling")
+        sys.exit()
+
+    
 def twopart_fitname(fits, samp):
     if(type(fits) != tuple):
         print("gis a tuple please")
@@ -166,7 +183,7 @@ def twopart_fitname(fits, samp):
         sys.exit()
 
     name = fits[0].flav + "_" + fits[1].flav + "_"
-    name += fits[0].mom.replace(",", "") + "_" + fits[1].mom.replace(",", "")
+    name += fits[0].psq + "_" + fits[1].psq
 
     if samp == "Bootstrap":
         name += "_boot"
@@ -451,7 +468,10 @@ def textable_super(particles, psq, ensem, sampling, filename):
     for i in particles:
         if ensem in i.ensemble and i.sampling == str(sampling) and i.psq == psq:
             table.append(i)
-
+            
+    table = list(set(table))    # remove duplicates
+    table.sort(key=lambda k: k.energy)
+    
     if table:
         # open output tex file
         f = open(filename + ".tex", 'w')
@@ -465,7 +485,7 @@ def textable_super(particles, psq, ensem, sampling, filename):
         # print out table content
         for x in table:
             f.write("$" + x.resultstr_tex + "$ & " + x.energyprint + " & " + x.energyratioprint + " \\\\ \n")
-
+        
         
         # print bottom hline, end environment, etc
         f.write("\\hline\n")
@@ -510,7 +530,6 @@ class linsuperlog:
             else:
                 self.energyratioprint = self.energyratio[:2+err_nprec] + "(" + self.energyratioerr + ")"
 
-
     def numparticles(self):
         num = self.resultstr.count("_")
         if num == 1 or num == 2:
@@ -528,25 +547,28 @@ class linsuperlog:
     # Flava flav has gone missing, can you find him?
     def findflav(self, num=2):
         self.flav1 = self.resultstr.split("_")[0]
-        self.flav2 = self.resultstr.split("_")[1]
         if not any(x in self.flav1 for x in ("pion", "kaon", "eta", "nucleon", "N", "Pi", "K")):
             print("what flavour are you particle 1?")
-        if not any(x in self.flav2 for x in ("pion", "kaon", "eta", "nucleon", "N", "Pi", "K")):
-            print("what flavour are you particle 2?")
 
         if self.flav1 == "K":
             self.flav1 = "kaon"    
         elif self.flav1 == "Pi":
             self.flav1 = "pion"    
         elif self.flav1 == "N":
-            self.flav1 = "nucleon" 
+            self.flav1 = "nucleon"
 
-        if self.flav2 == "K":
-            self.flav2 = "kaon"    
-        elif self.flav2 == "Pi":
-            self.flav2 = "pion"    
-        elif self.flav2 == "N":
-            self.flav2 = "nucleon" 
+
+        if num > 1:
+            self.flav2 = self.resultstr.split("_")[1]
+            if not any(x in self.flav2 for x in ("pion", "kaon", "eta", "nucleon", "N", "Pi", "K")):
+                print("what flavour are you particle 2?")
+
+            if self.flav2 == "K":
+                self.flav2 = "kaon"    
+            elif self.flav2 == "Pi":
+                self.flav2 = "pion"    
+            elif self.flav2 == "N":
+                self.flav2 = "nucleon" 
 
         if num > 2:
             self.flav3 = self.resultstr.split("_")[2]
@@ -570,12 +592,20 @@ class linsuperlog:
             elif self.flav4 == "N":
                 self.flav4 = "nucleon" 
 
-    # Where is she?
+        # print(self.resultstr + "  " + self.psq1 + "  " + self.psq2 + "  " + self.psq3 + "  " + self.psq4)    
+
+
+    # where is she?
     def findmom(self, num=2):
         # perform some sort of check to make sure a momentum (rather than flav, etc) has been extracted
-        if num == 2:
+        if num == 1:
+            self.mom1 = self.resultstr.split("_")[1]
+            self.psq1 = self.resultstr.split("_")[1]
+        elif num == 2:
             self.mom1 = self.resultstr.split("_")[2]
             self.mom2 = self.resultstr.split("_")[3]
+            self.psq1 = self.resultstr.split("_")[2]
+            self.psq2 = self.resultstr.split("_")[3]
         if num == 3:
             self.psq1 = self.resultstr.split("_")[3]
             self.psq2 = self.resultstr.split("_")[4]
@@ -606,26 +636,27 @@ class linsuperlog:
             tex = tex + p + ","
 
         tex = tex[:-1] + " \\right) "
-        
-        if self.flav2 == "pion":
-            tex = tex + "\pi \left( "
-        elif self.flav2 == "kaon":
-            tex = tex + "K \left( "
-        elif self.flav2 == "eta":
-            tex = tex + "\eta \left( "
-        elif self.flav2 == "nucleon":
-            tex = tex + "N \left( "
-        else:
-            print("can't find flav2")
-            sys.exit()
 
-        for p in self.mom2:
-            if p != "0":
-                tex = tex + "-" + p + ","
+        if num > 1:
+            if self.flav2 == "pion":
+                tex = tex + "\pi \left( "
+            elif self.flav2 == "kaon":
+                tex = tex + "K \left( "
+            elif self.flav2 == "eta":
+                tex = tex + "\eta \left( "
+            elif self.flav2 == "nucleon":
+                tex = tex + "N \left( "
             else:
-                tex = tex + p + ","
-        
-        tex = tex[:-1] + " \\right) "
+                print("can't find flav2")
+                sys.exit()
+
+            for p in self.mom2:
+                if p != "0":
+                    tex = tex + "-" + p + ","
+                else:
+                    tex = tex + p + ","
+
+            tex = tex[:-1] + " \\right) "
 
         if num > 2:
             if self.flav3 == "pion":
@@ -671,6 +702,7 @@ class linsuperlog:
 
         self.resultstr_tex = tex
 
+        
     def texthreshstr(self, num=2):
         tex = ''
         
@@ -688,19 +720,20 @@ class linsuperlog:
 
         tex += self.psq1 + " \\right) "
 
-        if self.flav2 == "pion":
-            tex = tex + "\pi \left( "
-        elif self.flav2 == "kaon":
-            tex = tex + "K \left( "
-        elif self.flav2 == "eta":
-            tex = tex + "\eta \left( "
-        elif self.flav2 == "nucleon":
-            tex = tex + "N \left( "
-        else:
-            print("can't find flav2")
-            sys.exit()
+        if num > 1:
+            if self.flav2 == "pion":
+                tex = tex + "\pi \left( "
+            elif self.flav2 == "kaon":
+                tex = tex + "K \left( "
+            elif self.flav2 == "eta":
+                tex = tex + "\eta \left( "
+            elif self.flav2 == "nucleon":
+                tex = tex + "N \left( "
+            else:
+                print("can't find flav2")
+                sys.exit()
 
-        tex += self.psq2 + " \\right) "        
+            tex += self.psq2 + " \\right) "        
 
         if num > 2:
             if self.flav3 == "pion":
@@ -733,7 +766,7 @@ class linsuperlog:
             tex += self.psq4 + " \\right) "        
 
         self.resultstr_tex = tex
-
+        
     def calcptot(self, num=2):
         ptot = []
         if num == 2:
@@ -780,3 +813,10 @@ class linsuperlog:
         self.energyprint = ''
         self.energyratioprint = ''
         self.sampling = ''
+
+
+    def __eq__(self, other):
+        return self.resultstr == other.resultstr and self.energy == other.energy and self.ensemble == other.ensemble
+
+    def __hash__(self):
+        return hash((self.ensemble, self.resultstr, self.energy))

@@ -342,7 +342,7 @@ def aspect_ratio(tasks, Ns, ordered_energies, xi_name, plotfile, minimizer, samp
     ET.SubElement(plot, "Goodness").text = "chisq"
 
 
-def add_obs(tasks, obs_strs, result_str, mode):
+def add_obs(tasks, obs_strs, result_str, mode, single=False):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoObsFunction"
@@ -352,13 +352,25 @@ def add_obs(tasks, obs_strs, result_str, mode):
     ET.SubElement(result, "Name").text = result_str
     ET.SubElement(result, "IDIndex").text = "0"
 
-    for x in obs_strs:
+    if not single:
+        for x in obs_strs:
+            summand = ET.SubElement(task, "Summand")
+            obs = ET.SubElement(summand, "MCObservable")
+            ET.SubElement(obs, "ObsName").text = x
+            ET.SubElement(obs, "Index").text = "0"
+            ET.SubElement(summand, "Coefficient").text = "1.0"
+    else:
         summand = ET.SubElement(task, "Summand")
         obs = ET.SubElement(summand, "MCObservable")
-        ET.SubElement(obs, "ObsName").text = x
+        ET.SubElement(obs, "ObsName").text = obs_strs[0]
         ET.SubElement(obs, "Index").text = "0"
         ET.SubElement(summand, "Coefficient").text = "1.0"
-
+        summand = ET.SubElement(task, "Summand")
+        obs = ET.SubElement(summand, "MCObservable")
+        ET.SubElement(obs, "ObsName").text = obs_strs[1]
+        ET.SubElement(obs, "Index").text = "0"
+        ET.SubElement(summand, "Coefficient").text = "0.0"
+            
     # Sampling mode or "bins"
     ET.SubElement(task, "Mode").text = mode
 

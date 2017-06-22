@@ -15,6 +15,8 @@ corr_paths = []
 for flav in "pion", "kaon", "eta", "nucleon":
     for p in range(0, 5):
         corr_paths.append("/home/ruairi/research/freeparticle_energies/SH_fits/24^3/" + flav + "/energies/" + flav + "_24_840_PSQ" + str(p) + "_boot")
+
+corr_paths.append("/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_boot")
 proj_name = "twoparticles24_boot"
 inputdir = "/home/ruairi/research/freeparticle_energies/two_particles/"
 logfile = inputdir + "log_twoparticles24_boot.log"
@@ -28,7 +30,7 @@ tasks = ET.SubElement(root, "TaskSequence")
 initialize(init, corr_paths, proj_name, logfile, "Bootstrap", "24_840", "samplings")
 
 # Tasks
-refmass_name = "E1_ref_5_35P0tsgs"
+refmass_name = "E1_kaon_4_35P0tsgs"
 # readsamplings(tasks, "/home/ruairi/research/freeparticle_energies/refenergies/kaon24_PSQ0_reference_bins_boot", "Bootstrap", [refmass_name])
 
 best = bestfits("/home/ruairi/research/freeparticle_energies/SH_fits")
