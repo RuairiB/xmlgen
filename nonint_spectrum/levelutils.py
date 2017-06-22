@@ -125,7 +125,7 @@ def textable_irrep(destination, irrep, ensemble, psq, sampling):
         # print bottom hline, end environment, etc
         f.write("\\hline\n")
         f.write("\\captionsetup{justification=centering}\n")
-        f.write("\\caption{Non-interacting spectrum of stable hadrons with total momentum $P^2 = " + str(psq) + "$ in the $" + irrep[0].irrep_tex + "$ irrep, on the \\vb{" + ensemble + "} ensemble with " + sampling + " resampling.}\n")
+        f.write("\\caption{$I = " + irrep[0].isospin_tex + "$,  $S = " + str(int(irrep[0].strangeness)) + "$,  $P^2 = " + str(psq) + "$: Non-interacting spectrum of stable hadrons in the $" + irrep[0].irrep_tex + "$ irrep, on the \\vb{" + ensemble + "} ensemble with " + sampling + " resampling.}\n")
         f.write("\\end{longtable}\n")
         # f.write("\\clearpage\n")
         f.close()
@@ -215,6 +215,17 @@ class explevel:
         elif "g" in self.irrep:
             self.irrep_tex = self.irrep_tex.replace("g", "_{g}")
 
+    def tex_isospin(self):
+        if self.isospin == 0.5:
+            self.isospin_tex = "\\frac{1}{2}"
+        elif self.isospin == 1.5:
+            self.isospin_tex = "\\frac{3}{2}"
+        elif self.isospin == 2.5:
+            self.isospin_tex = "\\frac{5}{2}"
+        elif self.isospin == 3.5:
+            self.isospin_tex = "\\frac{7}{2}"
+        else:
+            self.isospin_tex = str(int(self.isospin))
 
     def __init__(self):
         self.Npart = 0
@@ -223,6 +234,7 @@ class explevel:
         self.irrep = ''
         self.irrep_tex = ''
         self.isospin = 0
+        self.isospin_tex = 0
         self.strangeness = 0
         self.fitlist = ''
         self.resultstr_tex = ''

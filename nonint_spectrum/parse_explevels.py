@@ -61,6 +61,7 @@ def readlevels(filename, ensem, psq):
             temp.Npart = 1
             temp.psq = psq
             temp.isospin = isospin
+            temp.tex_isospin()
             temp.strangeness = strangeness
             temp.parts.append((x.split()[-1], psq))
             temp.findfitstrings(ensem)
@@ -73,6 +74,7 @@ def readlevels(filename, ensem, psq):
             temp.Npart = x.count("PSQ")
             temp.psq = psq
             temp.isospin = isospin
+            temp.tex_isospin()
             temp.strangeness = strangeness
             i = 0
             x = x.split()[-1]   # split off end string
@@ -82,7 +84,7 @@ def readlevels(filename, ensem, psq):
                 i += 1
 
             temp.findfitstrings(ensem)
-            
+
             check = True
             # only put level in that contain stable particles and the first 3/4 particle states
             for y in temp.parts:
