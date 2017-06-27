@@ -83,11 +83,7 @@ for x in fits:
     
     
 # Two particle energy combinations:
-pairs = list(itertools.combinations(fits, 2))
-
-for c in fits:
-    pairs.append(tuple((c, c))) # include \pi \pi, \eta \eta, etc states
-
+pairs = list(itertools.combinations_with_replacement(fits, 2))
 
 # add_obs(tasks, fits, "result_str", "Jackknife")
 for x in pairs:
@@ -105,11 +101,7 @@ for x in pairs:
 del pairs
     
 # Three particle energy combinations:
-triplets = list(itertools.combinations(fits, 3))
-
-for c in fits:
-    triplets.append(tuple((c, c, c))) # include \pi \pi, \eta \eta, etc states
-
+triplets = list(itertools.combinations_with_replacement(fits, 3))
 
 # add_obs(tasks, fits, "result_str", "Jackknife")
 for x in triplets:
@@ -128,10 +120,7 @@ for x in triplets:
 del triplets
     
 # Four particle energy combinations:
-fours = list(itertools.combinations(fits, 4))
-
-for c in fits:
-    fours.append(tuple((c, c, c, c))) # include \pi \pi, \eta \eta, etc states
+fours = list(itertools.combinations_with_replacement(fits, 4))
 
 # add_obs(tasks, fits, "result_str", "Jackknife")
 for x in fours:
