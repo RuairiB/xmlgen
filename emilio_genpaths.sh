@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# change all filepaths from ruairi-laptop to emilio
+# change all filepaths from ruairi-laptop to emilio :: OLD, write in future such that this isn't needed
 
 # sys.path for generate_* files
 for f in $(find /latticeQCD/raid6/ruairi/git/xmlgen/ -name '*.py'); do sed -i 's|/home/ruairi/research/xmlgen/|/home/ruairi/git/xmlgen/|g' $f; done
