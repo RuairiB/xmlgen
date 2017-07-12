@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
 from logutils import *
 
 # Given set of levels (separated by irrep), pull corresponding energies (& TeX'd particle content?) from logs

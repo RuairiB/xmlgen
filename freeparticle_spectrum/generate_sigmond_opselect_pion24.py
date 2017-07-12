@@ -1,0 +1,47 @@
+import xml.etree.cElementTree as ET
+import os
+import sys
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
+from utils import *
+from init import *
+from tasks import *
+
+corr_path = ["/latticeQCD/raid7/laph/clover_s24_t128_ud840_s743/special/du_mesons/"]
+proj_name = "diagcorr_24_840_pion_du_meson"
+inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/operator_selection/24^3/"
+logfile = inputdir + "log_diagcorr_24_840_du_meson_pion" + ".log"
+
+root = ET.Element("SigMonD")
+tree = ET.ElementTree(root)
+
+init = ET.SubElement(root, "Initialize")
+tasks = ET.SubElement(root, "TaskSequence")
+
+# Usage:
+# initialize(init, corr_path, proj_name, logfile, sampling, ensemble, obs_type)
+
+initialize(init, corr_path, proj_name, logfile, "Jackknife", "24_840", "BLCorr")
+
+# Tasks
+# dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, sampling="Bootstrap")
+# writesamplings(tasks, energies, energyfile, sampling="Bootstrap")
+
+ops_psq0 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_du.rb", 0)
+ops_psq1 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_du.rb", 1)
+ops_psq2 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_du.rb", 2)
+ops_psq3 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_du.rb", 3)
+ops_psq4 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_du.rb", 4)
+ops_psq5 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_du.rb", 5)
+ops_psq6 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_du.rb", 6)
+
+diagonalenergyplots(tasks, ops_psq0, inputdir + "plots/pion/diagcorr_24_840_du_meson_P0", "Jackknife")
+diagonalenergyplots(tasks, ops_psq1, inputdir + "plots/pion/diagcorr_24_840_du_meson_P1", "Jackknife")
+diagonalenergyplots(tasks, ops_psq2, inputdir + "plots/pion/diagcorr_24_840_du_meson_P2", "Jackknife")
+diagonalenergyplots(tasks, ops_psq3, inputdir + "plots/pion/diagcorr_24_840_du_meson_P3", "Jackknife")
+diagonalenergyplots(tasks, ops_psq4, inputdir + "plots/pion/diagcorr_24_840_du_meson_P4", "Jackknife")
+diagonalenergyplots(tasks, ops_psq5, inputdir + "plots/pion/diagcorr_24_840_du_meson_P5", "Jackknife")
+diagonalenergyplots(tasks, ops_psq6, inputdir + "plots/pion/diagcorr_24_840_du_meson_P6", "Jackknife")
+    
+indent(root)
+filename = str(inputdir + "input_diagcorr_24_840_du_meson_pion.xml")
+tree.write(filename)

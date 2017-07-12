@@ -3,7 +3,7 @@
 # change all filepaths from emilio to ruairi-laptop
 
 # sys.path for generate_* files
-for f in $(find /home/ruairi/research/xmlgen/ -name '*.py'); do sed -i 's|/home/ruairi/git/xmlgen/|/home/ruairi/research/xmlgen/|g' $f; done
+for f in $(find /home/ruairi/research/xmlgen/ -name '*.py'); do sed -i 's|/latticeQCD/raid6/ruairi/git/xmlgen/|/home/ruairi/research/xmlgen/|g' $f; done
 
 # working dir/inputdir changes
 for f in $(find /home/ruairi/research/xmlgen/ -name '*.py'); do sed -i 's|/latticeQCD/raid6/ruairi/freeparticle_energies/|/home/ruairi/research/freeparticle_energies/|g' $f; done
