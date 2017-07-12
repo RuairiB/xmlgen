@@ -36,3 +36,6 @@
 
 __pycache__
 nonint_spectrum/testing/
+nonint_spectrum/generate*
+freeparticle_spectrum/
+phi_rho/
