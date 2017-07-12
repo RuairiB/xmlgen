@@ -5,6 +5,7 @@ from utils import *
 
 # SigMond tasks
 # TO DO:
+# Update TO DO list...
 # DoCorrMatrixZMagSquares
 # DoRotCorrMatReorderLevelsByEnergy
 # Flesh out reading/writing bins/samplings, etc
@@ -78,7 +79,7 @@ def zfactors(tasks, piv_type, piv_file, piv_name, ampstub, plotstub, opstrings):
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixZMagSquares"
     readpivot(task, piv_type, piv_file, piv_name)
-    
+
     ET.SubElement(task, "RotatedAmplitudeCommonName").text = str(ampstub)
     plots = ET.SubElement(task, "DoPlots")
     ET.SubElement(plots, "PlotFileStub").text = plotstub
@@ -99,10 +100,10 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
     ET.SubElement(task, "Type").text = "TemporalCorrelator"
 
     minimizerinfo(task, minimizer)
-    
+
     ET.SubElement(task, "SamplingMode").text = sampling
     ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
-    
+
     fit = ET.SubElement(task, "TemporalCorrelatorFit")
 
     ET.SubElement(fit, getoptype(operator)).text = operator
@@ -116,7 +117,7 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
     ET.SubElement(model, "Type").text = fitfn
 
     fitmodel = shortform(fitfn)
-    
+
     if(len(fitname) < 8):
         obsname = str(fitname) + "_" + str(tmin) + "_" + str(tmax) + "P" + str(psq) + fitmodel
     else:
@@ -125,7 +126,7 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
 
     energies.append("E1_" + obsname)
     modelparams(model, obsname)
-    
+
     plot = ET.SubElement(fit, "DoEffectiveEnergyPlot")
     ET.SubElement(plot, "PlotFile").text = plotfile
     ET.SubElement(plot, "CorrName").text = "standard"
@@ -154,10 +155,10 @@ def dorotfit(tasks, operator_base, level, obsname, tmin, tmax, fitfn, minimizer,
     ET.SubElement(task, "Type").text = "TemporalCorrelator"
 
     minimizerinfo(task, minimizer)
-    
+
     ET.SubElement(task, "SamplingMode").text = sampling
     ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
-    
+
     fit = ET.SubElement(task, "TemporalCorrelatorFit")
     if operator_base[-1] == " ":
         operator = operator_base + str(level)
@@ -175,14 +176,14 @@ def dorotfit(tasks, operator_base, level, obsname, tmin, tmax, fitfn, minimizer,
     ET.SubElement(model, "Type").text = fitfn
 
     fitmodel = shortform(fitfn)
-    
+
     if(len(obsname) > 20):
         print("WARNING: obsname " + obsname + " may be too long for obsnames")
 
     energies.append(["E1_" + obsname, level])
     amplitudes.append(["A1_" + obsname, level])
     modelparams(model, obsname, level)
-    
+
     plot = ET.SubElement(fit, "DoEffectiveEnergyPlot")
     ET.SubElement(plot, "PlotFile").text = plotfile
     ET.SubElement(plot, "CorrName").text = "standard"
@@ -201,7 +202,7 @@ def dorotfit(tasks, operator_base, level, obsname, tmin, tmax, fitfn, minimizer,
         ET.SubElement(insert, "Type").text = "Single" # Only single pivot implemented so far
         ET.SubElement(insert, "Name").text = str(pivot) # Object name, NOT filename. Must already be in memory
         ET.SubElement(insert, "Level").text = str(level)
-    
+
 
 def writesamplings(tasks, energies, energyfile, sampling="Bootstrap", overwrite=True):
     task = ET.SubElement(tasks, "Task")
@@ -241,6 +242,7 @@ def readsamplings(tasks, filename, sampling, mcobs):
         else:
             print("Please give a better obsname format to read samplings")
             sys.exit()
+
 
 def diagonalenergyplots(tasks, oplist, filestub, sampling="Jackknife"):
     task = ET.SubElement(tasks, "Task")
@@ -312,7 +314,6 @@ def momaverage(tasks, opfile, psq, binfile, tmin, tmax, hermitian):
         if i not in oplist:
             oplist.append(i)
 
-
     ET.SubElement(task, "Action").text = "DoObsFunction"
     ET.SubElement(task, "Type").text = "CorrelatorMatrixSuperposition"
     results = ET.SubElement(task, "ResultOperatorOrderedList")
@@ -382,7 +383,7 @@ def aspect_ratio(tasks, Ns, ordered_energies, xi_name, plotfile, minimizer, samp
     ET.SubElement(task, "Type").text = "AnisotropyFromDispersion"
 
     minimizerinfo(task, minimizer)
-    
+
     ET.SubElement(task, "SamplingMode").text = sampling
     ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
 
@@ -441,7 +442,7 @@ def add_obs(tasks, obs_strs, result_str, mode, single=False):
         ET.SubElement(obs, "ObsName").text = obs_strs[1]
         ET.SubElement(obs, "Index").text = "0"
         ET.SubElement(summand, "Coefficient").text = "0.0"
-            
+
     # Sampling mode or "bins"
     ET.SubElement(task, "Mode").text = mode
 
@@ -502,13 +503,13 @@ def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2,
     ET.SubElement(task, "Type").text = "TwoTemporalCorrelator"
 
     minimizerinfo(task, minimizer)
-    
+
     ET.SubElement(task, "SamplingMode").text = sampling
     ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
 
     fit = ET.SubElement(task, "TwoTemporalCorrelatorFit")
 
-    
+    # Correlator 1
     corr1 = ET.SubElement(fit, "CorrelatorOne")
     ET.SubElement(corr1, getoptype(op1)).text = op1
     ET.SubElement(corr1, "MinimumTimeSeparation").text = str(tmin1)
@@ -530,8 +531,8 @@ def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2,
 
     energies.append("E1_" + obsname)
     modelparams(model, obsname)
-    
 
+    # Correlator 2
     corr2 = ET.SubElement(fit, "CorrelatorTwo")
     ET.SubElement(corr2, getoptype(op2)).text = op2
     ET.SubElement(corr2, "MinimumTimeSeparation").text = str(tmin2)
@@ -553,8 +554,8 @@ def dodoublefit(tasks, op1, op2, fitname1, fitname2, tmin1, tmax1, tmin2, tmax2,
 
     energies.append("E1_" + obsname)
     modelparams(model, obsname)
-    
-    
+
+    # Energy Ratio
     rat = ET.SubElement(fit, "EnergyRatio")
     ET.SubElement(rat, "Name").text = ratio_name
     ET.SubElement(rat, "IDIndex").text = "0"
