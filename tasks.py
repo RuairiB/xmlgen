@@ -6,11 +6,8 @@ from utils import *
 # SigMond tasks
 # TO DO:
 # Update TO DO list...
-# DoCorrMatrixZMagSquares
-# DoRotCorrMatReorderLevelsByEnergy
-# Flesh out reading/writing bins/samplings, etc
-# C(t+1) - C(t)
-# Fit to two correlators?
+# Add support for 'improved operators'
+# Entire rotation/reordering/z factor process
 
 # Go through header files for single pivot and rolling pivot, this could do with some more fleshing out
 def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, plotstub):
@@ -49,6 +46,7 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
     ET.SubElement(pivoter, "NegativeEigenvalueAlarm").text = "-0.01"
     ET.SubElement(pivoter, "CheckMetricErrors")
     ET.SubElement(pivoter, "CheckCommonMetricMatrixNullSpace")
+    ET.SubElement(pivoter, "PrintTransformationMatrix")
 
     writepiv = ET.SubElement(pivoter, "WritePivotToFile")
     ET.SubElement(writepiv, "PivotFileName").text = piv_file
@@ -56,7 +54,7 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
 
     writecorr = ET.SubElement(task, "WriteRotatedCorrToFile")
     ET.SubElement(writecorr, "RotatedCorrFileName").text = rotcorr_file
-    ET.SubElement(writecorr, "Type").text = "bins" # Or samplings for single pivot?
+    ET.SubElement(writecorr, "Type").text = "bins" # Or samplings?
     ET.SubElement(writecorr, "Overwrite")
 
     plots = ET.SubElement(task, "PlotRotatedEffectiveEnergies")
@@ -68,10 +66,46 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
         sys.exit()
 
     ET.SubElement(plots, "TimeStep").text = "3"
-    ET.SubElement(plots, "PlotFileStub").text = plotstub
+    ET.SubElement(plots, "PlotFileStub").text = "effE_" + plotstub
     ET.SubElement(plots, "SymbolColor").text = "blue"
     ET.SubElement(plots, "SymbolType").text = "circle"
     ET.SubElement(plots, "MaxErrorToPlot").text = "1.0"
+
+    corrplots = ET.SubElement(task, "PlotRotatedCorrelators")
+    ET.SubElement(corrplots, "SamplingMode").text = plot_sampling
+    ET.SubElement(corrplots, "PlotFileStub").text = "corr_" + plotstub
+    ET.SubElement(corrplots, "Arg").text = "Re"
+    ET.SubElement(corrplots, "SymbolColor").text = "blue"
+    ET.SubElement(corrplots, "SymbolType").text = "circle"
+    ET.SubElement(corrplots, "Rescale").text = "1.0"
+
+
+def insertintopivot(tasks, piv_type-"SinglePivot", piv_file=None, piv_name, energies, amps, reorder=True):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoRotCorrMatInsertFitInfos"
+    if piv_file is None:
+        getpivot(task, piv_type, piv_name)
+    else:
+        readpivot(task, piv_type, piv_file, piv_name)
+
+    if reorder:
+        ET.SubElement(task, "ReorderByFitEnergy")
+
+    for level in energies:
+        energy = ET.SubElement(task, "EnergyFit")
+        ET.SubElement(energy, "Level").text = str(level[1])
+        ET.SubElement(energy, "Name").text = level[0]
+        ET.SubElement(energy, "IDIndex").text = str(level[1])
+
+    if len(amps) == 1:
+        ET.SubElement(task, "RotatedAmplitudeCommonName").text = amps[0][0]
+    else:
+        for level in amps:
+            amp = ET.SubElement(task, "RotatedAmplitude")
+            ET.SubElement(amp, "Level").text = str(level[1])
+            ET.SubElement(amp, "Name").text = level[0]
+            ET.SubElement(amp, "IDIndex").text = str(level[1])
 
 
 def zfactors(tasks, piv_type, piv_file, piv_name, ampstub, plotstub, opstrings):

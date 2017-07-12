@@ -117,6 +117,21 @@ def readpivot(task, piv_type, piv_file, piv_name):
     ET.SubElement(pivoter, "AssignName").text = piv_name
 
 
+def getpivot(task, piv_type, piv_name):
+    if piv_type == "SinglePivot":
+        ET.SubElement(task, "Type").text = "SinglePivot"
+        pivoter = ET.SubElement(task, "SinglePivotInitiate")
+    elif piv_type == "RollingPivot":
+        ET.SubElement(task, "Type").text = "RollingPivot"
+        pivoter = ET.SubElement(task, "RollingPivotInitiate")
+    else:
+        print("need to implement other pivot types, check if in SigMonD first")
+        sys.exit()
+
+    read = ET.SubElement(pivoter, "GetFromMemory")
+    ET.SubElement(read, "IDName").text = piv_name
+
+
 def getoptype(operator):
     flav = ["pion", "kaon", "eta", "phi", "kbar", "nucleon", "delta", "omega", "sigma", "lambda", "xi"]
     isospin = ["singlet", "doublet", "triplet", "quartet"]
