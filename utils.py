@@ -72,7 +72,7 @@ def getopsdef(filename, psq):
     return operators
 
 
-def str_name(blah):
+>def str_name(blah):
     return [ k for k,v in locals().iteritems() if v is blah][0]
 
 def shortform(fitfn):
@@ -211,3 +211,17 @@ def getTsubopstring(opstring):
     irrep = stringbits[2]
     disp = stringbits[3]
     return isospin + " " + mom + " " + irrep + " " + "sub" + disp
+
+
+def read_fitparams(filename):
+    lines = file(filename)
+    params = []
+    
+    for line in lines:
+        level = str(line.split()[0])
+        model = str(line.split()[1])
+        tmin = str(line.split()[2])
+        tmax = str(line.split()[3])
+        params.append([level, model, tmin, tmax])
+
+    return params

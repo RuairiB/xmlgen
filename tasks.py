@@ -110,7 +110,7 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
     ET.SubElement(fit, "MaximumTimeSeparation").text = str(tmax)
     if(exclude != "none"):
         ET.SubElement(fit, "ExcludeTimes").text = exclude
-    ET.SubElement(fit, "LargeTimeNoiseCutoff").text = "1.0"
+    ET.SubElement(fit, "LargeTimeNoiseCutoff").text = "0.0"
 
     model = ET.SubElement(fit, "Model")
     ET.SubElement(model, "Type").text = fitfn
