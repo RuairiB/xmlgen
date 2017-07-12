@@ -3,7 +3,7 @@ import os
 from glob import glob
 from logutils import *
 
-# inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/thresholds"
+# inputdir = "/home/ruairi/research/freeparticle_energies/thresholds"
 
 def supers(inputdir):
     # Make sure all logfiles have .log extension (or start with log_ -- might be better to avoid bash logs)
@@ -80,5 +80,5 @@ def supers(inputdir):
     return particles
     
 if __name__ == "__main__":
-    junk = supers("/latticeQCD/raid6/ruairi/freeparticle_energies/thresholds")
+    junk = supers("/home/ruairi/research/freeparticle_energies/thresholds")
     

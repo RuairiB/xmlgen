@@ -2,21 +2,21 @@ import xml.etree.cElementTree as ET
 import os
 import itertools
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
 from logutils import *
 from bestfits import *
 
 corr_paths = []
 for flav in "pion", "kaon", "eta", "nucleon":
     for p in range(0, 5):
-        corr_paths.append("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_jack")
+        corr_paths.append("/home/ruairi/research/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_jack")
         proj_name = "twoparticles32_jack"
-        inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/thresholds/"
+        inputdir = "/home/ruairi/research/freeparticle_energies/thresholds/"
         logfile = inputdir + "log_thresholds32_jack.log"
 
 root = ET.Element("SigMonD")

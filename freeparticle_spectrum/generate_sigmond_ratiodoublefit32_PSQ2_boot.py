@@ -1,19 +1,19 @@
 import xml.etree.cElementTree as ET
 import os
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-corr_paths = ["/latticeQCD/raid8/laph/clover_s32_t256_ud860_s743/special/su_mesons/",
-              "/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_32_860_du_mesons_PSQ2",
-              "/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_32_860_su_mesons_PSQ2",
-              "/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_32_860_uu_mesons_PSQ2",
-              "/latticeQCD/raid6/ruairi/freeparticle_energies/irrep_averaging/avgbins/irrepavg_32_860_uud_baryons_PSQ2"]
+corr_paths = ["/home/ruairi/research/correlator_data/clover_s32_t256_ud860_s743/special/su_mesons/",
+              "/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_32_860_du_mesons_PSQ2",
+              "/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_32_860_su_mesons_PSQ2",
+              "/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_32_860_uu_mesons_PSQ2",
+              "/home/ruairi/research/freeparticle_energies/irrep_averaging/avgbins/irrepavg_32_860_uud_baryons_PSQ2"]
 corr_types = ["BLCorr", "bins", "bins", "bins", "bins"]
 proj_name = "doublefit32_PSQ2_boot"
-inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/ratio_comparison/"
+inputdir = "/home/ruairi/research/freeparticle_energies/ratio_comparison/"
 logfile = inputdir + "log_doublefit32_PSQ2_boot.log"
 
 root = ET.Element("SigMonD")

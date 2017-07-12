@@ -1,14 +1,14 @@
 import xml.etree.cElementTree as ET
 import os
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-corr_path = ["/latticeQCD/raid8/laph/clover_s32_t256_ud860_s743/special/su_mesons/"]
+corr_path = ["/home/ruairi/research/correlator_data/clover_s32_t256_ud860_s743/special/su_mesons/"]
 proj_name = "diagcorr_32_860_kaon_su_meson"
-inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/operator_selection/32^3/"
+inputdir = "/home/ruairi/research/freeparticle_energies/operator_selection/32^3/"
 logfile = inputdir + "log_diagcorr_32_860_su_meson_kaon" + ".log"
 
 root = ET.Element("SigMonD")
@@ -26,13 +26,13 @@ initialize(init, corr_path, proj_name, logfile, "Jackknife", "32_860", "BLCorr")
 # dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, sampling="Bootstrap")
 # writesamplings(tasks, energies, energyfile, sampling="Bootstrap")
 
-ops_psq0 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 0)
-ops_psq1 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 1)
-ops_psq2 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 2)
-ops_psq3 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 3)
-ops_psq4 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 4)
-ops_psq5 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 5)
-ops_psq6 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 6)
+ops_psq0 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 0)
+ops_psq1 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 1)
+ops_psq2 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 2)
+ops_psq3 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 3)
+ops_psq4 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 4)
+ops_psq5 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 5)
+ops_psq6 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_32_860_su.rb", 6)
 
 diagonalenergyplots(tasks, ops_psq0, inputdir + "plots/kaon/diagcorr_32_860_su_meson_P0", "Jackknife")
 diagonalenergyplots(tasks, ops_psq1, inputdir + "plots/kaon/diagcorr_32_860_su_meson_P1", "Jackknife")

@@ -3,7 +3,7 @@ import os
 from glob import glob
 from logutils import *
 
-# inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/two_particles"
+# inputdir = "/home/ruairi/research/freeparticle_energies/two_particles"
 
 def super2(inputdir):
     # Make sure all logfiles have .log extension (or start with log_ -- might be better to avoid bash logs)
@@ -83,9 +83,9 @@ def super2(inputdir):
     for ensem in ("32", "24"):
         for psq in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]:
             for samp in [("Bootstrap","boot"), ("Jackknife","jack")]:
-                textable_super(particles, psq, ensem, samp[0], "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/twoparticles" + ensem + "_P" + psq + "_" + samp[1])
+                textable_super(particles, psq, ensem, samp[0], "/home/ruairi/research/freeparticle_energies/notes/tables/twoparticles" + ensem + "_P" + psq + "_" + samp[1])
 
     return particles
 
 if __name__ == "__main__":
-    junk = super2("/latticeQCD/raid6/ruairi/freeparticle_energies/two_particles")
+    junk = super2("/home/ruairi/research/freeparticle_energies/two_particles")

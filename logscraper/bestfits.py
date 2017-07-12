@@ -3,7 +3,7 @@ import os
 from glob import glob
 from logutils import *
 
-# inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits"
+# inputdir = "/home/ruairi/research/freeparticle_energies/SH_fits"
 
 def bestfits(inputdir):
     # Make sure all logfiles have .log extension (or start with log_ -- might be better to avoid bash logs)
@@ -113,7 +113,7 @@ def bestfits(inputdir):
     print("This is unfinished, see logutils:bestfit()")
     best.sort(key=lambda k: (k.ensemble, k.flav, k.psq))
     for i in fits:
-        destination = "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/plots/" + i.flav + i.plotlocation.split(i.flav)[2]
+        destination = "/home/ruairi/research/freeparticle_energies/notes/plots/" + i.flav + i.plotlocation.split(i.flav)[2]
         if destination.endswith('.pdf'):
             destination = destination[:-4]
         texfig(i.plotlocation, destination, i)
@@ -123,4 +123,4 @@ def bestfits(inputdir):
 
 
 if __name__ == "__main__":
-    junk = bestfits("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits")
+    junk = bestfits("/home/ruairi/research/freeparticle_energies/SH_fits")
