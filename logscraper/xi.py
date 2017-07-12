@@ -4,7 +4,7 @@ import os
 from glob import glob
 from logutils import *
 
-# inputdir = "/home/ruairi/research/freeparticle_energies/SH_fits"
+# inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits"
 
 def xifits(inputdir):
     # Make sure all logfiles have .log extension (or start with log_ -- might be better to avoid bash logs)
@@ -66,7 +66,7 @@ def xifits(inputdir):
 
 
 if __name__ == "__main__":
-    junk = xifits("/home/ruairi/research/freeparticle_energies/aspect_ratio")
+    junk = xifits("/latticeQCD/raid6/ruairi/freeparticle_energies/aspect_ratio")
 
     junk32 = []
     junk24 = []

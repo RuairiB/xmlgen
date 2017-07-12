@@ -72,7 +72,7 @@ def getopsdef(filename, psq):
     return operators
 
 
->def str_name(blah):
+def str_name(blah):
     return [ k for k,v in locals().iteritems() if v is blah][0]
 
 def shortform(fitfn):

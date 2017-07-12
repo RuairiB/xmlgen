@@ -1,14 +1,14 @@
 import xml.etree.cElementTree as ET
 import os
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-corr_path = ["/home/ruairi/research/correlator_data/clover_s24_t128_ud840_s743/special/uud_baryons/"]
+corr_path = ["/latticeQCD/raid7/laph/clover_s24_t128_ud840_s743/special/uud_baryons/"]
 proj_name = "diagcorr_24_840_nucleon_uud_baryon"
-inputdir = "/home/ruairi/research/freeparticle_energies/operator_selection/24^3/"
+inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/operator_selection/24^3/"
 logfile = inputdir + "log_diagcorr_24_840_uud_baryon_nucleon" + ".log"
 
 root = ET.Element("SigMonD")
@@ -26,13 +26,13 @@ initialize(init, corr_path, proj_name, logfile, "Jackknife", "24_840", "BLCorr")
 # dofit(tasks, optype, operator, tmin, tmax, fitfn, plotfile, psq, energies, sampling="Bootstrap")
 # writesamplings(tasks, energies, energyfile, sampling="Bootstrap")
 
-ops_psq0 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 0)
-ops_psq1 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 1)
-ops_psq2 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 2)
-ops_psq3 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 3)
-ops_psq4 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 4)
-ops_psq5 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 5)
-ops_psq6 = getopsdef("/home/ruairi/research/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 6)
+ops_psq0 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 0)
+ops_psq1 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 1)
+ops_psq2 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 2)
+ops_psq3 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 3)
+ops_psq4 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 4)
+ops_psq5 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 5)
+ops_psq6 = getopsdef("/latticeQCD/raid6/ruairi/freeparticle_energies/run_scripts/opdefs_24_840_uud.rb", 6)
 
 diagonalenergyplots(tasks, ops_psq0, inputdir + "plots/nucleon/diagcorr_24_840_uud_baryon_P0", "Jackknife")
 diagonalenergyplots(tasks, ops_psq1, inputdir + "plots/nucleon/diagcorr_24_840_uud_baryon_P1", "Jackknife")

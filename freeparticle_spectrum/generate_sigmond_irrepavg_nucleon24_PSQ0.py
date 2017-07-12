@@ -1,14 +1,14 @@
 import xml.etree.cElementTree as ET
 import os
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-corr_paths = ["/home/ruairi/research/correlator_data/clover_s24_t128_ud840_s743/special/uud_baryons/"]
+corr_paths = ["/latticeQCD/raid7/laph/clover_s24_t128_ud840_s743/special/uud_baryons/"]
 proj_name = "irrepavg_nucleon24"
-inputdir = "/home/ruairi/research/freeparticle_energies/irrep_averaging/"
+inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/irrep_averaging/"
 logfile = inputdir + "log_irrepavg_nucleon24_PSQ0.log"
 
 root = ET.Element("SigMonD")

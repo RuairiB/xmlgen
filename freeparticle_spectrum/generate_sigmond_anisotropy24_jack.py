@@ -4,12 +4,12 @@ import sys
 import itertools
 from heapq import nsmallest
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
 from logutils import *
 from bestfits import *
 from fitparams import *
@@ -17,10 +17,10 @@ from fitparams import *
 def gen_aspect_fit(flav):
     corr_paths = []
     for p in range(0, 5):
-        corr_paths.append("/home/ruairi/research/freeparticle_energies/SH_fits/24^3/" + flav + "/energies/" + flav + "_24_840_PSQ" + str(p) + "_jack")
+        corr_paths.append("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits/24^3/" + flav + "/energies/" + flav + "_24_840_PSQ" + str(p) + "_jack")
 
     proj_name = "anisotropy24_" + str(flav) + "_jack"
-    inputdir = "/home/ruairi/research/freeparticle_energies/aspect_ratio/"
+    inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/aspect_ratio/"
     logfile = inputdir + "log_anisotropy24_" + str(flav) + "_jack.log"
 
     root = ET.Element("SigMonD")
@@ -36,7 +36,7 @@ def gen_aspect_fit(flav):
 
     results = []
     # Tasks
-    mucho_fits = allfits("/home/ruairi/research/freeparticle_energies/SH_fits")
+    mucho_fits = allfits("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits")
 
     # for flav in ["pion", "kaon", "eta", "nucleon"]:
     plenty_fits = []

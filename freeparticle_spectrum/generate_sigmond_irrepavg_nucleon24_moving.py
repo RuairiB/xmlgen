@@ -1,14 +1,14 @@
 import xml.etree.cElementTree as ET
 import os
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-corr_paths = ["/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ1", "/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ2", "/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ3", "/home/ruairi/research/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ4"]
+corr_paths = ["/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ1", "/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ2", "/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ3", "/latticeQCD/raid6/ruairi/freeparticle_energies/mom_averaging/avgbins/avgcorr_24_840_uud_baryons_PSQ4"]
 proj_name = "irrepavg_nucleon24"
-inputdir = "/home/ruairi/research/freeparticle_energies/irrep_averaging/"
+inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/irrep_averaging/"
 logfile = inputdir + "log_irrepavg_nucleon24_moving.log"
 
 root = ET.Element("SigMonD")

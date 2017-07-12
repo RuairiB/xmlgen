@@ -2,26 +2,26 @@ import xml.etree.cElementTree as ET
 import os
 import itertools
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
 from logutils import *
 from bestfits import *
 
 corr_paths = []
 for flav in "pion", "kaon":
     for p in range(0, 7):
-        corr_paths.append("/home/ruairi/research/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_boot")
+        corr_paths.append("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_boot")
 
 for flav in "eta", "nucleon":
     for p in range(0, 5):
-        corr_paths.append("/home/ruairi/research/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_boot")
+        corr_paths.append("/latticeQCD/raid6/ruairi/freeparticle_energies/SH_fits/32^3/" + flav + "/energies/" + flav + "_32_860_PSQ" + str(p) + "_boot")
         
 proj_name = "spectra32_boot"
-inputdir = "/home/ruairi/research/freeparticle_energies/spectra/"
+inputdir = "/latticeQCD/raid6/ruairi/freeparticle_energies/spectra/"
 logfile = inputdir + "log_spectra32_boot.log"
 
 root = ET.Element("SigMonD")

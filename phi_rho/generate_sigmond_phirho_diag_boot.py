@@ -1,12 +1,12 @@
 import xml.etree.cElementTree as ET
 import os
 import sys
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
 from logutils import *
 from bestfits import *
 
