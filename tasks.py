@@ -91,7 +91,7 @@ def zfactors(tasks, piv_type, piv_file, piv_name, ampstub, plotstub, opstrings):
         # ET.SubElement(zplot, "FileSuffix").text = uhh..
 
 
-# Effective mass fit to correlator data
+# Effective mass fit to UNROTATED correlator data
 def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, refenergy, sampling, exclude="none", pivot="none", level="none"):
     task = ET.SubElement(tasks, "Task")
 
@@ -144,20 +144,85 @@ def dofit(tasks, operator, fitname, tmin, tmax, fitfn, minimizer, plotfile, psq,
         ET.SubElement(insert, "Type").text = "Single" # Only single pivot implemented so far
         ET.SubElement(insert, "Name").text = str(pivot) # Object name, NOT filename. Must already be in memory
         ET.SubElement(insert, "Level").text = str(level)
+
+
+# Effective mass fit to ROTATED correlator data
+def dorotfit(tasks, operator_base, level, obsname, tmin, tmax, fitfn, minimizer, plotfile, psq, energies, amplitudes, refenergy, sampling, exclude="none", pivot="none"):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoFit"
+    ET.SubElement(task, "Type").text = "TemporalCorrelator"
+
+    minimizerinfo(task, minimizer)
+    
+    ET.SubElement(task, "SamplingMode").text = sampling
+    ET.SubElement(task, "CovMatCalcSamplingMode").text = sampling
+    
+    fit = ET.SubElement(task, "TemporalCorrelatorFit")
+    if operator_base[-1] == " ":
+        operator = operator_base + str(level)
+    else:
+        operator = operator_base + " " + str(level)
+
+    ET.SubElement(fit, getoptype(operator)).text = operator
+    ET.SubElement(fit, "MinimumTimeSeparation").text = str(tmin)
+    ET.SubElement(fit, "MaximumTimeSeparation").text = str(tmax)
+    if(exclude != "none"):
+        ET.SubElement(fit, "ExcludeTimes").text = exclude
+    ET.SubElement(fit, "LargeTimeNoiseCutoff").text = "0.0"
+
+    model = ET.SubElement(fit, "Model")
+    ET.SubElement(model, "Type").text = fitfn
+
+    fitmodel = shortform(fitfn)
+    
+    if(len(obsname) > 20):
+        print("WARNING: obsname " + obsname + " may be too long for obsnames")
+
+    energies.append(["E1_" + obsname, level])
+    amplitudes.append(["A1_" + obsname, level])
+    modelparams(model, obsname, level)
+    
+    plot = ET.SubElement(fit, "DoEffectiveEnergyPlot")
+    ET.SubElement(plot, "PlotFile").text = plotfile
+    ET.SubElement(plot, "CorrName").text = "standard"
+    ET.SubElement(plot, "TimeStep").text = "3"
+    ET.SubElement(plot, "SymbolColor").text = "blue"
+    ET.SubElement(plot, "SymbolType").text = "circle"
+    ET.SubElement(plot, "Goodness").text = "chisq"
+    if (refenergy != "none"):
+        ref = ET.SubElement(plot, "ReferenceEnergy")
+        ET.SubElement(ref, "Name").text = refenergy
+        ET.SubElement(ref, "IDIndex").text = "0"
+    ET.SubElement(plot, "ShowApproach")
+
+    if pivot != "none":
+        insert = ET.SubElement(fit, "InsertIntoPivot")
+        ET.SubElement(insert, "Type").text = "Single" # Only single pivot implemented so far
+        ET.SubElement(insert, "Name").text = str(pivot) # Object name, NOT filename. Must already be in memory
+        ET.SubElement(insert, "Level").text = str(level)
     
 
-def writesamplings(tasks, energies, energyfile, sampling="Bootstrap"):
+def writesamplings(tasks, energies, energyfile, sampling="Bootstrap", overwrite=True):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "WriteSamplingsToFile"
     ET.SubElement(task, "SamplingMode").text = sampling
     ET.SubElement(task, "FileName").text = energyfile
-    ET.SubElement(task, "FileMode").text = "overwrite"
+    if overwrite:
+        ET.SubElement(task, "FileMode").text = "overwrite"
 
     for x in energies:
         obs = ET.SubElement(task, "MCObservable")
-        ET.SubElement(obs, "ObsName").text = x
-        ET.SubElement(obs, "Index").text = "0"
+        if isinstance(x, basestring):
+            ET.SubElement(obs, "ObsName").text = x
+            ET.SubElement(obs, "Index").text = "0"
+        elif len(x) == 2:
+            ET.SubElement(obs, "ObsName").text = x[0]
+            ET.SubElement(obs, "Index").text = str(x[1])
+        else:
+            print("Please give a better obsname format to write samplings")
+            sys.exit()
 
 
 def readsamplings(tasks, filename, sampling, mcobs):
@@ -167,9 +232,15 @@ def readsamplings(tasks, filename, sampling, mcobs):
     ET.SubElement(task, "FileName").text = filename
     for x in mcobs:
         obs = ET.SubElement(task, "MCObservable")
-        ET.SubElement(obs, "ObsName").text = str(x)
-        ET.SubElement(obs, "IDIndex").text = "0"
-
+        if isinstance(x, basestring):
+            ET.SubElement(obs, "ObsName").text = x
+            ET.SubElement(obs, "IDIndex").text = "0"
+        elif len(x) == 2:
+            ET.SubElement(obs, "ObsName").text = x[0]
+            ET.SubElement(obs, "IDIndex").text = str(x[1])
+        else:
+            print("Please give a better obsname format to read samplings")
+            sys.exit()
 
 def diagonalenergyplots(tasks, oplist, filestub, sampling="Jackknife"):
     task = ET.SubElement(tasks, "Task")

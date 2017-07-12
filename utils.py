@@ -159,28 +159,28 @@ def getisospin(operator):
     return "iso" + isospin
 
 
-def modelparams(elem, obsname):
+def modelparams(elem, obsname, level="0"):
     eng = ET.SubElement(elem, "Energy")
     ET.SubElement(eng, "Name").text = "E1_" + obsname
-    ET.SubElement(eng, "IDIndex").text = "0"
+    ET.SubElement(eng, "IDIndex").text = level
     amp = ET.SubElement(elem, "Amplitude")
     ET.SubElement(amp, "Name").text = "A1_" + obsname
-    ET.SubElement(amp, "IDIndex").text = "0"
+    ET.SubElement(amp, "IDIndex").text = level
     eng1 = ET.SubElement(elem, "FirstEnergy")
     ET.SubElement(eng1, "Name").text = "E1_" + obsname
-    ET.SubElement(eng1, "IDIndex").text = "0"
+    ET.SubElement(eng1, "IDIndex").text = level
     amp1 = ET.SubElement(elem, "FirstAmplitude")
     ET.SubElement(amp1, "Name").text = "A1_" + obsname
-    ET.SubElement(amp1, "IDIndex").text = "0"
+    ET.SubElement(amp1, "IDIndex").text = level
     eng2 = ET.SubElement(elem, "SqrtGapToSecondEnergy")
     ET.SubElement(eng2, "Name").text = "E2_" + obsname
-    ET.SubElement(eng2, "IDIndex").text = "0"
+    ET.SubElement(eng2, "IDIndex").text = level
     amp2 = ET.SubElement(elem, "SecondAmplitudeRatio")
     ET.SubElement(amp2, "Name").text = "A2_" + obsname
-    ET.SubElement(amp2, "IDIndex").text = "0"
+    ET.SubElement(amp2, "IDIndex").text = level
     const = ET.SubElement(elem, "AddedConstant")
     ET.SubElement(const, "Name").text = "C_" + obsname
-    ET.SubElement(const, "IDIndex").text = "0"
+    ET.SubElement(const, "IDIndex").text = level
 
 
 def minimizerinfo(task, minimizer):
@@ -200,7 +200,7 @@ def minimizerinfo(task, minimizer):
     ET.SubElement(mini, "ParameterRelTol").text = "1e-6"
     ET.SubElement(mini, "ChiSquareRelTol").text = "1e-4"
     ET.SubElement(mini, "MaximumIterations").text = "2048"
-    ET.SubElement(mini, "Verbosity").text = "Low"
+    ET.SubElement(mini, "Verbosity").text = "High"
 
 
 def getTsubopstring(opstring):
