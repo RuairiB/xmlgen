@@ -255,5 +255,9 @@ def read_oplist(filename):
     return ops
 
 
+import xml.etree.cElementTree as ET
+
 def read_improved_ops_log(pivoter, filename):
-    
+    log = ET.parse(filename).getroot()
+    for ops in log.iter("ImprovedOperators"):
+        pivoter.extend(ops)

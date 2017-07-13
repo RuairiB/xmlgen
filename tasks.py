@@ -36,9 +36,11 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
         ET.SubElement(matrixinfo, "SubtractVEV")
 
     if improved_op_logs != None:
-        for log in improved_op_logs:
-            # function to pull out improved ops from log here
-
+        if isinstance(improved_op_logs, basestring):
+            read_improveed_ops_log(pivoter, improved_op_logs)
+        else:
+            for log in improved_op_logs:
+                read_improveed_ops_log(pivoter, log)
 
     rotatedop = ET.SubElement(pivoter, "RotatedCorrelator")
     ET.SubElement(rotatedop, "GIOperatorString").text = rotop
