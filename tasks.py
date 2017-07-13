@@ -7,7 +7,8 @@ from utils import *
 # TO DO:
 # Update TO DO list...
 # Add support for 'improved operators'
-# Entire rotation/reordering/z factor process
+# Add ability to specify individual new & old plotfile names in relabelplots task -- keep as one fn?
+# Entire rotation/reordering/z factor process -- Test & improve functionality
 
 # Go through header files for single pivot and rolling pivot, this could do with some more fleshing out
 def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, plotstub):
@@ -80,7 +81,7 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
     ET.SubElement(corrplots, "Rescale").text = "1.0"
 
 
-def insertintopivot(tasks, piv_type-"SinglePivot", piv_file=None, piv_name, energies, amps, reorder=True):
+def insertintopivot(tasks, piv_type, piv_name, energies, amps, piv_file=None, reorder=True):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoRotCorrMatInsertFitInfos"
@@ -98,7 +99,7 @@ def insertintopivot(tasks, piv_type-"SinglePivot", piv_file=None, piv_name, ener
         ET.SubElement(energy, "Name").text = level[0]
         ET.SubElement(energy, "IDIndex").text = str(level[1])
 
-    if len(amps) == 1:
+    if len(amps) == 1:          # change to isinstance(amps, basestring)? -- allow for either just a commonname string rather than single element list
         ET.SubElement(task, "RotatedAmplitudeCommonName").text = amps[0][0]
     else:
         for level in amps:
@@ -108,13 +109,40 @@ def insertintopivot(tasks, piv_type-"SinglePivot", piv_file=None, piv_name, ener
             ET.SubElement(amp, "IDIndex").text = str(level[1])
 
 
-def zfactors(tasks, piv_type, piv_file, piv_name, ampstub, plotstub, opstrings):
+def relabelplots(tasks, piv_type, piv_name, oldstub, piv_file=None, newstub=None):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoCorrMatrixRelabelEnergyPlots"
+    if piv_file is None:
+        getpivot(task, piv_type, piv_name)
+    else:
+        readpivot(task, piv_type, piv_file, piv_name)
+
+    originals = ET.SubElement(task, "OriginalPlotFiles")
+    if isinstance(oldstub, basestring):
+        ET.SubElement(originals, "PlotFileStub").text = oldstub
+    else:
+        for x in oldstub:
+            ET.SubElement(originals, "PlotFile").text = x
+
+    if newstub != None:
+        revised = ET.SubElement(task, "RevisedPlotFiles")
+        if isinstance(newstub, basestring):
+            ET.SubElement(revised, "PlotFileStub").text = newstub
+        else:
+            for x in newstub:
+                ET.SubElement(revised, "PlotFile").text = x
+
+
+def zfactors(tasks, piv_type, piv_name, plotstub, opstrings, piv_file=None):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixZMagSquares"
-    readpivot(task, piv_type, piv_file, piv_name)
+    if piv_file is None:
+        getpivot(task, piv_type, piv_name)
+    else:
+        readpivot(task, piv_type, piv_file, piv_name)
 
-    ET.SubElement(task, "RotatedAmplitudeCommonName").text = str(ampstub)
     plots = ET.SubElement(task, "DoPlots")
     ET.SubElement(plots, "PlotFileStub").text = plotstub
     ET.SubElement(plots, "BarColor").text = "cyan" # include option to pick/change this?
@@ -123,7 +151,7 @@ def zfactors(tasks, piv_type, piv_file, piv_name, ampstub, plotstub, opstrings):
         zplot = ET.SubElement(plots, "ZMagSqPlot")
         ET.SubElement(zplot, getoptype(x)).text = x
         ET.SubElement(zplot, "ObsName").text = standard
-        # ET.SubElement(zplot, "FileSuffix").text = uhh..
+        # ET.SubElement(zplot, "FileSuffix").text = uhh.. defaults to index. Maybe write something to get something from the OpString?
 
 
 # Effective mass fit to UNROTATED correlator data
