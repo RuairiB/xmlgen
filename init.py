@@ -77,9 +77,9 @@ def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_typ
     if any(x == "BLCorr" for x in obs_type):
         BLcorrs = ET.SubElement(mcobs, "BLCorrelatorData")
     if any(x == "bins" for x in obs_type):
-            bins = ET.SubElement(mcobs, "BinData")
+        bins = ET.SubElement(mcobs, "BinData")
     if any(x == "samplings" for x in obs_type):
-            samps = ET.SubElement(mcobs, "SamplingData")
+        samps = ET.SubElement(mcobs, "SamplingData")
 
     while i < len(corr_paths):
         if(obs_type[i] == "BLCorr"):

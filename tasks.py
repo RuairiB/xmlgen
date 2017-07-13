@@ -6,11 +6,11 @@ from utils import *
 # SigMond tasks
 # TO DO:
 # Update TO DO list...
-# Add support for 'improved operators'
+# Add support for 'improved operators' -- Function to read rotation log file and pull out improved XML
 # Entire rotation/reordering/z factor process -- Test & improve functionality
 
 # Go through header files for single pivot and rolling pivot, this could do with some more fleshing out
-def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, plotstub):
+def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, plotstub, improved_op_logs=None):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
@@ -34,6 +34,11 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
         ET.SubElement(matrixinfo, "HermitianMatrix")
     if vev:
         ET.SubElement(matrixinfo, "SubtractVEV")
+
+    if improved_op_logs != None:
+        for log in improved_op_logs:
+            # function to pull out improved ops from log here
+
 
     rotatedop = ET.SubElement(pivoter, "RotatedCorrelator")
     ET.SubElement(rotatedop, "GIOperatorString").text = rotop
@@ -132,6 +137,8 @@ def relabelplots(tasks, piv_type, piv_name, oldstub, piv_file=None, newstub=None
         revised = ET.SubElement(task, "RevisedPlotFiles")
         if isinstance(newstub, basestring):
             ET.SubElement(revised, "PlotFileStub").text = newstub
+        elif len(newstub) == 1:
+            ET.SubElement(revised, "PlotFileStub").text = newstub
         else:
             for x in newstub:
                 ET.SubElement(revised, "PlotFile").text = x
@@ -154,7 +161,7 @@ def zfactors(tasks, piv_type, piv_name, plotstub, opstrings, piv_file=None):
     for x in opstrings:
         zplot = ET.SubElement(plots, "ZMagSqPlot")
         ET.SubElement(zplot, getoptype(x)).text = x
-        ET.SubElement(zplot, "ObsName").text = standard
+        ET.SubElement(zplot, "ObsName").text = "standard"
         # ET.SubElement(zplot, "FileSuffix").text = uhh.. defaults to index. Maybe write something to get something from the OpString?
 
 

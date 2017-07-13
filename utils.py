@@ -28,8 +28,10 @@ def getopsdef(filename, psq):
     psq2 = ["0,1,1", "0,-1,1", "0,1,-1", "0,-1,-1", "1,0,1", "1,0,-1", "-1,0,1", "-1,0,-1", "1,1,0", "1,-1,0", "-1,1,0", "-1,-1,0"]
     psq3 = ["1,1,1", "1,1,-1", "1,-1,1", "-1,1,1", "-1,-1,1", "-1,1,-1", "1,-1,-1", "-1,-1,-1"]
     psq4 = ["0,0,2", "0,0,-2", "0,2,0", "0,-2,0", "2,0,0", "-2,0,0"]
-    psq5 = ["-1,-2,0", "-1,0,-2", "-1,0,2", "-1,2,0", "-2,-1,0", "-2,0,-1", "-2,0,1", "-2,1,0", "0,-1,-2", "0,-1,2", "0,-2,-1", "0,-2,1", "2,1,0", "2,0,1", "2,0,-1", "2,-1,0", "1,2,0", "1,0,2", "1,0,-2", "1,-2,0", "0,2,1", "0,1,2", "0,2,-1", "0,1,-2"]
-    psq6 = ["-1,-1,2", "-1,-2,-1", "-1,-2,1", "-1,1,-2", "-1,1,2", "-1,-1,-2", "-1,2,-1", "-1,2,1", "-2,-1,-1", "-2,-1,1", "-2,1,-1", "-2,1,1", "1,-1,-2", "1,-1,2", "1,-2,-1", "1,-2,1", "1,1,-2", "1,1,2", "1,2,-1", "1,2,1", "2,-1,-1", "2,-1,1", "2,1,-1", "2,1,1"]
+    psq5 = ["-1,-2,0", "-1,0,-2", "-1,0,2", "-1,2,0", "-2,-1,0", "-2,0,-1", "-2,0,1", "-2,1,0", "0,-1,-2", "0,-1,2", "0,-2,-1", "0,-2,1",
+            "2,1,0", "2,0,1", "2,0,-1", "2,-1,0", "1,2,0", "1,0,2", "1,0,-2", "1,-2,0", "0,2,1", "0,1,2", "0,2,-1", "0,1,-2"]
+    psq6 = ["-1,-1,2", "-1,-2,-1", "-1,-2,1", "-1,1,-2", "-1,1,2", "-1,-1,-2", "-1,2,-1", "-1,2,1", "-2,-1,-1", "-2,-1,1", "-2,1,-1",
+            "-2,1,1", "1,-1,-2", "1,-1,2", "1,-2,-1", "1,-2,1", "1,1,-2", "1,1,2", "1,2,-1", "1,2,1", "2,-1,-1", "2,-1,1", "2,1,-1", "2,1,1"]
 
     if psq == 0:
         for line in opdefs:
@@ -141,7 +143,7 @@ def getoptype(operator):
     elif any(i in operator for i in isospin):
         return "GIOperatorString"
     else:
-        print("Help please, I need an operator type I understand.")
+        print("Help please, I need an operator type I understand: getoptype(" + operator + ")")
         sys.exit()
 
 
@@ -168,7 +170,7 @@ def getisospin(operator):
     elif any(i in operator for i in isospin):
         isospin = next((i for i in isospin if i in operator), False)
     else:
-        print("Help please, I need an operator type I understand.")
+        print("Help please, I need an operator type I understand: getisospin")
         sys.exit()
 
     return "iso" + isospin
@@ -231,7 +233,7 @@ def getTsubopstring(opstring):
 def read_fitparams(filename):
     lines = file(filename)
     params = []
-    
+
     for line in lines:
         level = str(line.split()[0])
         model = str(line.split()[1])
@@ -240,3 +242,18 @@ def read_fitparams(filename):
         params.append([level, model, tmin, tmax])
 
     return params
+
+
+def read_oplist(filename):
+    lines = file(filename)
+    ops = []
+
+    for line in lines:
+        if line.strip() != '':
+            ops.append(line.strip("\n"))    # Need to perform some check to make sure it's a valid opstring
+
+    return ops
+
+
+def read_improved_ops_log(pivoter, filename):
+    
