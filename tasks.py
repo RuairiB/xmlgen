@@ -7,7 +7,6 @@ from utils import *
 # TO DO:
 # Update TO DO list...
 # Add support for 'improved operators'
-# Add ability to specify individual new & old plotfile names in relabelplots task -- keep as one fn?
 # Entire rotation/reordering/z factor process -- Test & improve functionality
 
 # Go through header files for single pivot and rolling pivot, this could do with some more fleshing out
@@ -81,6 +80,7 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
     ET.SubElement(corrplots, "Rescale").text = "1.0"
 
 
+# Insert fit energies and amplitudes into a pivot in memory or on file
 def insertintopivot(tasks, piv_type, piv_name, energies, amps, piv_file=None, reorder=True):
     task = ET.SubElement(tasks, "Task")
 
@@ -99,7 +99,9 @@ def insertintopivot(tasks, piv_type, piv_name, energies, amps, piv_file=None, re
         ET.SubElement(energy, "Name").text = level[0]
         ET.SubElement(energy, "IDIndex").text = str(level[1])
 
-    if len(amps) == 1:          # change to isinstance(amps, basestring)? -- allow for either just a commonname string rather than single element list
+    if isinstance(amps, basestring):
+        ET.SubElement(task, "RotatedAmplitudeCommonName").text = amps
+    elif len(amps) == 1:
         ET.SubElement(task, "RotatedAmplitudeCommonName").text = amps[0][0]
     else:
         for level in amps:
@@ -109,6 +111,7 @@ def insertintopivot(tasks, piv_type, piv_name, energies, amps, piv_file=None, re
             ET.SubElement(amp, "IDIndex").text = str(level[1])
 
 
+# After levels have been reordered in a pivot, rename plot files for the reordered levels
 def relabelplots(tasks, piv_type, piv_name, oldstub, piv_file=None, newstub=None):
     task = ET.SubElement(tasks, "Task")
 
@@ -125,7 +128,7 @@ def relabelplots(tasks, piv_type, piv_name, oldstub, piv_file=None, newstub=None
         for x in oldstub:
             ET.SubElement(originals, "PlotFile").text = x
 
-    if newstub != None:
+    if newstub is not None:
         revised = ET.SubElement(task, "RevisedPlotFiles")
         if isinstance(newstub, basestring):
             ET.SubElement(revised, "PlotFileStub").text = newstub
@@ -134,6 +137,7 @@ def relabelplots(tasks, piv_type, piv_name, oldstub, piv_file=None, newstub=None
                 ET.SubElement(revised, "PlotFile").text = x
 
 
+# Calculate Z factors and produce plots from pivot and opstrings (fit amplitudes must already be in pivot)
 def zfactors(tasks, piv_type, piv_name, plotstub, opstrings, piv_file=None):
     task = ET.SubElement(tasks, "Task")
 
