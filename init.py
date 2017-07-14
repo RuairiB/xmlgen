@@ -27,6 +27,7 @@ def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_typ
                     fileExt = os.path.splitext(file)[-1]
                     filenums.append(int(fileExt[1:]))
                     name = os.path.splitext(file)[-2]
+                break           # Break as to not recursively dig into any of the directories
 
             filemax.append(max(filenums))
 

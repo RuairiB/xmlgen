@@ -10,7 +10,7 @@ from utils import *
 # Entire rotation/reordering/z factor process -- Test & improve functionality
 
 # Go through header files for single pivot and rolling pivot, this could do with some more fleshing out
-def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, plotstub, improved_op_logs=None):
+def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, Eplotstub, Cplotstub, improved_op_logs=None):
     task = ET.SubElement(tasks, "Task")
 
     ET.SubElement(task, "Action").text = "DoCorrMatrixRotation"
@@ -36,11 +36,12 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
         ET.SubElement(matrixinfo, "SubtractVEV")
 
     if improved_op_logs != None:
+        improved_ops = ET.SubElement(pivoter, "ImprovedOperators")
         if isinstance(improved_op_logs, basestring):
-            read_improveed_ops_log(pivoter, improved_op_logs)
+            parse_improved_ops_log(improved_ops, improved_op_logs)
         else:
             for log in improved_op_logs:
-                read_improveed_ops_log(pivoter, log)
+                parse_improved_ops_log(improved_ops, log)
 
     rotatedop = ET.SubElement(pivoter, "RotatedCorrelator")
     ET.SubElement(rotatedop, "GIOperatorString").text = rotop
@@ -73,14 +74,14 @@ def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax
         sys.exit()
 
     ET.SubElement(plots, "TimeStep").text = "3"
-    ET.SubElement(plots, "PlotFileStub").text = "effE_" + plotstub
+    ET.SubElement(plots, "PlotFileStub").text = Eplotstub
     ET.SubElement(plots, "SymbolColor").text = "blue"
     ET.SubElement(plots, "SymbolType").text = "circle"
     ET.SubElement(plots, "MaxErrorToPlot").text = "1.0"
 
     corrplots = ET.SubElement(task, "PlotRotatedCorrelators")
     ET.SubElement(corrplots, "SamplingMode").text = plot_sampling
-    ET.SubElement(corrplots, "PlotFileStub").text = "corr_" + plotstub
+    ET.SubElement(corrplots, "PlotFileStub").text = Cplotstub
     ET.SubElement(corrplots, "Arg").text = "Re"
     ET.SubElement(corrplots, "SymbolColor").text = "blue"
     ET.SubElement(corrplots, "SymbolType").text = "circle"
@@ -100,11 +101,16 @@ def insertintopivot(tasks, piv_type, piv_name, energies, amps, piv_file=None, re
     if reorder:
         ET.SubElement(task, "ReorderByFitEnergy")
 
-    for level in energies:
-        energy = ET.SubElement(task, "EnergyFit")
-        ET.SubElement(energy, "Level").text = str(level[1])
-        ET.SubElement(energy, "Name").text = level[0]
-        ET.SubElement(energy, "IDIndex").text = str(level[1])
+    if isinstance(energies, basestring):
+        ET.SubElement(task, "EnergyFitCommonName").text = energies
+    elif len(energies) == 1:
+        ET.SubElement(task, "EnergyFitCommonName").text = energies[0][0]
+    else:
+        for level in energies:
+            energy = ET.SubElement(task, "EnergyFit")
+            ET.SubElement(energy, "Level").text = str(level[1])
+            ET.SubElement(energy, "Name").text = level[0]
+            ET.SubElement(energy, "IDIndex").text = str(level[1])
 
     if isinstance(amps, basestring):
         ET.SubElement(task, "RotatedAmplitudeCommonName").text = amps

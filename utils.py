@@ -250,14 +250,40 @@ def read_oplist(filename):
 
     for line in lines:
         if line.strip() != '':
-            ops.append(line.strip("\n"))    # Need to perform some check to make sure it's a valid opstring
+            ops.append(line.strip("\n"))    # Need to perform some check for valid opstring
+
+    return ops
+
+
+def read_oplist_byflav(filename):
+    lines = file(filename)
+    ops = []
+    flav = []
+
+    for line in lines:
+        if line.strip() != '':
+            flav.append(line.strip("\n"))    # Need to perform some check for valid opstring
+        else:
+            ops.append(flav)
+            flav = []
 
     return ops
 
 
 import xml.etree.cElementTree as ET
-
-def read_improved_ops_log(pivoter, filename):
+# Pull ImprovedOperators input XML from logfile & put into improved_ops tree
+def parse_improved_ops_log(improved_ops, filename):
     log = ET.parse(filename).getroot()
     for ops in log.iter("ImprovedOperators"):
-        pivoter.extend(ops)
+        improved_ops.extend(ops)
+
+
+# Pull oplist from improved ops logfile, return list
+def read_improved_ops_log(filename):
+    ops = []
+    log = ET.parse(filename).getroot()
+
+    for names in log.iter("OpName"):
+        ops.append(names.find("GIOperatorString").text)
+
+    return ops
