@@ -10,7 +10,7 @@ ISOMAP = {0: "isosinglet",
           2: "isoquintet",
           2.5: "isosextet"}
 
-def readlevels(filename, ensem, psq):
+def readlevels(filename, ensem, psq, empties=False):
     if not filename.endswith('.txt'):
         print("support only for .txt expected levels files")
         sys.exit()
@@ -45,10 +45,20 @@ def readlevels(filename, ensem, psq):
 
     for x in text:
         if "Irrep = " in x:     # for each new irrep, get levels
+            if 'irrep' in locals():
+                oldirrep = irrep
+            else:
+                oldirrep = x.split("Irrep = ")[-1]
             irrep = x.split("Irrep = ")[-1]
-            levels.extend(levels_irrep)
+            
+            if len(levels_irrep) != 0:
+                levels.extend(levels_irrep)
+
             if 'levels_sep' in locals():
-                levels_sep.append(levels_irrep)
+                if isinstance(levels_irrep, list):
+                    levels_sep.append(levels_irrep)
+                elif isinstance(levels_irrep, explevel):
+                    levels_sep.append([levels_irrep])
             else:
                 levels_sep = levels_irrep
             levels_irrep = []
@@ -98,10 +108,26 @@ def readlevels(filename, ensem, psq):
             if check:
                 levels_irrep.append(temp)
 
-    # append final irrep
-    levels.extend(levels_irrep)
-    levels_sep.append(levels_irrep)
 
+    # if empties and len(levels_irrep) == 0:
+    #     crap = explevel()
+    #     crap.irrep = oldirrep
+    #     levels_irrep.append([crap])
+                
+    # append final irrep
+    if isinstance(levels_irrep, list):
+        levels.extend(levels_irrep)
+        levels_sep.append(levels_irrep)
+    else:
+        levels.extend([levels_irrep])
+        levels_sep.append([levels_irrep])
+
+
+    # for irrep in levels_sep:
+    #     for level in irrep:
+    #         if isinstance(level, list):
+    #             print("problem here")
+        
     # return list containing sublist for each irrep
     return levels_sep
 

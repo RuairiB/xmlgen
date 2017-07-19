@@ -7,22 +7,30 @@ from logutils import *
 # Given set of levels (separated by irrep), pull corresponding energies (& TeX'd particle content?) from logs
 # NOTE: for now, logs separate for specific Npart
 # This may be slow, need a better way of parsing logs
-def pullenergies(levels, log1, log2, log3, log4, ensemble, sampling):
+def pullenergies(levels, log1, log2, log3, log4, ensemble, sampling, ignore_empties=False):
     # perform some checks here
 
     for irrep in levels:
-        for level in irrep:
-            if level.Npart == 1:
-                searchlog(level, log1, ensemble, sampling)
-            elif level.Npart == 2:
-                searchlog(level, log2, ensemble, sampling)
-            elif level.Npart == 3:
-                searchlog(level, log3, ensemble, sampling)
-            elif level.Npart == 4:
-                searchlog(level, log4, ensemble, sampling)
-            else:
-                print("wrong Npart (" + str(level.Npart) + ") for level in " + level.irrep + " irrep")
-                sys.exit()
+        if isinstance(irrep, list):
+            for level in irrep:
+                if isinstance(level, list):
+                    print(level[0].irrep)
+                    if len(level) == 1:
+                        level = level[0]
+                else:
+                    print(level.irrep)
+                if level.Npart == 1:
+                    searchlog(level, log1, ensemble, sampling)
+                elif level.Npart == 2:
+                    searchlog(level, log2, ensemble, sampling)
+                elif level.Npart == 3:
+                    searchlog(level, log3, ensemble, sampling)
+                elif level.Npart == 4:
+                    searchlog(level, log4, ensemble, sampling)
+                else:
+                    print("wrong Npart (" + str(level.Npart) + ") for level in " + level.irrep + " irrep")
+                    if not ignore_empties:
+                        sys.exit()
     # check here for correct/complete TeX and such, if not, do it?
 
 
@@ -131,7 +139,13 @@ def textable_irrep(destination, irrep, ensemble, psq, sampling):
         f.close()
 
 
+def irrep_threshold(irrep, N):
+    if len(irrep) > 0:
+        for level in irrep:
+            if level.Npart == N:
+                return level
 
+    return False
 
 
 class explevel:
