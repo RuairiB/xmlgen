@@ -267,7 +267,11 @@ def read_oplist_byflav(filename):
             ops.append(flav)
             flav = []
 
-    return ops
+    if not flav:
+        return ops
+    else:
+        ops.append(flav)
+        return ops
 
 
 import xml.etree.cElementTree as ET
