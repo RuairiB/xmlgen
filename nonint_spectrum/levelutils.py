@@ -14,11 +14,9 @@ def pullenergies(levels, log1, log2, log3, log4, ensemble, sampling, ignore_empt
         if isinstance(irrep, list):
             for level in irrep:
                 if isinstance(level, list):
-                    print(level[0].irrep)
                     if len(level) == 1:
                         level = level[0]
-                else:
-                    print(level.irrep)
+
                 if level.Npart == 1:
                     searchlog(level, log1, ensemble, sampling)
                 elif level.Npart == 2:
@@ -27,10 +25,9 @@ def pullenergies(levels, log1, log2, log3, log4, ensemble, sampling, ignore_empt
                     searchlog(level, log3, ensemble, sampling)
                 elif level.Npart == 4:
                     searchlog(level, log4, ensemble, sampling)
-                else:
+                elif not ignore_empties:
                     print("wrong Npart (" + str(level.Npart) + ") for level in " + level.irrep + " irrep")
-                    if not ignore_empties:
-                        sys.exit()
+                    sys.exit()
     # check here for correct/complete TeX and such, if not, do it?
 
 

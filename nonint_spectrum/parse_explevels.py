@@ -50,15 +50,15 @@ def readlevels(filename, ensem, psq, empties=False):
             else:
                 oldirrep = x.split("Irrep = ")[-1]
             irrep = x.split("Irrep = ")[-1]
-            
-            if len(levels_irrep) != 0:
-                levels.extend(levels_irrep)
 
             if 'levels_sep' in locals():
-                if isinstance(levels_irrep, list):
+                if len(levels_irrep) > 0:
                     levels_sep.append(levels_irrep)
-                elif isinstance(levels_irrep, explevel):
-                    levels_sep.append([levels_irrep])
+                else:
+                    temp = explevel()
+                    temp.irrep = oldirrep
+                    levels_irrep.append(temp)
+                    levels_sep.append(levels_irrep)
             else:
                 levels_sep = levels_irrep
             levels_irrep = []
@@ -109,25 +109,11 @@ def readlevels(filename, ensem, psq, empties=False):
                 levels_irrep.append(temp)
 
 
-    # if empties and len(levels_irrep) == 0:
-    #     crap = explevel()
-    #     crap.irrep = oldirrep
-    #     levels_irrep.append([crap])
-                
     # append final irrep
-    if isinstance(levels_irrep, list):
-        levels.extend(levels_irrep)
+    levels.extend(levels_irrep)
+    if levels_irrep != []:
         levels_sep.append(levels_irrep)
-    else:
-        levels.extend([levels_irrep])
-        levels_sep.append([levels_irrep])
 
-
-    # for irrep in levels_sep:
-    #     for level in irrep:
-    #         if isinstance(level, list):
-    #             print("problem here")
-        
     # return list containing sublist for each irrep
     return levels_sep
 
