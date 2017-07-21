@@ -65,11 +65,11 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
 
     # PRINT_ENSEMBLE:
     if ensemble == "32_860":
-        f3.write("    \'clover\\_s32\\_t256\\_ud860\\_s743\': {\n")
-        f4.write("    \'clover\\_s32\\_t256\\_ud860\\_s743\': {\n")
+        f3.write("    \'clover_s32_t256_ud860_s743\': {\n")
+        f4.write("    \'clover_s32_t256_ud860_s743\': {\n")
     elif ensemble == "24_840":
-        f3.write("    \'clover\\_s24\\_t128\\_ud840\\_s743\': {\n")
-        f4.write("    \'clover\\_s24\\_t128\\_ud840\\_s743\': {\n")
+        f3.write("    \'clover_s24_t128_ud840_s743\': {\n")
+        f4.write("    \'clover_s24_t128_ud840_s743\': {\n")
     else:
         print("What ensemble are you " + ensemble + "?")
 
@@ -194,5 +194,5 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
     f3.write("\n    }")
     f4.write("\n    }")
 # close it all
-f3.write("\n}")
-f4.write("\n}")
+f3.write("\n}\n")
+f4.write("\n}\n")
