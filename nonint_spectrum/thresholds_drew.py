@@ -49,10 +49,20 @@ samp = "boot"
 
 f3 = open("/home/ruairi/research/thresholds3.py", 'w')
 f4 = open("/home/ruairi/research/thresholds4.py", 'w')
-f3.write("THREE_PARTICLE_ENERGIES = {\n")
-f4.write("FOUR_PARTICLE_ENERGIES = {\n")
 
+f3.write(r'# Ensemble, PSQ, type, I, S, Irrep')
+f4.write(r'# Ensemble, PSQ, type, I, S, Irrep')
+
+f3.write("\nTHREE_PARTICLE_ENERGIES = {\n")
+f4.write("\nFOUR_PARTICLE_ENERGIES = {\n")
+
+countE = 0
 for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
+    if countE != 0:
+        f3.write(",\n")
+        f4.write(",\n")
+    countE += 1
+
     # PRINT_ENSEMBLE:
     if ensemble == "32_860":
         f3.write("    \'clover\\_s32\\_t256\\_ud860\\_s743\': {\n")
@@ -63,7 +73,13 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
     else:
         print("What ensemble are you " + ensemble + "?")
 
+    countP = 0
     for mom,psq in [("mom_000/", 0), ("mom_001/", 1), ("mom_011/", 2), ("mom_111/", 3), ("mom_002/", 4)]:
+        if countP != 0:
+            f3.write(",\n")
+            f4.write(",\n")
+        countP += 1
+
         # PRINT_PSQ:
         f3.write("        " + str(psq) + ": {\n")
         f4.write("        " + str(psq) + ": {\n")
@@ -79,8 +95,15 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
                 fermionic.append(f)
             else:
                 print("what spin type are you " + f + "?")
-        # loop over spins
+        # loop over spins/type
+        countT = 0
         for spin,spun in [(bosonic, 'boson'), (fermionic, 'fermion')]:
+            if countT != 0:
+                f3.write(",\n")
+                f4.write(",\n")
+            countT += 1
+
+
             f3.write("            \'" + spun + "\': {\n")
             f4.write("            \'" + spun + "\': {\n")
             isolist = [('singlet', []),
@@ -107,11 +130,24 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
                     isolist[5][1].append(x)
 
             # loop over isospin
+            countI = 0
             for I in isolist:
+                if countI != 0:
+                    f3.write(",\n")
+                    f4.write(",\n")
+                countI += 1
+
+
                 f3.write("                \'" + I[0] + "\': {\n")
                 f4.write("                \'" + I[0] + "\': {\n")
                 # loop over strangeness
+                countS = 0
                 for f in I[1]:
+                    if countS != 0:
+                        f3.write(",\n")
+                        f4.write(",\n")
+                    countS += 1
+
                     f3.write("                    " + f.split("/")[-1].split("_")[2][-1] + ": {\n")
                     f4.write("                    " + f.split("/")[-1].split("_")[2][-1] + ": {\n")
 
@@ -134,29 +170,29 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
                             threshold3 = irrep_threshold(irrep, 3)
                             threshold4 = irrep_threshold(irrep, 4)
                             if threshold3:
-                                f3.write("                        \'" + threshold3.irrep + "\': (r\"$" + threshold3.resultstr_tex + "$\", " + threshold3.energyprint[:-4] + ")")
+                                f3.write("                        \'" + threshold3.irrep + "\': (r\"$" + threshold3.resultstr_tex + "$\", " + threshold3.energyratioprint[:-4] + ")")
                             else:
                                 f3.write("                        \'" + irrep[0].irrep + "\': []")
                             if threshold4:
-                                f4.write("                        \'" + threshold4.irrep + "\': (r\"$" + threshold4.resultstr_tex + "$\", " + threshold4.energyprint[:-4] + ")")
+                                f4.write("                        \'" + threshold4.irrep + "\': (r\"$" + threshold4.resultstr_tex + "$\", " + threshold4.energyratioprint[:-4] + ")")
                             else:
                                 f4.write("                        \'" + irrep[0].irrep + "\': []")
 
                     # close strangeness
-                    f3.write("\n                    }\n")
-                    f4.write("\n                    }\n")
+                    f3.write("\n                    }")
+                    f4.write("\n                    }")
                 # close isospin
-                f3.write("\n                }\n")
-                f4.write("\n                }\n")
+                f3.write("\n                }")
+                f4.write("\n                }")
             # close spin
-            f3.write("\n            }\n")
-            f4.write("\n            }\n")
+            f3.write("\n            }")
+            f4.write("\n            }")
         # close PSQ
-        f3.write("\n        }\n")
-        f4.write("\n        }\n")
+        f3.write("\n        }")
+        f4.write("\n        }")
     # close ensemble
-    f3.write("\n    }\n")
-    f4.write("\n    }\n")
+    f3.write("\n    }")
+    f4.write("\n    }")
 # close it all
 f3.write("\n}")
 f4.write("\n}")
