@@ -6,8 +6,7 @@ from utils import *
 # SigMond tasks
 # TO DO:
 # Update TO DO list...
-# Add support for 'improved operators' -- Function to read rotation log file and pull out improved XML
-# Entire rotation/reordering/z factor process -- Test & improve functionality
+# Entire rotation/reordering/z factor process -- Improve functionality
 
 # Go through header files for single pivot and rolling pivot, this could do with some more fleshing out
 def rotatematrix(tasks, piv_type, oplist, herm, vev, rotop, piv_name, tmin, tmax, tnorm, tmet, tdiag, piv_file, rotcorr_file, plot_sampling, effenergytype, Eplotstub, Cplotstub, improved_op_logs=None):
@@ -343,7 +342,89 @@ def diagonalenergyplots(tasks, oplist, filestub, sampling="Jackknife"):
     ET.SubElement(task, "CorrName").text = "standard"
 
 
-def momaverage(tasks, opfile, psq, binfile, tmin, tmax, hermitian):
+def diagonalcorrelatorplots(tasks, oplist, filestub, sampling="Jackknife", herm=True, subVEV=False):
+    task = ET.SubElement(tasks, "Task")
+
+    ET.SubElement(task, "Action").text = "DoPlot"
+    ET.SubElement(task, "Type").text = "TemporalCorrelators"
+
+    corrset = ET.SubElement(task, "DiagonalCorrelatorSet")
+    seq = ET.SubElement(corrset, "Sequential")
+    for x in oplist:
+        ET.SubElement(seq, "BLOperatorString").text = x
+
+    if herm:
+        ET.SubElement(task, "HermitianMatrix")
+    if subVEV:
+        ET.SubElement(task, "SubtractVEV")
+
+    ET.SubElement(task, "Sampling").text = sampling
+    ET.SubElement(task, "PlotFileStub").text = filestub
+
+
+# Average correlators of equivalent total momentum. (For now assumes all coeffs = 1.0)
+def momaverage(tasks, oplists, psq, binfile, tmin, tmax, hermitian=True):
+    task = ET.SubElement(tasks, "Task")
+    ET.SubElement(task, "Action").text = "DoObsFunction"
+    ET.SubElement(task, "Type").text = "CorrelatorMatrixSuperposition"
+    results = ET.SubElement(task, "ResultOperatorOrderedList")
+
+    result_strs = []
+    FLAV_MAP = {
+        'eta': 'singlet',
+        'phi': 'singlet',
+        'lambda': 'singlet',
+        'omega': 'singlet',
+        'kaon': 'doublet',
+        'kbar': 'doublet',
+        'nucleon': 'doublet',
+        'xi': 'doublet',
+        'pion': 'triplet',
+        'sigma': 'triplet',
+        'delta': 'quartet'
+        }
+    MOM_MAP = {
+        0: 'P=(0,0,0)',
+        1: 'P=(0,0,1)',
+        2: 'P=(0,1,1)',
+        3: 'P=(1,1,1)',
+        4: 'P=(0,0,2)',
+        5: 'P=(0,1,2)',
+        6: 'P=(1,1,2)'
+        }
+
+    # Get GI opstring from oplists
+    for op in oplists[0]:
+        if "iso" not in op.split()[0]: # if SH op
+            result_strs.append('iso' + FLAV_MAP[op.split()[0]] + ' ' + MOM_MAP[psq] + ' '
+                               + op.split()[2] + ' ' + op.split()[0].upper() + '_' + op.split()[3])
+        else:
+            result_strs.append(op.split('_')[0] + ' ' + MOM_MAP[psq] + ' ' + op.split()[1] + ' '
+                               + op.split('_')[1].upper() + '_' + op.split()[3] + '_' + op.split('_')[2].upper().split()[0] + '_' + op.split()[6])
+
+    # GIOperatorStrings for resultant averaged matrix here
+    for opname in result_strs:
+        ET.SubElement(results, "GIOperatorString").text = opname
+
+    for oplist in oplists:
+        matrix = ET.SubElement(task, "OperatorOrderedList")
+        for opname in oplist:
+            item = ET.SubElement(matrix, "Item")
+            ET.SubElement(item, "BLOperatorString").text = opname
+            ET.SubElement(item, "Coefficient").text = "1.0"
+
+    ET.SubElement(task, "MinimumTimeSeparation").text = str(tmin)
+    ET.SubElement(task, "MaximumTimeSeparation").text = str(tmax)
+    if(hermitian):
+        ET.SubElement(task, "HermitianMatrix")
+    ET.SubElement(task, "WriteToBinFile").text = binfile
+    ET.SubElement(task, "FileMode").text = "overwrite"
+
+    return result_strs
+
+
+# Momentum average operators based on opdefs file. This is depricated and will only work for data from the 'special' directories
+def momaverage_opdefs(tasks, opfile, psq, binfile, tmin, tmax, hermitian=True):
     task = ET.SubElement(tasks, "Task")
     operators = getopsdef(opfile, psq)
     if not operators:
