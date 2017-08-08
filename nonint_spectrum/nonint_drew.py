@@ -45,42 +45,34 @@ basedir = "/home/ruairi/research/expectedlevels/" # eg: + "24^3_390/mom_000/boso
 sampling = "Bootstrap"
 samp = "boot"
 
-f3 = open("/home/ruairi/research/thresholds3.py", 'w')
-f4 = open("/home/ruairi/research/thresholds4.py", 'w')
+f_levels = open("/home/ruairi/research/non_int_spectra_drew.py", 'w')
 
-f3.write(r'# Ensemble, PSQ, type, I, S, Irrep')
-f4.write(r'# Ensemble, PSQ, type, I, S, Irrep')
+f_levels.write(r'# Ensemble, PSQ, type, I, S, Irrep, [Levels]')
 
-f3.write("\nTHREE_PARTICLE_ENERGIES = {\n")
-f4.write("\nFOUR_PARTICLE_ENERGIES = {\n")
+f_levels.write("\nNON_INTERACTING_ENERGIES = {\n")
 
 countE = 0
 for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
     if countE != 0:
-        f3.write(",\n")
-        f4.write(",\n")
+        f_levels.write(",\n")
     countE += 1
 
     # PRINT_ENSEMBLE:
     if ensemble == "32_860":
-        f3.write("    \'clover_s32_t256_ud860_s743\': {\n")
-        f4.write("    \'clover_s32_t256_ud860_s743\': {\n")
+        f_levels.write("    \'clover_s32_t256_ud860_s743\': {\n")
     elif ensemble == "24_840":
-        f3.write("    \'clover_s24_t128_ud840_s743\': {\n")
-        f4.write("    \'clover_s24_t128_ud840_s743\': {\n")
+        f_levels.write("    \'clover_s24_t128_ud840_s743\': {\n")
     else:
         print("What ensemble are you " + ensemble + "?")
 
     countP = 0
     for mom,psq in [("mom_000/", 0), ("mom_001/", 1), ("mom_011/", 2), ("mom_111/", 3), ("mom_002/", 4)]:
         if countP != 0:
-            f3.write(",\n")
-            f4.write(",\n")
+            f_levels.write(",\n")
         countP += 1
 
         # PRINT_PSQ:
-        f3.write("        " + str(psq) + ": {\n")
-        f4.write("        " + str(psq) + ": {\n")
+        f_levels.write("        " + str(psq) + ": {\n")
 
         files = [y for x in os.walk(basedir + ensem + mom) for y in glob(os.path.join(x[0], '*.txt'))]
 
@@ -97,13 +89,11 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
         countT = 0
         for spin,spun in [(bosonic, 'boson'), (fermionic, 'fermion')]:
             if countT != 0:
-                f3.write(",\n")
-                f4.write(",\n")
+                f_levels.write(",\n")
             countT += 1
 
 
-            f3.write("            \'" + spun + "\': {\n")
-            f4.write("            \'" + spun + "\': {\n")
+            f_levels.write("            \'" + spun + "\': {\n")
             isolist = [('singlet', []),
                        ('doublet', []),
                        ('triplet', []),
@@ -131,23 +121,19 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
             countI = 0
             for I in isolist:
                 if countI != 0:
-                    f3.write(",\n")
-                    f4.write(",\n")
+                    f_levels.write(",\n")
                 countI += 1
 
 
-                f3.write("                \'" + I[0] + "\': {\n")
-                f4.write("                \'" + I[0] + "\': {\n")
+                f_levels.write("                \'" + I[0] + "\': {\n")
                 # loop over strangeness
                 countS = 0
                 for f in I[1]:
                     if countS != 0:
-                        f3.write(",\n")
-                        f4.write(",\n")
+                        f_levels.write(",\n")
                     countS += 1
 
-                    f3.write("                    " + f.split("/")[-1].split("_")[2][-1] + ": {\n")
-                    f4.write("                    " + f.split("/")[-1].split("_")[2][-1] + ": {\n")
+                    f_levels.write("                    " + f.split("/")[-1].split("_")[2][-1] + ": {\n")
 
                     # loop over irreps:
                     irreps = readlevels(f, ensemble, psq, empties=True) # list of irreps
@@ -156,41 +142,52 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
                     count = 0
                     for irrep in irreps:
                         if count != 0:
-                            f3.write(",\n")
-                            f4.write(",\n")
+                            f_levels.write(",\n")
                         count += 1
 
                         if len(irrep) == 1 and irrep[0].Npart == 0:
-                            f3.write("                        \'" + irrep[0].irrep + "\': []")
-                            f4.write("                        \'" + irrep[0].irrep + "\': []")
+                            f_levels.write("                        \'" + irrep[0].irrep + "\': []")
                         else:
-                        # if True:
+                            below_threshold = True
                             threshold3 = irrep_threshold(irrep, 3)
                             threshold4 = irrep_threshold(irrep, 4)
-                            if threshold3:
-                                f3.write("                        \'" + threshold3.irrep + "\': (r\"$" + threshold3.resultstr_tex + "$\", " + threshold3.energyprint[:-4] + ")")
+                            if threshold3 and threshold4:
+                                threshold = max([threshold3, threshold4], key=lambda x: x.energyprint[:-4])
+                            elif threshold3:
+                                threshold = threshold3
+                            elif threshold4:
+                                threshold = threshold4
                             else:
-                                f3.write("                        \'" + irrep[0].irrep + "\': []")
-                            if threshold4:
-                                f4.write("                        \'" + threshold4.irrep + "\': (r\"$" + threshold4.resultstr_tex + "$\", " + threshold4.energyprint[:-4] + ")")
-                            else:
-                                f4.write("                        \'" + irrep[0].irrep + "\': []")
+                                threshold = False
 
+                            # Begin irrep
+                            f_levels.write("                        \'" + irrep[0].irrep + "\': [")
+
+                            # while below_threshold:
+                            countL = 0
+                            for level in irrep:
+                                if level == threshold:
+                                    below_threshold = False
+                                    
+                                if below_threshold:
+                                    if countL != 0:
+                                        f_levels.write(",\n                                 ")
+                                    countL += 1
+
+                                    f_levels.write("(r\"$" + level.resultstr_tex
+                                            + "$\", " + level.energyprint[:-4] + ")")
+                                    
+                            # close irrep
+                            f_levels.write("]")
                     # close strangeness
-                    f3.write("\n                    }")
-                    f4.write("\n                    }")
+                    f_levels.write("\n                    }")
                 # close isospin
-                f3.write("\n                }")
-                f4.write("\n                }")
+                f_levels.write("\n                }")
             # close spin
-            f3.write("\n            }")
-            f4.write("\n            }")
+            f_levels.write("\n            }")
         # close PSQ
-        f3.write("\n        }")
-        f4.write("\n        }")
+        f_levels.write("\n        }")
     # close ensemble
-    f3.write("\n    }")
-    f4.write("\n    }")
+    f_levels.write("\n    }")
 # close it all
-f3.write("\n}\n")
-f4.write("\n}\n")
+f_levels.write("\n}\n")
