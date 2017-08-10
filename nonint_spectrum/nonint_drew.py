@@ -169,7 +169,7 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
                                 if level == threshold:
                                     below_threshold = False
                                     
-                                if below_threshold:
+                                if below_threshold and level.resultstr_tex != '':
                                     if countL != 0:
                                         f_levels.write(",\n                                 ")
                                     countL += 1
