@@ -175,7 +175,7 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
                                     countL += 1
 
                                     f_levels.write("(r\"$" + level.resultstr_tex
-                                            + "$\", " + level.energyprint[:-4] + ")")
+                                                   + "$\", " + level.energy + ", " + level.energyerr + ")")
                                     
                             # close irrep
                             f_levels.write("]")

@@ -168,11 +168,11 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
                             threshold3 = irrep_threshold(irrep, 3)
                             threshold4 = irrep_threshold(irrep, 4)
                             if threshold3:
-                                f3.write("                        \'" + threshold3.irrep + "\': (r\"$" + threshold3.resultstr_tex + "$\", " + threshold3.energyprint[:-4] + ")")
+                                f3.write("                        \'" + threshold3.irrep + "\': (r\"$" + threshold3.resultstr_tex + "$\", " + threshold3.energy + ", " + threshold3.energyerr + ")")
                             else:
                                 f3.write("                        \'" + irrep[0].irrep + "\': []")
                             if threshold4:
-                                f4.write("                        \'" + threshold4.irrep + "\': (r\"$" + threshold4.resultstr_tex + "$\", " + threshold4.energyprint[:-4] + ")")
+                                f4.write("                        \'" + threshold4.irrep + "\': (r\"$" + threshold4.resultstr_tex + "$\", " + threshold4.energy + ", " + threshold4.energyerr + ")")
                             else:
                                 f4.write("                        \'" + irrep[0].irrep + "\': []")
 

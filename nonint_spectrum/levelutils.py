@@ -88,6 +88,8 @@ def searchlog(level, logs, ensemble, sampling):
     if check:
         # assign things
         level.resultstr_tex = temp.resultstr_tex
+        level.energy = temp.energy
+        level.energyerr = temp.energyerr
         level.energyprint = temp.energyprint
         level.energyratioprint = temp.energyratioprint
         level.ensemble = temp.ensemble
@@ -226,6 +228,7 @@ class explevel:
         elif "g" in self.irrep:
             self.irrep_tex = self.irrep_tex.replace("g", "_{g}")
 
+
     def tex_isospin(self):
         if self.isospin == 0.5:
             self.isospin_tex = "\\frac{1}{2}"
@@ -238,6 +241,7 @@ class explevel:
         else:
             self.isospin_tex = str(int(self.isospin))
 
+        
     def __init__(self):
         self.Npart = 0
         self.parts = []         # list of tuples: (flavour, PSQ)
@@ -249,6 +253,8 @@ class explevel:
         self.strangeness = 0
         self.fitlist = ''
         self.resultstr_tex = ''
+        self.energy = ''
+        self.energyerr = ''
         self.energyprint = ''
         self.energyratioprint = ''
         self.sampling = ''
