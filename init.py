@@ -64,7 +64,7 @@ def initialize(init, corr_paths, proj_name, logfile, sampling, ensemble, obs_typ
         ET.SubElement(mcsample, "Jackknife")
     elif(sampling == "Bootstrap"):
         boots = ET.SubElement(mcsample, "Bootstrapper")
-        ET.SubElement(boots, "NumberResamplings").text = "2048"
+        ET.SubElement(boots, "NumberResamplings").text = "1024"
         ET.SubElement(boots, "Seed").text = "6754"
         ET.SubElement(boots, "BootSkip").text = "127"
         ET.SubElement(boots, "Precompute")
