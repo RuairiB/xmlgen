@@ -22,7 +22,7 @@ ISO_MAP = {
     '2I=5': 'sextet'
 }
 
-crap = supers("/latticeQCD/raid6/ruairi/freeparticle_energies/spectra/")
+crap = supers("/home/ruairi/research/freeparticle_energies/spectra/")
 ones = []
 twos = []
 threes = []
