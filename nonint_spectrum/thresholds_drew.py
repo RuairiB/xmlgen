@@ -3,12 +3,12 @@ import sys
 from parse_explevels import *
 from levelutils import *
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
 from logutils import *
 from bestfits import *
 from thresholds import supers
@@ -22,7 +22,7 @@ ISO_MAP = {
     '2I=5': 'sextet'
 }
 
-crap = supers("/home/ruairi/research/freeparticle_energies/spectra/")
+crap = supers("/latticeQCD/raid6/ruairi/freeparticle_energies/spectra/")
 ones = []
 twos = []
 threes = []

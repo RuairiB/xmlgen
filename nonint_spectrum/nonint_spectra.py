@@ -3,18 +3,18 @@ import sys
 from parse_explevels import *
 from levelutils import *
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/"))
 from utils import *
 from init import *
 from tasks import *
 
-sys.path.append(os.path.abspath("/home/ruairi/research/xmlgen/logscraper/"))
+sys.path.append(os.path.abspath("/home/ruairi/git/xmlgen/logscraper/"))
 from logutils import *
 from bestfits import *
 from thresholds import supers
 
 
-crap = supers("/home/ruairi/research/freeparticle_energies/spectra/")
+crap = supers("/latticeQCD/raid6/ruairi/freeparticle_energies/spectra/")
 ones = []
 twos = []
 threes = []
@@ -34,7 +34,7 @@ for x in crap:
 
 basedir = "/home/ruairi/research/expectedlevels/" # eg: 24^3_390/mom_000/bosonic_I=1_S=0_levels.txt"
 
-tableroot = "/home/ruairi/research/freeparticle_energies/notes/tables/spectra/"
+tableroot = "/latticeQCD/raid6/ruairi/freeparticle_energies/notes/tables/spectra/"
 
 for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
     for mom,psq in [("mom_000/", 0), ("mom_001/", 1), ("mom_011/", 2), ("mom_111/", 3), ("mom_002/", 4)]:
