@@ -115,7 +115,7 @@ def bestfit(fits, flav, psq, sampling, ensem):
                  "E1_nucleon_3_25P2tsgs",
                  "E1_nucleon_4_25P3tste",
                  "E1_nucleon_3_25P4tsgs",
-                 "E1_eta_17_24P0tsseC",
+                 "E1_eta_5_26P0tste",
                  "E1_eta_17_24P1tsseC",
                  "E1_eta_17_25P2tsseC",
                  "E1_eta_17_25P3tsse",
@@ -138,7 +138,7 @@ def bestfit(fits, flav, psq, sampling, ensem):
                  "E1_nucleon_3_25P2tsgs",
                  "E1_nucleon_3_25P3tsgs",
                  "E1_nucleon_3_25P4tsgs",
-                 "E1_eta_17_25P0tsseC",
+                 "E1_eta_5_25P0tste",
                  "E1_eta_17_25P1tsseC",
                  "E1_eta_17_25P2tsseC",
                  "E1_eta_17_25P3tsseC"]
@@ -424,6 +424,8 @@ class fitlog:
         elif "nucleon" in self.fitname:
             self.flav = "nucleon"
         elif "kaon" in self.fitname:
+            self.flav = "kaon"
+        elif "E1_ref" in self.fitname:
             self.flav = "kaon"
         elif "eta" in self.fitname:
             self.flav = "eta"

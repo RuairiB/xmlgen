@@ -27,7 +27,10 @@ def pullenergies(levels, log1, log2, log3, log4, ensemble, sampling, ignore_empt
                     searchlog(level, log4, ensemble, sampling)
                 elif not ignore_empties:
                     print("wrong Npart (" + str(level.Npart) + ") for level in " + level.irrep + " irrep")
-                    sys.exit()
+                    # sys.exit()
+
+                if level.irrep_tex == '':
+                    level.tex_irrep()
     # check here for correct/complete TeX and such, if not, do it?
 
 
@@ -93,6 +96,8 @@ def searchlog(level, logs, ensemble, sampling):
         level.energyprint = temp.energyprint
         level.energyratioprint = temp.energyratioprint
         level.ensemble = temp.ensemble
+        # if level.energyratioprint == '':
+        #     print(temp.resultstr_tex)
         del temp
     # else:
     #     print("couldn't find log for one of the levels")
@@ -132,7 +137,7 @@ def textable_irrep(destination, irrep, ensemble, psq, sampling):
         # print bottom hline, end environment, etc
         f.write("\\hline\n")
         f.write("\\captionsetup{justification=centering}\n")
-        f.write("\\caption{$I = " + irrep[0].isospin_tex + "$,  $S = " + str(int(irrep[0].strangeness)) + "$,  $P^2 = " + str(psq) + "$: Non-interacting spectrum of stable hadrons in the $" + irrep[0].irrep_tex + "$ irrep, on the \\vb{" + ensemble + "} ensemble with " + sampling + " resampling.}\n")
+        f.write("\\caption{$I = " + str(irrep[0].isospin_tex) + "$,  $S = " + str(int(irrep[0].strangeness)) + "$,  $P^2 = " + str(psq) + "$: Non-interacting spectrum of stable hadrons in the $" + irrep[0].irrep_tex + "$ irrep, on the \\vb{" + ensemble + "} ensemble with " + sampling + " resampling.}\n")
         f.write("\\end{longtable}\n")
         # f.write("\\clearpage\n")
         f.close()
@@ -169,7 +174,7 @@ class explevel:
                      "E1_nucleon_3_25P2tsgs",
                      "E1_nucleon_4_25P3tste",
                      "E1_nucleon_3_25P4tsgs",
-                     "E1_eta_17_24P0tsseC",
+                     "E1_eta_5_26P0tste",
                      "E1_eta_17_24P1tsseC",
                      "E1_eta_17_25P2tsseC",
                      "E1_eta_17_25P3tsse",
@@ -192,7 +197,7 @@ class explevel:
                      "E1_nucleon_3_25P2tsgs",
                      "E1_nucleon_3_25P3tsgs",
                      "E1_nucleon_3_25P4tsgs",
-                     "E1_eta_17_25P0tsseC",
+                     "E1_eta_5_25P0tste",
                      "E1_eta_17_25P1tsseC",
                      "E1_eta_17_25P2tsseC",
                      "E1_eta_17_25P3tsseC"]

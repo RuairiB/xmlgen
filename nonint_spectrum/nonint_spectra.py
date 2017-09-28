@@ -42,8 +42,8 @@ for ensem,ensemble in [("32^3_240/", "32_860"), ("24^3_390/", "24_840")]:
         for f in files:
             for sampling,samp in [("Bootstrap", "boot"), ("Jackknife", "jack")]:
                 levels = readlevels(f, ensemble, psq) # list of irreps
-                # print("about to pull for: " + f)
-                pullenergies(levels, ones, twos, threes, fours, ensemble, sampling)
+
+                pullenergies(levels, ones, twos, threes, fours, ensemble, sampling, True)
                 destination = tableroot + ensem + mom + f.split("/")[-1].strip('.txt')
 
                 for irrep in levels:
